@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals</title>
+    <link rel="stylesheet" href="../assets/built/screen.css%3Fv=cb9e41483e.css">
+    <link rel="stylesheet" href="https://use.typekit.net/nlf8nho.css">
+
+    <!-- Favicon Situation -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
+    <link rel="manifest" href="../assets/images/site.webmanifest%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
+    <link rel="mask-icon" href="../assets/images/safari-pinned-tab.svg%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
+    <meta name="msapplication-TileColor" content="#029aff">
+    <meta name="msapplication-config" content="/assets/images/browserconfig.xml?v=YA3x6XqYr8">
+    <meta name="theme-color" content="#ffffff">
+    <!-- End Favicons -->
+
+    <script>
+        var siteUrl = 'http://localhost:2368';
+        // Force dark mode
+        // localStorage.setItem('dawn_theme', 'dark');
+        // document.documentElement.classList.add('theme-dark');          
+    </script>
+
+    <script>
+        var localTheme = localStorage.getItem('dawn_theme');
+        switch (localTheme) {
+            case 'dark':
+                document.documentElement.classList.add('theme-dark');
+                break;
+            case 'light':
+                document.documentElement.classList.add('theme-light');
+                break;
+            default:
+                break;
+        }
+    </script>
+
+    <link rel="canonical" href="index.html" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Qubit Quants" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" />
+    <meta property="og:description" content="In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your VectorBT Pro plotting skills by creating your own plot_strategy() function and learn how to go from a basic plot" />
+    <meta property="og:url" content="http://localhost:2368/vbt_plot_strategy/" />
+    <meta property="og:image" content="https://lh6.googleusercontent.com/DzcjAgpbXyPy7ywDci9ER3t2-mehycLjWwx-GqPAZNqeZYFs6I8nl_Mgt0K6P25Ogb0=w2400" />
+    <meta property="article:published_time" content="2022-11-30T17:49:00.000Z" />
+    <meta property="article:modified_time" content="2022-12-11T15:22:40.000Z" />
+    <meta property="article:tag" content="vectorBT" />
+    <meta property="article:tag" content="Signal Cleaning" />
+    <meta property="article:tag" content="plotly" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" />
+    <meta name="twitter:description" content="In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your VectorBT Pro plotting skills by creating your own plot_strategy() function and learn how to go from a basic plot" />
+    <meta name="twitter:url" content="http://localhost:2368/vbt_plot_strategy/" />
+    <meta name="twitter:image" content="https://lh6.googleusercontent.com/DzcjAgpbXyPy7ywDci9ER3t2-mehycLjWwx-GqPAZNqeZYFs6I8nl_Mgt0K6P25Ogb0=w2400" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Dilip Rajkumar" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="vectorBT, Signal Cleaning, plotly" />
+    <meta name="twitter:site" content="@ghost" />
+    <meta property="og:image:width" content="2218" />
+    <meta property="og:image:height" content="736" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Qubit Quants",
+        "url": "http://localhost:2368/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2022/12/QQ_Text_DarkMode.png"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Dilip Rajkumar",
+        "image": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2022/12/ProfilePic.jpg",
+            "width": 315,
+            "height": 340
+        },
+        "url": "http://localhost:2368/author/dilip/",
+        "sameAs": [
+            "https://www.linkedin.com/in/sridiliprk/"
+        ]
+    },
+    "headline": "VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals",
+    "url": "http://localhost:2368/vbt_plot_strategy/",
+    "datePublished": "2022-11-30T17:49:00.000Z",
+    "dateModified": "2022-12-11T15:22:40.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "http://localhost:2368/content/images/2022/12/PostFeatureImage-1.png",
+        "width": 2218,
+        "height": 736
+    },
+    "keywords": "vectorBT, Signal Cleaning, plotly",
+    "description": "In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your VectorBT Pro plotting skills by creating your own plot_strategy() function and learn how to go from a basic plot like this ⬇\n\n\n\n\n\nTO this Fancy Advanced Plot 🎉 😎 with stacked figures, entries/exits and layered indicators\n\n\n\n\n\n\nPlotting - Basics 👶\n\n\nAs before we will start with the global settings we will use everywhere f",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:2368/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.24" />
+    <link rel="alternate" type="application/rss+xml" title="Qubit Quants" href="../rss/index.html" />
+    
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="27a6f7b1b53a260e5c12a43798" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="http://localhost:2368/" crossorigin="anonymous"></script>
+    <script defer src="../public/cards.min.js%3Fv=cb9e41483e"></script>
+    <link rel="stylesheet" type="text/css" href="../public/cards.min.css%3Fv=cb9e41483e.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/brands.min.css" integrity="sha512-+oRH6u1nDGSm3hH8poU85YFIVTdSnS2f+texdPGrURaJh8hzmhMiZrQth6l56P4ZQmxeZzd2DqVEMqQoJ8J89A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+/* Change post width - for older dawn theme versions use .kg-canvas*/     
+.gh-canvas {
+    display: grid;
+    grid-template-columns: [full-start] minmax(4vw,auto) [wide-start] minmax(auto,140px) [main-start] min(900px,calc(100% - 8vw)) [main-end] minmax(auto,140px) [wide-end] minmax(4vw,auto) [full-end];
+}
+    
+.kg-canvas {
+    display: grid;
+    grid-template-columns: [full-start] minmax(4vw,auto) [wide-start] minmax(auto,140px) [main-start] min(900px,calc(100% - 8vw)) [main-end] minmax(auto,140px) [wide-end] minmax(4vw,auto) [full-end];
+}
+
+.cover-cta, .gh-powered-by, .gh-foot-menu {
+    display: None;
+    }
+
+</style><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+
+<body class="post-template tag-vectorbt tag-signal-cleaning tag-plotly">
+    <svg width="0" height="0" style="display: none;">
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="arrow-left">
+    <path d="M26.667 14.667v2.667h-16L18 24.667l-1.893 1.893L5.547 16l10.56-10.56L18 7.333l-7.333 7.333h16z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="arrow-right">
+    <path d="M5.333 14.667v2.667h16L14 24.667l1.893 1.893L26.453 16 15.893 5.44 14 7.333l7.333 7.333h-16z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="brightness-2">
+    <path
+        d="M13.333 2.667c-2.427 0-4.707.667-6.667 1.8 4 2.307 6.667 6.6 6.667 11.533s-2.667 9.227-6.667 11.533c1.96 1.133 4.24 1.8 6.667 1.8 7.36 0 13.333-5.973 13.333-13.333S20.693 2.667 13.333 2.667z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="chevron-left">
+    <path d="M20.547 22.107L14.44 16l6.107-6.12L18.667 8l-8 8 8 8 1.88-1.893z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="chevron-right">
+    <path d="M11.453 22.107L17.56 16l-6.107-6.12L13.333 8l8 8-8 8-1.88-1.893z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="circle-half-full">
+    <path
+        d="M16 2.667c-7.36 0-13.333 5.973-13.333 13.333s5.973 13.333 13.333 13.333c7.36 0 13.333-5.973 13.333-13.333s-5.973-13.333-13.333-13.333zM16 5.333c5.893 0 10.667 4.773 10.667 10.667s-4.773 10.667-10.667 10.667v-21.333z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="dots-horizontal">
+    <path
+        d="M21.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM13.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM5.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="facebook-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zM24 6.667h-3.333A4.672 4.672 0 0 0 16 11.334v3.333h-2.667v4H16V28h4v-9.333h4v-4h-4V12c0-.733.6-1.333 1.333-1.333H24v-4z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="facebook">
+    <path
+        d="M22.667 2.667V8H20c-.92 0-1.333 1.08-1.333 2v3.333h4v5.333h-4v10.667h-5.333V18.666h-4v-5.333h4V8a5.332 5.332 0 0 1 5.333-5.333h4z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="flickr-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M11.1,7.6
+    c1.7,0,3.2,1.4,3.2,3.2c0,1.7-1.4,3.2-3.1,3.2c-1.7,0-3.2-1.4-3.2-3.2S9.3,7.7,11.1,7.6z M25,24.2c-0.1,0.1-0.2,0.2-0.5,0.2
+    c0,0,0,0-0.1,0H12.3c-0.9,0-1.8,0-2.7,0c-0.4,0-0.8,0-1.2,0c-0.4,0-0.8,0.1-1.2,0h0c0,0-0.1,0-0.1,0c-0.3-0.2,0.3-0.5,0.3-0.7
+    c0.3-0.3,3.3-4.6,3.3-4.7c0.4-0.6,1-1,1.5-1c0.8,0,1.3,0.9,2,1.3c0.9,0.5,1.5-0.2,1.9-0.9c0.3-0.5,0.6-1,0.9-1.4
+    c0.2-0.3,0.3-0.6,0.5-0.8c0.2-0.3,0.4-0.7,0.7-1l0.4-0.7c0,0,0.1-0.1,0.1-0.2c0.2-0.2,0.3-0.4,0.5-0.4c0.1,0,0.3,0.2,0.4,0.4
+    c1.5,2.7,3,5.4,4.5,8l0.7,1.3c0.1,0.1,0.1,0.2,0.1,0.3C25,24,25,24.1,25,24.2z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="instapaper-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M17.5,23.5
+    c0.1,0.2,0.3,0.4,0.5,0.6c0.2,0.2,0.7,0.2,1.3,0.2v0.3h-6.6v-0.3c0.8,0,1.4-0.2,1.6-0.5c0.2-0.3,0.3-1.1,0.3-2.2V10.4
+    c0-1.2-0.1-2-0.3-2.3c-0.2-0.4-0.7-0.5-1.5-0.5V7.4h6.6v0.2h0c-0.3,0-0.7,0-1.1,0.2s-0.6,0.3-0.7,0.6c-0.1,0.3-0.1,0.9-0.1,1.8v11.4
+    C17.4,22.7,17.4,23.3,17.5,23.5z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="linkedin-box">
+    <path
+        d="M25.333 4c1.473 0 2.667 1.194 2.667 2.667v0 18.667c0 1.473-1.194 2.667-2.667 2.667v0h-18.667c-1.473 0-2.667-1.194-2.667-2.667v0-18.667c0-1.473 1.194-2.667 2.667-2.667v0h18.667zM24.667 24.667v-7.067c0-2.401-1.946-4.347-4.347-4.347v0c-1.133 0-2.453 0.693-3.093 1.733v-1.48h-3.72v11.16h3.72v-6.573c0-1.027 0.827-1.867 1.853-1.867 1.031 0 1.867 0.836 1.867 1.867v0 6.573h3.72zM9.173 11.413c1.237 0 2.24-1.003 2.24-2.24v0c0-1.24-1-2.253-2.24-2.253-1.244 0-2.253 1.009-2.253 2.253v0c0 1.24 1.013 2.24 2.253 2.24zM11.027 24.667v-11.16h-3.693v11.16h3.693z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 -2 28 28" id="github-box">
+    <path 
+        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z">
+        </path>
+</symbol>
+
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" id="loader">
+    <path opacity="0.3" fill="currentColor"
+        d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946 s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634 c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z" />
+    <path fill="currentColor"
+        d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0 C22.32,8.481,24.301,9.057,26.013,10.047z">
+        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 20 20" to="360 20 20"
+            dur="0.5s" repeatCount="indefinite" />
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="magnify">
+    <path
+        d="M12.667 4a8.667 8.667 0 0 1 8.667 8.667c0 2.147-.787 4.12-2.08 5.64l.36.36h1.053l6.667 6.667-2 2-6.667-6.667v-1.053l-.36-.36a8.689 8.689 0 0 1-5.64 2.08C7.88 21.334 4 17.454 4 12.667S7.88 4 12.667 4zm0 2.667c-3.333 0-6 2.667-6 6s2.667 6 6 6 6-2.667 6-6-2.667-6-6-6z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="menu-down">
+    <path d="M9.333 13.333L16 20l6.667-6.667H9.334z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="pinboard-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M14.5,22.5
+    c-0.4-0.1,0.1-2.4,0-2.7l-4.9-5.9c-0.3-0.1-3.2,1.2-2.6,0l6.5-6.6c1.2-0.7,0,2.3,0.1,2.6l5.9,4.8c0.3,0.1,3.5-1.1,2.9,0.1l-7.5,7.6
+    C14.8,22.5,14.7,22.5,14.5,22.5z M24.2,24.6l-5.6-5.4l0.7-0.7C19.3,18.9,27.4,25.4,24.2,24.6z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="rss-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zM10 20c-1.107 0-2 .893-2 2s.893 2 2 2 2-.893 2-2-.893-2-2-2zm-2-6.667V16c4.413 0 8 3.587 8 8h2.667c0-5.893-4.773-10.667-10.667-10.667zM8 8v2.667c7.36 0 13.333 5.973 13.333 13.333H24c0-8.84-7.16-16-16-16z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="spotify-box">
+<path
+    d="M25.2,4H6.6C5.1,4,3.9,5.2,3.9,6.7v18.7c0,1.4,1.2,2.6,2.7,2.6h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C27.9,5.2,26.7,4,25.2,4z
+     M20.1,22.8c-1.6,0-2.9-1.1-2.9-2.4c0-1.3,1.3-2.4,2.9-2.4c0.3,0,0.7,0,1,0.1l0-5.8l-6.3,2l0.1,8.2c0,1.3-1.3,2.4-2.9,2.4
+    C10.3,25,9,24,9,22.6c0-1.3,1.3-2.4,2.9-2.4c0.3,0,0.7,0,1,0.1v-9.9L22.9,7L23,20.4C23,21.8,21.7,22.8,20.1,22.8z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="star">
+    <path
+        d="M16 23.027L24.24 28l-2.187-9.373 7.28-6.307-9.587-.827-3.747-8.827-3.747 8.827-9.587.827 7.267 6.307L7.759 28l8.24-4.973z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="table-of-contents">
+    <path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="twitter-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zm16.946 8.44c.64-.533 1.387-1.173 1.72-1.88-.547.28-1.2.453-1.92.547.667-.48 1.213-1.107 1.493-1.96-.693.373-1.4.693-2.28.853-2.067-2.493-7.013-.467-6.133 3.267-3.48-.213-5.6-1.787-7.36-3.72-1 1.627-.133 4.093 1.053 4.773-.613-.04-1.08-.227-1.52-.44.053 2.053 1.187 3.04 2.773 3.573a4.47 4.47 0 0 1-1.52.04c.493 1.427 1.52 2.32 3.28 2.507-1.2 1.013-3.413 1.72-5.2 1.44 1.533.973 3.28 1.747 5.707 1.64 5.88-.267 9.813-4.48 9.907-10.64z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="twitter">
+    <path
+        d="M29.947 8a11.423 11.423 0 0 1-3.28.92 5.738 5.738 0 0 0 2.507-3.173 11.52 11.52 0 0 1-3.627 1.4C24.494 6 23.014 5.334 21.334 5.334c-3.133 0-5.693 2.56-5.693 5.72 0 .453.053.893.147 1.307A16.261 16.261 0 0 1 4.001 6.388a5.663 5.663 0 0 0-.773 2.867c0 1.987 1 3.747 2.547 4.747-.947 0-1.827-.267-2.6-.667v.04a5.724 5.724 0 0 0 4.587 5.613 5.644 5.644 0 0 1-2.574.093c.72 2.253 2.813 3.933 5.333 3.973-1.947 1.547-4.413 2.453-7.107 2.453-.453 0-.907-.027-1.36-.08A16.19 16.19 0 0 0 10.827 28c10.507 0 16.28-8.72 16.28-16.28 0-.253 0-.493-.013-.747A11.42 11.42 0 0 0 29.947 8z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="white-balance-sunny">
+    <path
+        d="M4.733 24.72l1.88 1.88 2.4-2.387L7.12 22.32zm9.934 5.213h2.667V26h-2.667zM16 7.333c-4.413 0-8 3.587-8 8s3.587 8 8 8 8-3.587 8-8c0-4.427-3.587-8-8-8zm10.667 9.334h4V14h-4zm-3.68 7.546l2.4 2.387 1.88-1.88-2.387-2.4zm4.28-18.266l-1.88-1.88-2.4 2.387 1.893 1.893zM17.333.733h-2.667v3.933h2.667zM5.333 14h-4v2.667h4zm3.68-7.547l-2.4-2.387-1.88 1.88 2.387 2.4 1.893-1.893z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="window-close">
+    <path
+        d="M17.947 16l7.387 7.387v1.947h-1.947L16 17.947l-7.387 7.387H6.666v-1.947L14.053 16 6.666 8.613V6.666h1.947L16 14.053l7.387-7.387h1.947v1.947L17.947 16z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="title-link">
+   <path d="M19 3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.94,14.81L11.73,17C11.08,17.67 10.22,18 9.36,18C8.5,18 7.64,17.67 7,17C5.67,15.71 5.67,13.58 7,12.26L8.35,10.9L8.34,11.5C8.33,12 8.41,12.5 8.57,12.94L8.62,13.09L8.22,13.5C7.91,13.8 7.74,14.21 7.74,14.64C7.74,15.07 7.91,15.47 8.22,15.78C8.83,16.4 9.89,16.4 10.5,15.78L12.7,13.59C13,13.28 13.18,12.87 13.18,12.44C13.18,12 13,11.61 12.7,11.3C12.53,11.14 12.44,10.92 12.44,10.68C12.44,10.45 12.53,10.23 12.7,10.06C13.03,9.73 13.61,9.74 13.94,10.06C14.57,10.7 14.92,11.54 14.92,12.44C14.92,13.34 14.57,14.18 13.94,14.81M17,11.74L15.66,13.1V12.5C15.67,12 15.59,11.5 15.43,11.06L15.38,10.92L15.78,10.5C16.09,10.2 16.26,9.79 16.26,9.36C16.26,8.93 16.09,8.53 15.78,8.22C15.17,7.6 14.1,7.61 13.5,8.22L11.3,10.42C11,10.72 10.82,11.13 10.82,11.56C10.82,12 11,12.39 11.3,12.7C11.47,12.86 11.56,13.08 11.56,13.32C11.56,13.56 11.47,13.78 11.3,13.94C11.13,14.11 10.91,14.19 10.68,14.19C10.46,14.19 10.23,14.11 10.06,13.94C8.75,12.63 8.75,10.5 10.06,9.19L12.27,7C13.58,5.67 15.71,5.68 17,7C17.65,7.62 18,8.46 18,9.36C18,10.26 17.65,11.1 17,11.74Z">
+   </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="feed-link">
+  <path d="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z">
+  </path>
+</symbol>
+
+</svg>
+    <div class="site">
+        <header class="site-header container">
+    <div class="header-left">
+        <a class="logo" href="../index.html">
+                <img class="logo-image" src="../content/images/2022/12/QQ_Text_DarkMode.png" alt="Qubit Quants">
+        </a>
+    </div>
+        <nav class="main-nav hidden-xs hidden-sm hidden-md">
+                <a class="menu-item menu-item-home"
+        href="../index.html">Home</a>
+    <a class="menu-item menu-item-about"
+        href="../about/index.html">About</a>
+
+        </nav>
+
+        <button class="button-icon hidden-lg hidden-xl js-modal" data-modal="search" aria-label="Search">
+            <svg class="icon">
+                <use xlink:href="#magnify"></use>
+            </svg>
+        </button>
+        <div class="burger hidden-lg hidden-xl">
+            <div class="burger-bar"></div>
+            <div class="burger-bar"></div>
+        </div>
+
+        <div class="mobile-menu hidden-lg hidden-xl">
+            <div class="container">
+                <nav class="mobile-nav">
+                        <a class="menu-item menu-item-home"
+        href="../index.html">Home</a>
+    <a class="menu-item menu-item-about"
+        href="../about/index.html">About</a>
+
+                </nav>
+            </div>
+        </div>
+    <div class="header-right hidden-xs hidden-sm hidden-md">
+            <button class="button-icon js-modal" data-modal="search" aria-label="Search">
+                <svg class="icon">
+                    <use xlink:href="#magnify"></use>
+                </svg>
+            </button>
+    </div>
+</header>
+
+        <header class="sticky">
+            <div class="sticky-title">VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals</div>
+            <button class="button-icon sticky-toc-button" aria-label="Table of Contents">
+                <svg class="icon">
+                    <use xlink:href="#table-of-contents"></use>
+                </svg>
+                <div class="sticky-toc"></div>
+            </button>
+            <div class="sticky-track">
+                <div class="sticky-progress"></div>
+            </div>
+        </header>
+        <div class="site-content">
+            
+<div class="content-area">
+    <main class="site-main">
+            <article class="single post tag-vectorbt tag-signal-cleaning tag-plotly">
+    <header class="single-header kg-canvas">
+            <div class="single-meta">
+                <span class="single-meta-item single-meta-date">
+                    <time datetime="2022-11-30">
+                        Nov 30, 2022
+                    </time>
+                </span>
+                <span class="single-meta-item single-meta-length">
+                    11 min read
+                </span>
+                    <span class="single-meta-item single-meta-tag">
+                        <a class="post-tag post-tag-vectorbt" href="../tag/vectorbt/index.html">
+                            vectorBT
+                        </a>
+                    </span>
+            </div>
+            <h1 class="single-title">VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals</h1>
+                <div class="single-media kg-width-wide u-placeholder horizontal">
+                    <img class="lazyload u-object-fit" data-srcset="https://lh6.googleusercontent.com/DzcjAgpbXyPy7ywDci9ER3t2-mehycLjWwx-GqPAZNqeZYFs6I8nl_Mgt0K6P25Ogb0=w2400 400w,
+                    https://lh6.googleusercontent.com/DzcjAgpbXyPy7ywDci9ER3t2-mehycLjWwx-GqPAZNqeZYFs6I8nl_Mgt0K6P25Ogb0=w2400 750w,
+                    https://lh6.googleusercontent.com/DzcjAgpbXyPy7ywDci9ER3t2-mehycLjWwx-GqPAZNqeZYFs6I8nl_Mgt0K6P25Ogb0=w2400 960w,
+                    https://lh6.googleusercontent.com/DzcjAgpbXyPy7ywDci9ER3t2-mehycLjWwx-GqPAZNqeZYFs6I8nl_Mgt0K6P25Ogb0=w2400 1140w"
+                        data-sizes="auto" src="https://lh6.googleusercontent.com/DzcjAgpbXyPy7ywDci9ER3t2-mehycLjWwx-GqPAZNqeZYFs6I8nl_Mgt0K6P25Ogb0=w2400"
+                        srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                        alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals">
+                </div>
+    </header>
+    <div class="single-content kg-canvas u-text-format">
+            <p></p><!--kg-card-begin: markdown--><p>In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your <code>VectorBT Pro</code> plotting skills by creating your own <code>plot_strategy()</code> function and learn how to go from a basic plot like this ⬇</p>
+<p><img src="../content/images/2022/12/H4_OHLCV_Only.svg" alt="H4_OHLCV_Only" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>TO this <code>Fancy</code> Advanced Plot 🎉 😎</strong> with stacked figures, entries/exits and layered indicators <br><br>
+<img src="../content/images/2022/12/Final_Strategy_Plot.svg" alt="Final_Strategy_Plot" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="plottingbasics-%F0%9F%91%B6">Plotting - Basics 👶</h2>
+<p>As before we will start with the global settings we will use everywhere for our plotting like this dark theme and figure / width.</p>
+<pre><code class="language-python">## Global Plot Settings for vectorBT
+vbt.settings.set_theme(&quot;dark&quot;)
+vbt.settings['plotting']['layout']['width'] = 1280
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="ohlcv-plot">OHLCV Plot</h3>
+<p>The code to get a basic OHLCV plot is shown below, to get custom plot titles and other attributes you pass it in the <code>kwargs</code>. To make some sensible visualization and not get a super condensed plot we will use <code>.iloc</code> to slice a small sample of the dataframe.</p>
+<pre><code class="language-python">## Plot OHLCV data first
+kwargs1 = {&quot;title_text&quot; : &quot;OHLCV Plot&quot;, &quot;title_font_size&quot; : 18}
+h4_ohlc_sample = h4_df[[&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Close&quot;]].iloc[100:200]#.dropna()
+f = h4_ohlc_sample.vbt.ohlcv.plot(**kwargs1)
+f.show()
+</code></pre>
+<p><img src="../content/images/2022/12/H4_OHLCV_Only.svg" alt="H4_OHLCV_Only" loading="lazy"></p>
+<p>This gives the plot you saw earlier, and yes we see some ugly gaps in the candlestick data, which we will see how to fix later. Let's try to add the Bollinger Bands indicator on top of this basic candlestick plot</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="ohlcv-plot-with-bollinger-bands">OHLCV Plot with Bollinger Bands</h3>
+<pre><code class="language-python">h4_bbands.iloc[100:200].plot(fig = f,
+                            lowerband_trace_kwargs=dict(fill=None, name = 'BB_Price_Lower'), 
+                            upperband_trace_kwargs=dict(fill=None, name = 'BB_Price_Upper'),
+                            middleband_trace_kwargs=dict(fill=None, name = 'BB_Price_Middle')).show()
+</code></pre>
+<p><img src="../content/images/2022/12/H4_OHLCV_with_2BB.svg" alt="H4_OHLCV_with_2BB" loading="lazy"></p>
+<p>The fundamental concept you have to understand in layering elements on a figure is to reference the parent figure, notice how the <code>fig = f</code> in the above Bollinger Band plot is referencing the parent figure object <code>f</code> we first created. Also notice that child objects inherit the styling and other attributes <code>kwargs1</code> you passed to the parent object. You can ofcourse over-ride them by placing another <code>**kwargs</code> in the <code>plot()</code> function call.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="adding-rsi-on-stacked-subplots">Adding RSI on Stacked SubPlots</h3>
+<p>So we learnt how to add an indicator to the figure, but what if we want to create stacked subplots, like adding an RSI Indicator below the previous plot. This is essentially done using the <code>vbt.make_subplots()</code> function and the use of the <code>add_trace_kwargs</code> argument inside the <code>plot()</code> function.</p>
+<pre><code class="language-python">kwargs1 = {&quot;title_text&quot; : &quot;H4 OHLCV with BBands on Price and RSI&quot;, &quot;title_font_size&quot; : 18, 
+           &quot;legend&quot; : dict(yanchor=&quot;top&quot;,y=0.99, xanchor=&quot;right&quot;,x= 0.25)}
+
+fig = vbt.make_subplots(rows=2,cols=1, shared_xaxes=True, vertical_spacing=0.1)
+
+## Sliced Data
+h4_price = h4_df[[&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Close&quot;]]
+indices = slice(100,200)
+h4_price.iloc[indices].vbt.ohlcv.plot(add_trace_kwargs=dict(row=1, col=1),  fig=fig, **kwargs1) 
+h4_bbands.iloc[indices].plot(add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                            lowerband_trace_kwargs=dict(fill=None, name = 'BB_Price_Lower'), 
+                            upperband_trace_kwargs=dict(fill=None, name = 'BB_Price_Upper'),
+                            middleband_trace_kwargs=dict(fill=None, name = 'BB_Price_Middle'))
+
+h4_rsi.iloc[indices].rename(&quot;RSI&quot;).vbt.plot(add_trace_kwargs=dict(row=2, col=1),fig=fig, **kwargs1 )
+
+h4_bbands_rsi.iloc[indices].plot(add_trace_kwargs=dict(row=2, col=1),limits=(25, 75),fig=fig,
+                            lowerband_trace_kwargs=dict(fill=None, name = 'BB_RSI_Lower'), 
+                            upperband_trace_kwargs=dict(fill=None, name = 'BB_RSI_Upper'),
+                            middleband_trace_kwargs=dict(fill=None, name = 'BB_RSI_Middle'),
+                            # xaxis=dict(rangeslider_visible=True) ## Without Range Slider
+                            )
+
+fig.update_xaxes(rangebreaks=[dict(values=dt_breaks)])
+fig.layout.showlegend = False
+fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><img src="../content/images/2022/12/Stacked_RSI_Plot.svg" alt="Stacked_RSI_Plot" loading="lazy"></p>
+<!--kg-card-end: markdown--><hr><!--kg-card-begin: markdown--><h2 id="plottingadvanced-%F0%9F%92%AA">Plotting - Advanced 💪</h2>
+<p>In this section, we will see how to create your own <code>plot_strategy</code> with all the customizations you would want. Please read the inline comments in the code block below to understand the inner workings and details of the various commands</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">def plot_strategy(slice_lower : str, slice_upper: str, df : pd.DataFrame , rsi : pd.Series,
+                  bb_price : vbt.indicators.factory, bb_rsi : vbt.indicators.factory,  
+                  pf: vbt.portfolio.base.Portfolio, entries: pd.Series = None, 
+                  exits: pd.Series = None,
+                  show_legend : bool = True):
+    &quot;&quot;&quot;Creates a stacked indicator plot for the 2BB strategy.
+    Parameters
+    ===========
+    slice_lower : str, start date of dataframe slice in yyyy.mm.dd format
+    slice_upper : str, start date of dataframe slice in yyyy.mm.dd format
+    df          : pd.DataFrame, containing the OHLCV data
+    rsi         : pd.Series, rsi indicator time series in same freq as df
+    bb_price    : vbt.indicators.factory.talib('BBANDS'), computed on df['close'] price
+    bb_rsi      : vbt.indicators.factory.talib('BBANDS') computer on RSI
+    pf          : vbt.portfolio.base.Portfolio, portfolio simulation object from VBT Pro
+    entries     : pd.Series, time series data of long entries
+    exits       : pd.Series, time series data of long exits
+    show_legend : bool, switch to show or completely hide the legend box on the plot
+    
+    Returns
+    =======
+    fig         : plotly figure object
+    &quot;&quot;&quot;
+    kwargs1 = {&quot;title_text&quot; : &quot;H4 OHLCV with BBands on Price and RSI&quot;, 
+               &quot;title_font_size&quot; : 18,
+               &quot;height&quot; : 960,
+               &quot;legend&quot; : dict(yanchor=&quot;top&quot;,y=0.99, xanchor=&quot;left&quot;,x= 0.1)}
+    fig = vbt.make_subplots(rows=2,cols=1, shared_xaxes=True, vertical_spacing=0.1)
+    ## Filter Data according to date slice
+    df_slice = df[[&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Close&quot;]][slice_lower : slice_upper]
+    bb_price = bb_price[slice_lower : slice_upper]
+    rsi = rsi[slice_lower : slice_upper]
+    bb_rsi = bb_rsi[slice_lower : slice_upper]
+
+    ## Retrieve datetime index of rows where price data is NULL
+    # retrieve the dates that are in the original datset
+    dt_obs = df_slice.index.to_list()
+    # Drop rows with missing values
+    dt_obs_dropped = df_slice['Close'].dropna().index.to_list()
+    # store  dates with missing values
+    dt_breaks = [d for d in dt_obs if d not in dt_obs_dropped]
+
+    ## Plot Figures
+    df_slice.vbt.ohlcv.plot(add_trace_kwargs=dict(row=1, col=1),  fig=fig, **kwargs1) ## Without Range Slider
+    rsi.rename(&quot;RSI&quot;).vbt.plot(add_trace_kwargs=dict(row=2, col=1), trace_kwargs = dict(connectgaps=True), fig=fig) 
+
+    bb_line_style = dict(color=&quot;white&quot;,width=1, dash=&quot;dot&quot;)
+    bb_price.plot(add_trace_kwargs=dict(row=1, col=1),fig=fig, **kwargs1,
+                lowerband_trace_kwargs=dict(fill=None, name = 'BB_Price_Lower', connectgaps=True, line = bb_line_style), 
+                upperband_trace_kwargs=dict(fill=None, name = 'BB_Price_Upper', connectgaps=True, line = bb_line_style),
+                middleband_trace_kwargs=dict(fill=None, name = 'BB_Price_Middle', connectgaps=True) )
+
+    bb_rsi.plot(add_trace_kwargs=dict(row=2, col=1),limits=(25, 75),fig=fig,
+                lowerband_trace_kwargs=dict(fill=None, name = 'BB_RSI_Lower', connectgaps=True,line = bb_line_style), 
+                upperband_trace_kwargs=dict(fill=None, name = 'BB_RSI_Upper', connectgaps=True,line = bb_line_style),
+                middleband_trace_kwargs=dict(fill=None, name = 'BB_RSI_Middle', connectgaps=True, visible = False))
+    
+    ## Plots Long Entries / Exits and Short Entries / Exits
+    pf[slice_lower:slice_upper].plot_trade_signals(add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                                                   plot_close=False, plot_positions=&quot;lines&quot;)
+
+    ## Plot Trade Profit or Loss Boxes
+    pf.trades.direction_long[slice_lower : slice_upper].plot(
+                                        add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                                        plot_close = False,
+                                        plot_markers = False
+                                        )
+                                        
+
+    pf.trades.direction_short[slice_lower : slice_upper].plot(
+                                            add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                                            plot_close = False,
+                                            plot_markers = False
+                                            )
+
+    if (entries is not None) &amp; (exits is not None):
+        ## Slice Entries and Exits
+        entries = entries[slice_lower : slice_upper]
+        exits = exits[slice_lower : slice_upper]
+        ## Add Entries and Long Exits on RSI in lower subplot
+        entries.vbt.signals.plot_as_entries(rsi, fig = fig,
+                                                add_trace_kwargs=dict(row=2, col=1),
+                                                trace_kwargs=dict(name = &quot;Long Entry&quot;, 
+                                                                  marker=dict(color=&quot;limegreen&quot;)
+                                                                  ))  
+
+        exits.vbt.signals.plot_as_exits(rsi, fig = fig, 
+                                            add_trace_kwargs=dict(row=2, col=1),
+                                            trace_kwargs=dict(name = &quot;Short Entry&quot;, 
+                                                              marker=dict(color=&quot;red&quot;),
+                                                            #   showlegend = False ## To hide this from the legend
+                                                              )
+                                            )
+
+    fig.update_xaxes(rangebreaks=[dict(values=dt_breaks)])
+    fig.layout.showlegend = show_legend  
+    # fig.write_html(f&quot;2BB_Strategy_{slice_lower}_to_{slice_upper}.html&quot;)
+    
+    return fig
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">slice_lower = '2019.11.01'
+slice_higher = '2019.12.31'
+
+fig = plot_strategy(slice_lower, slice_higher, h4_data.get(), h4_rsi, 
+                           h4_bbands, h4_bbands_rsi, pf,
+                           clean_h4_entries, clean_h4_exits,
+                           show_legend = True)
+
+# fig.show_svg()
+fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><img src="../content/images/2022/12/Final_Strategy_Plot.svg" alt="Final_Strategy_Plot" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>Notes</strong>:</p>
+<ul>
+<li>We are using the H4 timeframe data for our plotting, as the <code>15T</code> baseline data series results in a very dense looking plot which slows down the interactive plot.</li>
+<li>We are passing a slice of the time series dataframe in order to avoid a dense, highly cluttered plot. You can make this interactive also if you were to use <code>plotly-dash</code> (a topic for another blog post perhaps 😃 )</li>
+<li>The gaps in the OHLCV candlesticks on weekends are fixed by storing the dates with missing values in the <code>dt_breaks</code> variable and passing this in the <code>rangebreaks=[dict(values=dt_breaks)]</code> argument in the <code>fig.update_xaxes()</code> method to filter our the missing dates in the x-axes.</li>
+<li>We fixed the gaps occuring in the bollinger bands (due to weekend market closures) by using the <code>connectgaps = True</code> argument in each <code>_trace_kwargs</code> of the bollinger bands.</li>
+<li>Note, that you may wonder why we are naming the legends entries and exits in the RSI subplot below as <code>Long Entries</code> and <code>Short Entries</code> and not four distinct labels as in the first subplot.
+<ul>
+<li>This is because since we set <code>direction = both</code> in the <code>pf.simulation</code> the Short Entry is basically an Exit for the previous Long position and similarly, a Long Entry is basically an exit for the previous short position. This type of nomenclature setting makes the plot also usable for other settings like when you would want to set <code>direction = longonly</code> in the <code>pf.simulation</code> in which case you can just call these legend items <code>Long Entries</code> and <code>Long Exits</code> on the RSI subplot.</li>
+</ul>
+</li>
+</ul>
+<!--kg-card-end: markdown--><hr><!--kg-card-begin: markdown--><h2 id="cleaning-entries-and-exits">Cleaning <code>entries</code> and <code>exits</code></h2>
+<p>You might have noticed in the last code block we were using <code>clean_h4_entries</code> and <code>clean_h4_exits</code>. Lets understand why we did that? Before we plot any entries and exits for visual analysis, it is imperative to clean them. We will continue with the entries and exits at the end of our previous tutorial <code>Strategy Development and Signal Generation</code> in order to explain how we can go about  <code>cleaning</code> and <code>resampling</code> entry &amp; exit signals.</p>
+<pre><code class="language-python">entries = mtf_df.signal == 1.0
+exits = mtf_df.signal == -1.0
+</code></pre>
+<p>The total nr. of actual signals in the entries and exits array is computed by the <code>vbt.signals.total()</code> accessor method.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(f&quot;Length of Entries (array): {len(entries)} || Length of Exits (array): {len(exits)}&quot; )
+print(f&quot;Total Nr. of Entry Signals: {entries.vbt.signals.total()} || \
+        Total Nr. of Exit Signals: {exits.vbt.signals.total()}&quot;)
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-python">Length of Entries (array): 105188 || Length of Exits (array): 105188
+Total Nr. of Entry Signals: 2135 || Total Nr. of Exit Signals: 1568
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="why-do-you-want-to-clean-the-entries-and-exits">Why do you want to clean the <code>entries</code> and <code>exits</code>?</h3>
+<p>From the print statement output we can see that in the entire length of the dataframe <code>105188</code> on <code>15T</code> frequency, we can see that the total number of raw entry and raw exit signals is 2135 and 1568 respectively, which is prior to any cleaning. Currently there are many duplicate signals in the entries and exits, and this discrepancy between entries and exits need to be resolved by cleaning.</p>
+<p>Cleaning entry and exit signals is easily done by <code>vbt.signals.clean()</code> accessor and after cleaning each entry signal has a corresponding exit signal. When we validate the total number of clean entry and clean exit signals using the <code>vbt.signals.total()</code> method now, we can now see the cleaned entry and exit signals total to be 268 and 267 respectively.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Clean redundant and duplicate signals
+clean_entries, clean_exits = entries.vbt.signals.clean(exits)
+print(f&quot;Length of Clean_Entries Array: {len(clean_entries)} || Length of Clean_Exits Array: {len(clean_exits)}&quot; )
+print(f&quot;Total nr. of Entry Signals in Clean_Entry Array: {clean_entries.vbt.signals.total()} || \
+        Total nr. of Exit Signals in Clean_Exit Array: {clean_exits.vbt.signals.total()}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code>Length of Clean_Entries Array: 105188 || Length of Clean_Exits Array: 105188
+Total nr. of Entry Signals in Clean_Entry Array: 268 || Total nr. of Exit Signals in Clean_Exit Array: 267
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p>Could you think of a reason why there is a difference of one signal between the <code>clean_entry</code> and <code>clean_exit</code> signals ?</p>
+<ul>
+<li>This is happening because the most recent (entry) position that was last opened, has not been closed out.</li>
+</ul>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="cleaning-signalsvisual-difference">Cleaning Signals - Visual Difference</h3>
+<p>The below plots will make it easier when understanding what happens if we use uncleaned signals<br>
+<strong>Uncleaned Entries &amp; Exits on our RSI Plot</strong><br>
+<img src="../content/images/2022/12/unCleaned_RSI.png" alt="unCleaned_RSI" loading="lazy"></p>
+<p><strong>Cleaned Entries &amp; Exits on our RSI plot</strong><br>
+<img src="../content/images/2022/12/Cleaned_RSI.png" alt="Cleaned_RSI" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="resampling-entries-and-exits-to-h4-timeframe">Resampling <code>entries</code> and <code>exits</code> to H4 timeframe</h2>
+<p>Resampling any entries/exits is <strong>only</strong> required when we are concerned with analyzing (plotting, counting etc.) and visualizing our strategy and entries/exits on a timeframe different from the baseline frequency of our strategy. It is always recommended to <strong>first clean the raw entries/exits</strong> array and then do the resampling.</p>
+<p><strong>When do we need to <code>upsample</code> and <code>downsample</code> entries &amp; exits?</strong></p>
+<ul>
+<li><em>Downsampling</em> of entries/exists is required if we want to do any visual analysis on a timeframe <strong>higher</strong> than that our baseline frequency of our strategy.
+<ul>
+<li>For eg, in the below code we show a case of Downsampling  our entries/exits on the 15m timeframe to H4 timeframe. Downsampling comes with the <code>risk</code> of <strong>information loss</strong>.</li>
+</ul>
+</li>
+<li><em>Upsampling</em> of entries/exits is required, if we want to do any visual analysis on a timeframe <strong>lower</strong> than that our baseline frequency of our strategy.
+<ul>
+<li>For example, you have some crossover on 4h frequency and you want to combine the signals with some other crossover on 15 min frequency, then you would need to upsample signals from 4h-&gt;15min, which would cause no problems because there is no information loss in upsampling</li>
+</ul>
+</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">clean_h4_entries = clean_entries.vbt.resample_apply(&quot;4h&quot;, &quot;any&quot;, wrap_kwargs=dict(dtype=bool))
+clean_h4_exits = clean_exits.vbt.resample_apply(&quot;4h&quot;, &quot;any&quot;, wrap_kwargs=dict(dtype=bool))
+
+print(f&quot;Length of H4_Entries (array): {len(clean_h4_entries)} || Length of H4_Exits (array): {len(clean_h4_exits)}&quot; )
+print(f&quot;Total nr. of H4_Entry Signals: {clean_h4_entries.vbt.signals.total()} || \
+        Total nr. of H4_Exit Signals: {clean_h4_exits.vbt.signals.total()}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code class="language-python">Length of H4_Entries (array): 6575 || Length of H4_Exits (array): 6575
+Total nr. of H4_Entry Signals: 263 || Total nr. of H4_Exit Signals: 263
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="information-loss-during-downsampling">Information Loss during downsampling</h3>
+<p>From the above output we see the nr. of signals on the <code>clean_h4_entries</code> and <code>clean_h4_exits</code> as 263 respectively, this shows a loss of information during this Downsampling process. This information loss occurs because by aggregating signals during downsampling, our data becomes less granular. <br></p>
+<p>⭐ <strong>Key Points</strong> <br></p>
+<ul>
+<li><strong>How information loss occurs during downsampling of entries/exits?</strong> <br>
+<ul>
+<li>Let's say we have <code>[entry, entry, exit, exit, entry, entry]</code> in our signal array, after cleaning we'll get <code>[entry, exit, entry]</code>, but after aggregating the original signal sequence you'll get just <code>{entry:4 ; exit:2}</code>, which clearly cannot after cleaning produce the same sequence as on the smaller (more granular) timeframe.</li>
+<li>The problem here is that the information loss occured during <code>downsampling</code> the cleaned entries and exits, ignores any exit that could have closed the position if you back tested on the original timeframe (<code>15T</code> in our example), that is why we end up seeing 263 || 263 in the above print statement.</li>
+</ul>
+</li>
+<li>After downsampling if we want to retrace the order of signals and we want to investigate &quot;<em>Which signal came first in the original timeframe</em> ?&quot;, we encounter a irresolvible problem. We can't resample 1m (minutely) data to one year timeframe and then expect the signal count to be the same even though our new data is all fitting in only one bar (1D candle).</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>By changing the method to <code>sum</code> and removing the <code>wrap_kwargs</code> argument in the <code>vbt.resample_apply()</code> method we can aggregate the signals and show the aggregated nr. of signals.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## sum() will aggregate the signals
+h4_entries_agg = clean_entries.vbt.resample_apply(&quot;4h&quot;, &quot;sum&quot;)
+h4_exits_agg = clean_exits.vbt.resample_apply(&quot;4h&quot;, &quot;sum&quot;)
+
+## h4_extries_agg is not a vbt object so vbt.signals.total() accessor will not work 
+## and thus we use the pandas sum() method in the print statement below
+print(f&quot;Length of H4_Entries (array): {len(h4_entries_agg)} || Length of H4_Exits (array): {len(h4_exits_agg)}&quot; )
+print(f&quot;Aggregated H4_Entry Signals: {int(h4_entries_agg.sum())} || Aggregated H4_Exit Signals: {int(h4_exits_agg.sum())}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code>Length of H4_Entries (array): 6575 || Length of H4_Exits (array): 6575
+Aggregated H4_Entry Signals: 268   || Aggregated H4_Exit Signals: 267
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Though the result of this aggregation shows the same result we got above when printing the <code>clean_entries.vbt.signals.total()</code> and <code>clean_exits.vbt.signals.total()</code>, this does not help us in inferring the true order of the signals and the information loss created by downsampling cannot be compensated by aggregation.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p><strong>Do we have to resample entries/exits for running the backtesting simulation?</strong> <br><br>
+When you are doing portfolio simulation (backtesting), using the <code>from_signals()</code> which we see in the previous blog post - <a href="https://qubitquants.pro/strategydev/">Strategy Development and Signal Generation</a>, the <code>from_signals</code> method automatically cleans the entries and exits , therefore there is no reason to do resampling or cleaning of any entries and exits.<br>
+Irrespective of whether we use the clean entries and exits or just the regular entries and exits in the simulation/backtest when running <code>from_signals()</code> it will make no difference. You can try this for yourself and see the results will be the same.</p>
+</blockquote>
+<!--kg-card-end: markdown--><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>
+    </div>
+        <footer class="single-footer container medium">
+            <div class="single-footer-middle">
+             <div class="single-footer-top">
+                <h3 class="single-footer-title">Published by:</h3>
+                <div class="author-list">
+                    <div class="author-image-placeholder u-placeholder square">
+                        <a href="../author/dilip/index.html" title="Dilip Rajkumar">
+                            <img class="author-image u-object-fit" src="../content/images/size/w150/2022/12/ProfilePic.jpg" alt="Dilip Rajkumar" loading="lazy">
+                        </a>
+                    </div>
+                </div>               
+            </div>
+            <div class="copyright" style="text-align:center">
+                <strong>Copyright Warning ©</strong> All rights belong to the author(s) of this publication. <br>
+                No part of this publication can be reproduced anywhere without prior approval from the author(s).
+            </div>
+        </footer>
+        <script src="https://utteranc.es/client.js"
+        repo="QubitQuants/qubitquants.github.io"
+        issue-term="pathname"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+        </script>
+</article>                    <section class="related-wrapper">
+            <div class="container medium">
+                <h3 class="related-title">You might also like...</h3>
+                <div class="related-feed">
+                        <article class="feed post featured">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Nov
+        </div>
+        <div class="feed-calendar-day">
+            26
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Aligning MTF time series Data with Resampling</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            14 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../aligning-mtf-data/index.html" aria-label="VectorBT Pro - Aligning MTF time series Data with Resampling"></a>
+</article>                        <article class="feed post featured">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Nov
+        </div>
+        <div class="feed-calendar-day">
+            14
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Tutorial Series</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            1 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../vbt-tuts-toc/index.html" aria-label="VectorBT Pro - Tutorial Series"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Sep
+        </div>
+        <div class="feed-calendar-day">
+            05
+        </div>
+    </div>
+    <h2 class="feed-title">MT5PyBot 🤖 - Account Monitor &amp; Data Visualisation Dashboard</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            1 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../plotly-dashboard/index.html" aria-label="MT5PyBot 🤖 - Account Monitor &amp; Data Visualisation Dashboard"></a>
+</article>                </div>
+            </div>
+        </section>
+                </main>
+</div>
+        </div>
+        </section>
+        <footer class="site-footer container">
+    <div class="social">
+        <a class="social-item social-item-linkedin"
+        href="https://www.linkedin.com/groups/14112759/" target="_blank"
+        rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg class="icon">
+            <use xlink:href="#linkedin-box"></use>
+        </svg>
+        </a>
+        
+        <a class="social-item social-item-github"
+        href="https://github.com/qubitquants" target="_blank"
+        rel="noopener noreferrer" aria-label="GitHub">
+        <svg class="icon">
+            <use xlink:href="#github-box"></use>
+        </svg>
+        </a>
+
+        <a class="social-item social-item-rss"
+            href="../rss/index.html"
+            target="_blank" rel="noopener noreferrer" aria-label="RSS">
+            <svg class="icon">
+                <use xlink:href="#rss-box"></use>
+            </svg>
+        </a>
+
+    </div>
+
+    <nav class="footer-nav">
+        
+        <a class="menu-item js-theme" href="index.html#" data-system="System theme" data-dark="Dark theme" data-light="Light theme">
+            <svg class="icon theme-icon theme-icon-system">
+                <use xlink:href="#circle-half-full"></use>
+            </svg>
+            <svg class="icon theme-icon theme-icon-dark">
+                <use xlink:href="#brightness-2"></use>
+            </svg>
+            <svg class="icon theme-icon theme-icon-light">
+                <use xlink:href="#white-balance-sunny"></use>
+            </svg>
+            <span class="theme-text">System theme</span>
+        </a>
+    </nav>
+
+    <div class="copyright">
+        <strong>Copyright</strong> © 2022 Qubit Quants
+    </div>
+
+     <div class="copyright">
+        <strong>DISCLAIMER</strong>: All Content is for educational purposes only. Nothing here is financial advise. 
+        Implement at your own risk. No liability assumed by Qubit Quants and it's authors
+    </div>
+
+    <script>
+        var links = document.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          if (links[i].hostname != window.location.hostname) {
+            links[i].target = '_blank';
+            links[i].rel = 'noopener';
+          }
+        }
+    </script>
+
+</footer>        <div class="modal-overlay">
+    <div class="modal modal-search">
+        <div class="form-wrapper">
+            <input class="modal-input search-input" type="search" placeholder="Enter keyword...">
+            <button class="form-button search-button" aria-label="Search">
+                <svg class="icon icon-search">
+                    <use xlink:href="#magnify"></use>
+                </svg>
+                <svg class="icon icon-close">
+                    <use xlink:href="#window-close"></use>
+                </svg>
+            </button>
+        </div>
+                <div class="popular-wrapper">
+                    <h4 class="popular-title">Popular tags</h4>
+                    <div class="popular-feed">
+                            <a class="popular" href="../tag/python/index.html">python</a>
+                            <a class="popular" href="../tag/algorithmic-trading/index.html">algorithmic trading</a>
+                            <a class="popular" href="../tag/vectorbt/index.html">vectorBT</a>
+                            <a class="popular" href="../tag/metatrader5/index.html">metatrader5</a>
+                            <a class="popular" href="../tag/plotly/index.html">plotly</a>
+                    </div>
+                </div>
+        <div class="search-result"></div>
+    </div>
+    <button class="button-icon modal-close" aria-label="Close">
+        <svg class="icon icon-close">
+            <use xlink:href="#window-close"></use>
+        </svg>
+    </button>
+</div>        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe.
+        It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides.
+          PhotoSwipe keeps only 3 of them in the DOM to save memory.
+          Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>    </div>
+
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous">
+    </script>
+    <script src="../assets/built/main.min.js%3Fv=cb9e41483e"></script>
+
+    
+</body>
+
+</html>

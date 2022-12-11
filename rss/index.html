@@ -1,0 +1,879 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Qubit Quants]]></title><description><![CDATA[Welcome to Qubit Quants. The blogging platform to elevate your algorithmic and quantitative trading endeavours.]]></description><link>http://localhost:2368/</link><image><url>http://localhost:2368/favicon.png</url><title>Qubit Quants</title><link>http://localhost:2368/</link></image><generator>Ghost 5.24</generator><lastBuildDate>Sun, 11 Dec 2022 15:27:27 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals]]></title><description><![CDATA[<p></p><!--kg-card-begin: markdown--><p>In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your <code>VectorBT Pro</code> plotting skills by creating your own <code>plot_strategy()</code> function and learn how to go from a basic plot</p>]]></description><link>http://localhost:2368/vbt_plot_strategy/</link><guid isPermaLink="false">63936f6bb83e314625f3c796</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[Signal Cleaning]]></category><category><![CDATA[plotly]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Wed, 30 Nov 2022 17:49:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/PostFeatureImage-1.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/PostFeatureImage-1.png" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals"><p></p><!--kg-card-begin: markdown--><p>In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your <code>VectorBT Pro</code> plotting skills by creating your own <code>plot_strategy()</code> function and learn how to go from a basic plot like this &#x2B07;</p>
+<p><img src="http://localhost:2368/content/images/2022/12/H4_OHLCV_Only.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>TO this <code>Fancy</code> Advanced Plot &#x1F389; &#x1F60E;</strong> with stacked figures, entries/exits and layered indicators <br><br>
+<img src="http://localhost:2368/content/images/2022/12/Final_Strategy_Plot.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="plottingbasics-%F0%9F%91%B6">Plotting - Basics &#x1F476;</h2>
+<p>As before we will start with the global settings we will use everywhere for our plotting like this dark theme and figure / width.</p>
+<pre><code class="language-python">## Global Plot Settings for vectorBT
+vbt.settings.set_theme(&quot;dark&quot;)
+vbt.settings[&apos;plotting&apos;][&apos;layout&apos;][&apos;width&apos;] = 1280
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="ohlcv-plot">OHLCV Plot</h3>
+<p>The code to get a basic OHLCV plot is shown below, to get custom plot titles and other attributes you pass it in the <code>kwargs</code>. To make some sensible visualization and not get a super condensed plot we will use <code>.iloc</code> to slice a small sample of the dataframe.</p>
+<pre><code class="language-python">## Plot OHLCV data first
+kwargs1 = {&quot;title_text&quot; : &quot;OHLCV Plot&quot;, &quot;title_font_size&quot; : 18}
+h4_ohlc_sample = h4_df[[&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Close&quot;]].iloc[100:200]#.dropna()
+f = h4_ohlc_sample.vbt.ohlcv.plot(**kwargs1)
+f.show()
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2022/12/H4_OHLCV_Only.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<p>This gives the plot you saw earlier, and yes we see some ugly gaps in the candlestick data, which we will see how to fix later. Let&apos;s try to add the Bollinger Bands indicator on top of this basic candlestick plot</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="ohlcv-plot-with-bollinger-bands">OHLCV Plot with Bollinger Bands</h3>
+<pre><code class="language-python">h4_bbands.iloc[100:200].plot(fig = f,
+                            lowerband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Lower&apos;), 
+                            upperband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Upper&apos;),
+                            middleband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Middle&apos;)).show()
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2022/12/H4_OHLCV_with_2BB.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<p>The fundamental concept you have to understand in layering elements on a figure is to reference the parent figure, notice how the <code>fig = f</code> in the above Bollinger Band plot is referencing the parent figure object <code>f</code> we first created. Also notice that child objects inherit the styling and other attributes <code>kwargs1</code> you passed to the parent object. You can ofcourse over-ride them by placing another <code>**kwargs</code> in the <code>plot()</code> function call.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="adding-rsi-on-stacked-subplots">Adding RSI on Stacked SubPlots</h3>
+<p>So we learnt how to add an indicator to the figure, but what if we want to create stacked subplots, like adding an RSI Indicator below the previous plot. This is essentially done using the <code>vbt.make_subplots()</code> function and the use of the <code>add_trace_kwargs</code> argument inside the <code>plot()</code> function.</p>
+<pre><code class="language-python">kwargs1 = {&quot;title_text&quot; : &quot;H4 OHLCV with BBands on Price and RSI&quot;, &quot;title_font_size&quot; : 18, 
+           &quot;legend&quot; : dict(yanchor=&quot;top&quot;,y=0.99, xanchor=&quot;right&quot;,x= 0.25)}
+
+fig = vbt.make_subplots(rows=2,cols=1, shared_xaxes=True, vertical_spacing=0.1)
+
+## Sliced Data
+h4_price = h4_df[[&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Close&quot;]]
+indices = slice(100,200)
+h4_price.iloc[indices].vbt.ohlcv.plot(add_trace_kwargs=dict(row=1, col=1),  fig=fig, **kwargs1) 
+h4_bbands.iloc[indices].plot(add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                            lowerband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Lower&apos;), 
+                            upperband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Upper&apos;),
+                            middleband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Middle&apos;))
+
+h4_rsi.iloc[indices].rename(&quot;RSI&quot;).vbt.plot(add_trace_kwargs=dict(row=2, col=1),fig=fig, **kwargs1 )
+
+h4_bbands_rsi.iloc[indices].plot(add_trace_kwargs=dict(row=2, col=1),limits=(25, 75),fig=fig,
+                            lowerband_trace_kwargs=dict(fill=None, name = &apos;BB_RSI_Lower&apos;), 
+                            upperband_trace_kwargs=dict(fill=None, name = &apos;BB_RSI_Upper&apos;),
+                            middleband_trace_kwargs=dict(fill=None, name = &apos;BB_RSI_Middle&apos;),
+                            # xaxis=dict(rangeslider_visible=True) ## Without Range Slider
+                            )
+
+fig.update_xaxes(rangebreaks=[dict(values=dt_breaks)])
+fig.layout.showlegend = False
+fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><img src="http://localhost:2368/content/images/2022/12/Stacked_RSI_Plot.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<!--kg-card-end: markdown--><hr><!--kg-card-begin: markdown--><h2 id="plottingadvanced-%F0%9F%92%AA">Plotting - Advanced &#x1F4AA;</h2>
+<p>In this section, we will see how to create your own <code>plot_strategy</code> with all the customizations you would want. Please read the inline comments in the code block below to understand the inner workings and details of the various commands</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">def plot_strategy(slice_lower : str, slice_upper: str, df : pd.DataFrame , rsi : pd.Series,
+                  bb_price : vbt.indicators.factory, bb_rsi : vbt.indicators.factory,  
+                  pf: vbt.portfolio.base.Portfolio, entries: pd.Series = None, 
+                  exits: pd.Series = None,
+                  show_legend : bool = True):
+    &quot;&quot;&quot;Creates a stacked indicator plot for the 2BB strategy.
+    Parameters
+    ===========
+    slice_lower : str, start date of dataframe slice in yyyy.mm.dd format
+    slice_upper : str, start date of dataframe slice in yyyy.mm.dd format
+    df          : pd.DataFrame, containing the OHLCV data
+    rsi         : pd.Series, rsi indicator time series in same freq as df
+    bb_price    : vbt.indicators.factory.talib(&apos;BBANDS&apos;), computed on df[&apos;close&apos;] price
+    bb_rsi      : vbt.indicators.factory.talib(&apos;BBANDS&apos;) computer on RSI
+    pf          : vbt.portfolio.base.Portfolio, portfolio simulation object from VBT Pro
+    entries     : pd.Series, time series data of long entries
+    exits       : pd.Series, time series data of long exits
+    show_legend : bool, switch to show or completely hide the legend box on the plot
+    
+    Returns
+    =======
+    fig         : plotly figure object
+    &quot;&quot;&quot;
+    kwargs1 = {&quot;title_text&quot; : &quot;H4 OHLCV with BBands on Price and RSI&quot;, 
+               &quot;title_font_size&quot; : 18,
+               &quot;height&quot; : 960,
+               &quot;legend&quot; : dict(yanchor=&quot;top&quot;,y=0.99, xanchor=&quot;left&quot;,x= 0.1)}
+    fig = vbt.make_subplots(rows=2,cols=1, shared_xaxes=True, vertical_spacing=0.1)
+    ## Filter Data according to date slice
+    df_slice = df[[&quot;Open&quot;, &quot;High&quot;, &quot;Low&quot;, &quot;Close&quot;]][slice_lower : slice_upper]
+    bb_price = bb_price[slice_lower : slice_upper]
+    rsi = rsi[slice_lower : slice_upper]
+    bb_rsi = bb_rsi[slice_lower : slice_upper]
+
+    ## Retrieve datetime index of rows where price data is NULL
+    # retrieve the dates that are in the original datset
+    dt_obs = df_slice.index.to_list()
+    # Drop rows with missing values
+    dt_obs_dropped = df_slice[&apos;Close&apos;].dropna().index.to_list()
+    # store  dates with missing values
+    dt_breaks = [d for d in dt_obs if d not in dt_obs_dropped]
+
+    ## Plot Figures
+    df_slice.vbt.ohlcv.plot(add_trace_kwargs=dict(row=1, col=1),  fig=fig, **kwargs1) ## Without Range Slider
+    rsi.rename(&quot;RSI&quot;).vbt.plot(add_trace_kwargs=dict(row=2, col=1), trace_kwargs = dict(connectgaps=True), fig=fig) 
+
+    bb_line_style = dict(color=&quot;white&quot;,width=1, dash=&quot;dot&quot;)
+    bb_price.plot(add_trace_kwargs=dict(row=1, col=1),fig=fig, **kwargs1,
+                lowerband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Lower&apos;, connectgaps=True, line = bb_line_style), 
+                upperband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Upper&apos;, connectgaps=True, line = bb_line_style),
+                middleband_trace_kwargs=dict(fill=None, name = &apos;BB_Price_Middle&apos;, connectgaps=True) )
+
+    bb_rsi.plot(add_trace_kwargs=dict(row=2, col=1),limits=(25, 75),fig=fig,
+                lowerband_trace_kwargs=dict(fill=None, name = &apos;BB_RSI_Lower&apos;, connectgaps=True,line = bb_line_style), 
+                upperband_trace_kwargs=dict(fill=None, name = &apos;BB_RSI_Upper&apos;, connectgaps=True,line = bb_line_style),
+                middleband_trace_kwargs=dict(fill=None, name = &apos;BB_RSI_Middle&apos;, connectgaps=True, visible = False))
+    
+    ## Plots Long Entries / Exits and Short Entries / Exits
+    pf[slice_lower:slice_upper].plot_trade_signals(add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                                                   plot_close=False, plot_positions=&quot;lines&quot;)
+
+    ## Plot Trade Profit or Loss Boxes
+    pf.trades.direction_long[slice_lower : slice_upper].plot(
+                                        add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                                        plot_close = False,
+                                        plot_markers = False
+                                        )
+                                        
+
+    pf.trades.direction_short[slice_lower : slice_upper].plot(
+                                            add_trace_kwargs=dict(row=1, col=1),fig=fig,
+                                            plot_close = False,
+                                            plot_markers = False
+                                            )
+
+    if (entries is not None) &amp; (exits is not None):
+        ## Slice Entries and Exits
+        entries = entries[slice_lower : slice_upper]
+        exits = exits[slice_lower : slice_upper]
+        ## Add Entries and Long Exits on RSI in lower subplot
+        entries.vbt.signals.plot_as_entries(rsi, fig = fig,
+                                                add_trace_kwargs=dict(row=2, col=1),
+                                                trace_kwargs=dict(name = &quot;Long Entry&quot;, 
+                                                                  marker=dict(color=&quot;limegreen&quot;)
+                                                                  ))  
+
+        exits.vbt.signals.plot_as_exits(rsi, fig = fig, 
+                                            add_trace_kwargs=dict(row=2, col=1),
+                                            trace_kwargs=dict(name = &quot;Short Entry&quot;, 
+                                                              marker=dict(color=&quot;red&quot;),
+                                                            #   showlegend = False ## To hide this from the legend
+                                                              )
+                                            )
+
+    fig.update_xaxes(rangebreaks=[dict(values=dt_breaks)])
+    fig.layout.showlegend = show_legend  
+    # fig.write_html(f&quot;2BB_Strategy_{slice_lower}_to_{slice_upper}.html&quot;)
+    
+    return fig
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">slice_lower = &apos;2019.11.01&apos;
+slice_higher = &apos;2019.12.31&apos;
+
+fig = plot_strategy(slice_lower, slice_higher, h4_data.get(), h4_rsi, 
+                           h4_bbands, h4_bbands_rsi, pf,
+                           clean_h4_entries, clean_h4_exits,
+                           show_legend = True)
+
+# fig.show_svg()
+fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><img src="http://localhost:2368/content/images/2022/12/Final_Strategy_Plot.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>Notes</strong>:</p>
+<ul>
+<li>We are using the H4 timeframe data for our plotting, as the <code>15T</code> baseline data series results in a very dense looking plot which slows down the interactive plot.</li>
+<li>We are passing a slice of the time series dataframe in order to avoid a dense, highly cluttered plot. You can make this interactive also if you were to use <code>plotly-dash</code> (a topic for another blog post perhaps &#x1F603; )</li>
+<li>The gaps in the OHLCV candlesticks on weekends are fixed by storing the dates with missing values in the <code>dt_breaks</code> variable and passing this in the <code>rangebreaks=[dict(values=dt_breaks)]</code> argument in the <code>fig.update_xaxes()</code> method to filter our the missing dates in the x-axes.</li>
+<li>We fixed the gaps occuring in the bollinger bands (due to weekend market closures) by using the <code>connectgaps = True</code> argument in each <code>_trace_kwargs</code> of the bollinger bands.</li>
+<li>Note, that you may wonder why we are naming the legends entries and exits in the RSI subplot below as <code>Long Entries</code> and <code>Short Entries</code> and not four distinct labels as in the first subplot.
+<ul>
+<li>This is because since we set <code>direction = both</code> in the <code>pf.simulation</code> the Short Entry is basically an Exit for the previous Long position and similarly, a Long Entry is basically an exit for the previous short position. This type of nomenclature setting makes the plot also usable for other settings like when you would want to set <code>direction = longonly</code> in the <code>pf.simulation</code> in which case you can just call these legend items <code>Long Entries</code> and <code>Long Exits</code> on the RSI subplot.</li>
+</ul>
+</li>
+</ul>
+<!--kg-card-end: markdown--><hr><!--kg-card-begin: markdown--><h2 id="cleaning-entries-and-exits">Cleaning <code>entries</code> and <code>exits</code></h2>
+<p>You might have noticed in the last code block we were using <code>clean_h4_entries</code> and <code>clean_h4_exits</code>. Lets understand why we did that? Before we plot any entries and exits for visual analysis, it is imperative to clean them. We will continue with the entries and exits at the end of our previous tutorial <code>Strategy Development and Signal Generation</code> in order to explain how we can go about  <code>cleaning</code> and <code>resampling</code> entry &amp; exit signals.</p>
+<pre><code class="language-python">entries = mtf_df.signal == 1.0
+exits = mtf_df.signal == -1.0
+</code></pre>
+<p>The total nr. of actual signals in the entries and exits array is computed by the <code>vbt.signals.total()</code> accessor method.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(f&quot;Length of Entries (array): {len(entries)} || Length of Exits (array): {len(exits)}&quot; )
+print(f&quot;Total Nr. of Entry Signals: {entries.vbt.signals.total()} || \
+        Total Nr. of Exit Signals: {exits.vbt.signals.total()}&quot;)
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-python">Length of Entries (array): 105188 || Length of Exits (array): 105188
+Total Nr. of Entry Signals: 2135 || Total Nr. of Exit Signals: 1568
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="why-do-you-want-to-clean-the-entries-and-exits">Why do you want to clean the <code>entries</code> and <code>exits</code>?</h3>
+<p>From the print statement output we can see that in the entire length of the dataframe <code>105188</code> on <code>15T</code> frequency, we can see that the total number of raw entry and raw exit signals is 2135 and 1568 respectively, which is prior to any cleaning. Currently there are many duplicate signals in the entries and exits, and this discrepancy between entries and exits need to be resolved by cleaning.</p>
+<p>Cleaning entry and exit signals is easily done by <code>vbt.signals.clean()</code> accessor and after cleaning each entry signal has a corresponding exit signal. When we validate the total number of clean entry and clean exit signals using the <code>vbt.signals.total()</code> method now, we can now see the cleaned entry and exit signals total to be 268 and 267 respectively.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Clean redundant and duplicate signals
+clean_entries, clean_exits = entries.vbt.signals.clean(exits)
+print(f&quot;Length of Clean_Entries Array: {len(clean_entries)} || Length of Clean_Exits Array: {len(clean_exits)}&quot; )
+print(f&quot;Total nr. of Entry Signals in Clean_Entry Array: {clean_entries.vbt.signals.total()} || \
+        Total nr. of Exit Signals in Clean_Exit Array: {clean_exits.vbt.signals.total()}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code>Length of Clean_Entries Array: 105188 || Length of Clean_Exits Array: 105188
+Total nr. of Entry Signals in Clean_Entry Array: 268 || Total nr. of Exit Signals in Clean_Exit Array: 267
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p>Could you think of a reason why there is a difference of one signal between the <code>clean_entry</code> and <code>clean_exit</code> signals ?</p>
+<ul>
+<li>This is happening because the most recent (entry) position that was last opened, has not been closed out.</li>
+</ul>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="cleaning-signalsvisual-difference">Cleaning Signals - Visual Difference</h3>
+<p>The below plots will make it easier when understanding what happens if we use uncleaned signals<br>
+<strong>Uncleaned Entries &amp; Exits on our RSI Plot</strong><br>
+<img src="http://localhost:2368/content/images/2022/12/unCleaned_RSI.png" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<p><strong>Cleaned Entries &amp; Exits on our RSI plot</strong><br>
+<img src="http://localhost:2368/content/images/2022/12/Cleaned_RSI.png" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="resampling-entries-and-exits-to-h4-timeframe">Resampling <code>entries</code> and <code>exits</code> to H4 timeframe</h2>
+<p>Resampling any entries/exits is <strong>only</strong> required when we are concerned with analyzing (plotting, counting etc.) and visualizing our strategy and entries/exits on a timeframe different from the baseline frequency of our strategy. It is always recommended to <strong>first clean the raw entries/exits</strong> array and then do the resampling.</p>
+<p><strong>When do we need to <code>upsample</code> and <code>downsample</code> entries &amp; exits?</strong></p>
+<ul>
+<li><em>Downsampling</em> of entries/exists is required if we want to do any visual analysis on a timeframe <strong>higher</strong> than that our baseline frequency of our strategy.
+<ul>
+<li>For eg, in the below code we show a case of Downsampling  our entries/exits on the 15m timeframe to H4 timeframe. Downsampling comes with the <code>risk</code> of <strong>information loss</strong>.</li>
+</ul>
+</li>
+<li><em>Upsampling</em> of entries/exits is required, if we want to do any visual analysis on a timeframe <strong>lower</strong> than that our baseline frequency of our strategy.
+<ul>
+<li>For example, you have some crossover on 4h frequency and you want to combine the signals with some other crossover on 15 min frequency, then you would need to upsample signals from 4h-&gt;15min, which would cause no problems because there is no information loss in upsampling</li>
+</ul>
+</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">clean_h4_entries = clean_entries.vbt.resample_apply(&quot;4h&quot;, &quot;any&quot;, wrap_kwargs=dict(dtype=bool))
+clean_h4_exits = clean_exits.vbt.resample_apply(&quot;4h&quot;, &quot;any&quot;, wrap_kwargs=dict(dtype=bool))
+
+print(f&quot;Length of H4_Entries (array): {len(clean_h4_entries)} || Length of H4_Exits (array): {len(clean_h4_exits)}&quot; )
+print(f&quot;Total nr. of H4_Entry Signals: {clean_h4_entries.vbt.signals.total()} || \
+        Total nr. of H4_Exit Signals: {clean_h4_exits.vbt.signals.total()}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code class="language-python">Length of H4_Entries (array): 6575 || Length of H4_Exits (array): 6575
+Total nr. of H4_Entry Signals: 263 || Total nr. of H4_Exit Signals: 263
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="information-loss-during-downsampling">Information Loss during downsampling</h3>
+<p>From the above output we see the nr. of signals on the <code>clean_h4_entries</code> and <code>clean_h4_exits</code> as 263 respectively, this shows a loss of information during this Downsampling process. This information loss occurs because by aggregating signals during downsampling, our data becomes less granular. <br></p>
+<p>&#x2B50; <strong>Key Points</strong> <br></p>
+<ul>
+<li><strong>How information loss occurs during downsampling of entries/exits?</strong> <br>
+<ul>
+<li>Let&apos;s say we have <code>[entry, entry, exit, exit, entry, entry]</code> in our signal array, after cleaning we&apos;ll get <code>[entry, exit, entry]</code>, but after aggregating the original signal sequence you&apos;ll get just <code>{entry:4 ; exit:2}</code>, which clearly cannot after cleaning produce the same sequence as on the smaller (more granular) timeframe.</li>
+<li>The problem here is that the information loss occured during <code>downsampling</code> the cleaned entries and exits, ignores any exit that could have closed the position if you back tested on the original timeframe (<code>15T</code> in our example), that is why we end up seeing 263 || 263 in the above print statement.</li>
+</ul>
+</li>
+<li>After downsampling if we want to retrace the order of signals and we want to investigate &quot;<em>Which signal came first in the original timeframe</em> ?&quot;, we encounter a irresolvible problem. We can&apos;t resample 1m (minutely) data to one year timeframe and then expect the signal count to be the same even though our new data is all fitting in only one bar (1D candle).</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>By changing the method to <code>sum</code> and removing the <code>wrap_kwargs</code> argument in the <code>vbt.resample_apply()</code> method we can aggregate the signals and show the aggregated nr. of signals.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## sum() will aggregate the signals
+h4_entries_agg = clean_entries.vbt.resample_apply(&quot;4h&quot;, &quot;sum&quot;)
+h4_exits_agg = clean_exits.vbt.resample_apply(&quot;4h&quot;, &quot;sum&quot;)
+
+## h4_extries_agg is not a vbt object so vbt.signals.total() accessor will not work 
+## and thus we use the pandas sum() method in the print statement below
+print(f&quot;Length of H4_Entries (array): {len(h4_entries_agg)} || Length of H4_Exits (array): {len(h4_exits_agg)}&quot; )
+print(f&quot;Aggregated H4_Entry Signals: {int(h4_entries_agg.sum())} || Aggregated H4_Exit Signals: {int(h4_exits_agg.sum())}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code>Length of H4_Entries (array): 6575 || Length of H4_Exits (array): 6575
+Aggregated H4_Entry Signals: 268   || Aggregated H4_Exit Signals: 267
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Though the result of this aggregation shows the same result we got above when printing the <code>clean_entries.vbt.signals.total()</code> and <code>clean_exits.vbt.signals.total()</code>, this does not help us in inferring the true order of the signals and the information loss created by downsampling cannot be compensated by aggregation.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p><strong>Do we have to resample entries/exits for running the backtesting simulation?</strong> <br><br>
+When you are doing portfolio simulation (backtesting), using the <code>from_signals()</code> which we see in the previous blog post - <a href="https://qubitquants.pro/strategydev/">Strategy Development and Signal Generation</a>, the <code>from_signals</code> method automatically cleans the entries and exits , therefore there is no reason to do resampling or cleaning of any entries and exits.<br>
+Irrespective of whether we use the clean entries and exits or just the regular entries and exits in the simulation/backtest when running <code>from_signals()</code> it will make no difference. You can try this for yourself and see the results will be the same.</p>
+</blockquote>
+<!--kg-card-end: markdown--><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Strategy Development and Signal Generation]]></title><description><![CDATA[<!--kg-card-begin: markdown--><h2 id="strategy-development-and-signal-generation">Strategy Development and Signal Generation</h2>
+<p>Strategy Development usually involves multiple trial and error research, where we check for various combinations of technical indicators and price levels to generate entry and exit signals. It is very easy to generate entry and exit signals in VectorBT which is just a <code>bool</code> array</p>]]></description><link>http://localhost:2368/strategydev/</link><guid isPermaLink="false">639307e0b83e314625f3c66c</guid><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 28 Nov 2022 11:09:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1635236198091-33d5aa8466cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDQxfHxjaGFydCUyMGFuYWx5c2lzfGVufDB8fHx8MTY3MDU4MDI5OQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><h2 id="strategy-development-and-signal-generation">Strategy Development and Signal Generation</h2>
+<img src="https://images.unsplash.com/photo-1635236198091-33d5aa8466cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDQxfHxjaGFydCUyMGFuYWx5c2lzfGVufDB8fHx8MTY3MDU4MDI5OQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Strategy Development and Signal Generation"><p>Strategy Development usually involves multiple trial and error research, where we check for various combinations of technical indicators and price levels to generate entry and exit signals. It is very easy to generate entry and exit signals in VectorBT which is just a <code>bool</code> array for <code>entries</code> and <code>exits</code>. If you have different criteria for your LONGS and SHORTS, you can create separate boolean arrays for <code>long_entries</code>, <code>long_exits</code>, <code>short_entries</code> and <code>short_exits</code>.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="double-bollinger-band-strategy-conditions">Double Bollinger Band Strategy Conditions</h3>
+<p>For the rest of this tutorial we will be using the indicators and other elements created in the previous tutorial - <a href>Aligning MTF time series Data with Resampling</a>, for our customized <code>MTF</code> adaptation of this <a href="https://abouttrading.substack.com/p/the-double-bollinger-trading-strategy"><em>Double Bollinger Band</em> Strategy</a> on the H4 and 15m timeframes. In our implementation we will be using the same conditions for a short entry as a long exit and a short exit signal will use the same conditions as a long entry.</p>
+<h5 id="long-condition-%E2%86%97"><strong>Long Condition</strong> &#x2197;</h5>
+<p>In our adaptation of this Double Bollinger Band Strategy, a long (buy) signal is generated whenever the H4 market (Low) price goes below its lower Bollinger band, and the 15m RSI goes below its lower Bollinger band.</p>
+<blockquote>
+<p>Here are the two conditions (<code>c1_long_entry</code> and <code>c2_long_entry</code>) that would qualify a long entry</p>
+</blockquote>
+<pre><code class="language-python">## The two variables `bb_upper_fract` and `bb_lower_fract` are simply some adjustment parameters for the RSI bollinger bands and they are explained at the end of this article.
+
+bb_upper_fract = 0.99
+bb_lower_fract = 1.01
+
+c1_long_entry = (mtf_df[&apos;h4_low&apos;] &lt;= mtf_df[&apos;h4_bband_price_lower&apos;])
+c2_long_entry = (mtf_df[&apos;m15_rsi&apos;] &lt;= (bb_lower_fract * mtf_df[&apos;m15_bband_rsi_lower&apos;]))
+</code></pre>
+<h5 id="short-condition-%E2%86%98"><strong>Short Condition</strong> &#x2198;</h5>
+<p>Likewise, a long exit ( and also the short (sell) signal ) is generated whenever the H4 market (High) price breaks its upper Bollinger band, and the 15m RSI breaks above its upper Bollinger band.</p>
+<blockquote>
+<p>Here are the two conditions that would qualify a short entry (closing out the long entry)</p>
+</blockquote>
+<pre><code class="language-python">c1_long_exit =  (mtf_df[&apos;h4_high&apos;] &gt;= mtf_df[&apos;h4_bband_price_upper&apos;])
+c2_long_exit = (mtf_df[&apos;m15_rsi&apos;] &gt;= (bb_upper_fract * mtf_df[&apos;m15_bband_rsi_upper&apos;]))
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>As seen below the <code>entry</code> and <code>exit</code> criteria can be added as two seperate columns in the <code>mtf_df</code> pandas dataframe, simply by chaining multiple conditions using the bitwise <code>&amp;</code> operator.</p>
+<pre><code class="language-python">## Strategy conditions check - Using m15 and h4 data 
+mtf_df[&apos;entry&apos;] = c1_long_entry &amp; c2_long_entry
+mtf_df[&apos;exit&apos;]  = c1_long_exit &amp; c2_long_exit
+</code></pre>
+<p>The <code>entries</code> and <code>exits</code> are boolean arrays and in order to represent them in a numerical format we will create a new column called <code>signal</code> in <code>mtf_df</code> that will read <code>1</code> where the entry conditions have been satisfied and <code>-1</code> where the exit conditions have been satisfied, or <code>0</code> otherwise.</p>
+<pre><code class="language-python">mtf_df[&apos;signal&apos;] = 0   
+mtf_df[&apos;signal&apos;] = np.where( mtf_df[&apos;entry&apos;] ,1, 0)
+mtf_df[&apos;signal&apos;] = np.where( mtf_df[&apos;exit&apos;] ,-1, mtf_df[&apos;signal&apos;])
+</code></pre>
+<p>The entries and exits series can be extracted from <code>mtf_df[&apos;signal&apos;]</code> which will then be used to run the simulation/backtest</p>
+<pre><code class="language-python">entries = mtf_df.signal == 1.0
+exits = mtf_df.signal == -1.0
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>To run the backtest we use the following code , when the direction is set to <code>both</code>, the long exit is categorised as a short entry, as to close out the long position a short must be initiated and likewise, the short exit is treated as a long entry</p>
+<pre><code class="language-python">pf = vbt.Portfolio.from_signals(
+    close = mtf_df[&apos;m15_close&apos;], 
+    entries = entries, 
+    exits = exits, 
+    direction = &quot;both&quot;, ## This setting trades both long and short signals
+    freq = pd.Timedelta(minutes=5), 
+    init_cash = 100000
+)
+</code></pre>
+<pre><code class="language-python">pf_stats = pf.stats()
+print(&quot;Total Returns    [%]:&quot;, round(pf_stats[&apos;Total Return [%]&apos;], 2))
+print(&quot;Maximum Drawdown [%]: &quot;, round(pf_stats[&apos;Max Drawdown [%]&apos;],2))
+print(pf_stats)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code class="language-python">Total Returns    [%]: 33.27
+Maximum Drawdown [%]:  11.57
+Start                         2019-08-27 00:00:00+00:00
+End                           2022-08-26 16:45:00+00:00
+Period                                365 days 05:40:00
+Start Value                                    100000.0
+Min Value                                  92520.879497
+Max Value                                  133314.96609
+End Value                                 133266.736753
+Total Return [%]                              33.266737
+Benchmark Return [%]                          -3.833225
+Total Time Exposure [%]                       99.856448
+Max Gross Exposure [%]                       107.104183
+Max Drawdown [%]                              11.572446
+Max Drawdown Duration                  94 days 06:30:00
+Total Orders                                        535
+Total Fees Paid                                     0.0
+Total Trades                                        535
+Win Rate [%]                                  59.550562
+Best Trade [%]                                 2.797026
+Worst Trade [%]                               -3.578342
+Avg Winning Trade [%]                          0.384536
+Avg Losing Trade [%]                           -0.42807
+Avg Winning Trade Duration    0 days 13:10:31.132075471
+Avg Losing Trade Duration     0 days 21:07:20.277777777
+Profit Factor                                  1.320807
+Expectancy                                    62.387577
+Sharpe Ratio                                   1.868003
+Calmar Ratio                                   0.867506
+Omega Ratio                                    1.021671
+Sortino Ratio                                  2.691066
+dtype: object
+</code></pre>
+<!--kg-card-end: markdown--><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text">In the <code>pf.stats</code> printout, why does it say <code>Period</code> is 365 days, when the dataset start and end period is for 3 years? There are atleast 262 * 3 = 786 tradings days in the 3 - year calendar?</div></div><!--kg-card-begin: markdown--><p>We can see all the trades that were executed during this backtest simulation by using</p>
+<pre><code class="language-python">pf.trade_history()
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2022/12/pf_trade_history.png" alt="VectorBT Pro - Strategy Development and Signal Generation" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="plottingportfolio-simulations">Plotting - Portfolio Simulations</h3>
+<p>It is a good practise to set the theme and plot dimensions that we would like to commonly use for all our plotting in the beginning. VectorBT uses <code>plotly</code> (a python package) for all its plotting capabilities.</p>
+<pre><code class="language-python">## Global Plot Settings for vectorBT
+vbt.settings.set_theme(&quot;dark&quot;)
+vbt.settings[&apos;plotting&apos;][&apos;layout&apos;][&apos;width&apos;] = 1280
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Since our backtest simulation was run on 15m timeframe (as it was our baseline frequency) we resamply the <code>pf.plot()</code> to save time and also avoid seeing a dense  plot. The below SVG static plot was generated using the <code>show_svg()</code> function, but you can also <code>show_png()</code> to render the plot as a static rasterized image or use <code>show()</code> to show an interactive toolbar along with a dynamic interactive plot with hovertools etc.</p>
+<blockquote>
+<p>The important thing to remember is to use one of the <code>show()</code> method after the <code>plot()</code> in order to render the figure correctly.</p>
+</blockquote>
+<pre><code class="language-python"># pf.plot().show() ## This takes slightly long (10 secs) as it uses 15m timeframe index
+pf.resample(&quot;1d&quot;).plot().show_svg()
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2022/12/pf_plot_resampled_1d.svg" alt="VectorBT Pro - Strategy Development and Signal Generation" loading="lazy"></p>
+<p>The plot includes three sub-plots that captures at a glance most of the trading performance stats we would like to see like</p>
+<ul>
+<li>Open and closed positions at various price points</li>
+<li>The <code>PnL</code> of each order</li>
+<li>The cummulative returns of our strategy compared to the benchmark returns of just holding the instrument</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>We can also isolate <code>pf.orders</code> from the above <code>pf.plot</code> to just show the orders and pass a custom <code>kwargs</code> argument to give a custom title for the plot.</p>
+<pre><code class="language-python">kwargs = {&quot;title_text&quot; : &quot;Orders - Daily chart&quot;, &quot;title_font_size&quot; : 18}
+pf.orders.resample(&quot;1d&quot;).plot(xaxis=dict(rangeslider_visible=False),**kwargs).show()
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2022/12/Orders_1D_Isolated.svg" alt="VectorBT Pro - Strategy Development and Signal Generation" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="max-drawdown">Max Drawdown</h3>
+<p>Understanding and Visualization of Drawdown is a very important part of any strategy development and fortunately, for us VectorBT has a very convenient method to visualize DrawDown</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(f&quot;Max Drawdown [%]: {pf.stats()[&apos;Max Drawdown [%]&apos;]}&quot;)
+print(f&quot;Max Drawdown Duration: {pf.stats()[&apos;Max Drawdown Duration&apos;]}&quot;)
+pf.drawdowns.plot(**{&quot;title_text&quot; : &quot;Drawdowns Plot&quot;}).show()
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-python">Max Drawdown [%]: 11.572445827440356
+Max Drawdown Duration: 94 days 06:30:00
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2022/12/DrawDownPlot_Interactive.png" alt="VectorBT Pro - Strategy Development and Signal Generation" loading="lazy"></p>
+<blockquote>
+<ul>
+<li>The above Drawdown plot below shows only the top 5 drawdowns.</li>
+<li>The max drawdown duration of 94 days includes, 73 days for the declination phase and 21 days for the recovery phase in the max. peak drawdown. If you use the <code>.show()</code> method to get an interactive plot you can see this in the hover information when you hover over the plotted figure.</li>
+</ul>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="underwater-plot">UnderWater Plot:</h3>
+<p>VectorBT also allows us to plot an underwater plot, which is basically just an alternative way of visualizing drawdown and shows the relative drawdown ( <code>time-to-time</code> ) from the previous peak balance</p>
+<pre><code class="language-python">kwargs = {&quot;title_text&quot; : &quot;Underwater Plot&quot;,&apos;title_x&apos;: 0.5}
+pf.plot_underwater(**kwargs).show()
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2022/12/UnderWaterPlot.svg" alt="VectorBT Pro - Strategy Development and Signal Generation" loading="lazy"></p>
+<!--kg-card-end: markdown--><p>To adjust various aspects and parameters of the plot (eg: Title, position etc.) , one should always refer the Plotly Documentation Reference : <a href="https://plotly.com/python/reference/layout/">https://plotly.com/python/reference/layout/</a></p><!--kg-card-begin: markdown--><h2 id="summarystrategy-exploration">Summary - Strategy Exploration</h2>
+<p>&#x1F4A1; <strong>Why we use <code>bb_upper_fract</code> and <code>bb_lower_fract</code>?</strong></p>
+<p>To readily understand what these two adjustment variables are you can try running the code see what happens when you see both of these variables equal to 1 , you will essentially get fewer number of signals.</p>
+<p>The <code>bb_upper_fract</code> and <code>bb_lower_fract</code> can simply be thought of as parameters that reduce the gap between the upper bound and the high price and the lower bound and the low price.</p>
+<p>Reducing this gap results in price more frequently touching the new upper bound and the new lower bound thus resulting in more signals generated.</p>
+<p>&#x1F4A1; <strong>What will happen if we try other timeframe combinations?</strong></p>
+<p>Well in the strategy explained above we used <code>H4</code> and <code>m15</code> but you may have the idea &#x1F4AD; to use <code>H1</code> instead of <code>H4</code>, thinking that it would result in more signals and perhaps also more profit &#x1F4B5; &#x1F911; ?</p>
+<pre><code class="language-python">## Long Entry Conditions
+c1_long_entry = (mtf_df[&apos;h1_low&apos;] &lt;= mtf_df[&apos;h1_bband_price_lower&apos;])
+c2_long_entry = (mtf_df[&apos;m15_rsi&apos;] &lt;= (bb_lower_fract * mtf_df[&apos;m15_bband_rsi_lower&apos;]) )
+ 
+ 
+## Long Exit Conditions
+c1_long_exit =  (mtf_df[&apos;h1_high&apos;] &gt;= mtf_df[&apos;h1_bband_price_upper&apos;])
+c2_long_exit = (mtf_df[&apos;m15_rsi&apos;] &gt;= (bb_upper_fract * mtf_df[&apos;m15_bband_rsi_upper&apos;]))
+</code></pre>
+<p>Yes &#x2705; that is true we get more signals ,take a look at the results obtained when we execute the above &#x261D; code. But, would you be happy with these results ?</p>
+<pre><code class="language-python">Total Returns    [%]: -16.21
+Maximum Drawdown [%]:  28.17
+</code></pre>
+<h3 id="key-takeaways-%E2%9A%A1">Key Takeaways &#x26A1;</h3>
+<ul>
+<li>
+<p>Ultimately strategy development and signal generation is and art thatis dependent on variety of different elements like:</p>
+<ul>
+<li>Timeframes</li>
+<li>Indicators and their parameter values</li>
+<li>Fundamental and Economic data etc.</li>
+</ul>
+</li>
+<li>
+<p>Its imperative that you study &#x1F4DA; the rules and parameters of your strategy carefully before backtesting.</p>
+</li>
+</ul>
+<!--kg-card-end: markdown--><p>Good Luck &#xA0;&#x270C;&#xFE0F; on your strategy development journey, let us know in the comments below if you happen to discover any profitable variations of this strategy</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Aligning MTF time series Data with Resampling]]></title><description><![CDATA[<blockquote>Software Requirements : vectorbtpro, python3</blockquote><p><strong>Resampling</strong> of the market data is needed for strategies that involve multiple time frames, often referred to as &#x201C;<em>top down analysis</em>&#x201D; or &#x201C;<em>Multi Time Frame</em> (MTF) analysis&#x201D;. There are two types of resampling, called <strong>upsampling</strong> and <strong>downsampling</strong>.<br><br>Before thinking of <em><code>upsampling</code></em> and</p>]]></description><link>http://localhost:2368/aligning-mtf-data/</link><guid isPermaLink="false">638a2dcf63e5f664c010817d</guid><category><![CDATA[python]]></category><category><![CDATA[algorithmic trading]]></category><category><![CDATA[vectorBT]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sat, 26 Nov 2022 08:30:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<blockquote>Software Requirements : vectorbtpro, python3</blockquote><img src="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Aligning MTF time series Data with Resampling"><p><strong>Resampling</strong> of the market data is needed for strategies that involve multiple time frames, often referred to as &#x201C;<em>top down analysis</em>&#x201D; or &#x201C;<em>Multi Time Frame</em> (MTF) analysis&#x201D;. There are two types of resampling, called <strong>upsampling</strong> and <strong>downsampling</strong>.<br><br>Before thinking of <em><code>upsampling</code></em> and <em><code>downsampling</code></em> time-series data, let&apos;s use the analogy of an UltraHD (4K) &#xA0;television to better understand these terms intuitively. When you feed a 1080p video source to a 4K TV it will <em>Upsample</em> the pixels, giving you a high resolution image. Essentially, you will get a high granularity (finer, hi-res image) from a low granularity (coarse, low-res image). The opposite ( <em>downsampling </em>) happens when you play a 4K video file on an old &#x1F4FA; HD TV.<br><br>In the context of time series data,</p><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text"><strong>Downsampling</strong> means going from high frequency time-series data (holds more information about the price within a time interval) to low frequency time-series data (holds less information about the price within the same time interval)<br><strong>Example</strong>: 15 Minute Data &#x2192; 1 Hour Data</div></div><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text"><strong>Upsampling</strong> means going from a low frequency time-series data (holds less information about the price within a time interval) to a higher frequency (holds more information about the price within a time interval)<br><strong>Example</strong> : 1 Hour Data &#x2192; 15 Minute Data</div></div><p>In multi-time frame strategy analysis, we have to deal with the problem of integrating time series data (eg: <code>close</code> price) from multiple time frames.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Merge_How-1.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy" width="1507" height="458"><figcaption>How to merge timeseries data with different frequencies?</figcaption></figure><p>To make our data-analytics and back-testing simulation process easier, we usually like to have a single time-series dataframe ( <code>mtf_df</code> ) which contains all the values from whatever time-frames we require (eg: 5m, 15min, 1h. 4h, 1D, 1W etc.) . This MTF dataframe will have a <em>base-line</em> frequency which will typically be the highest frequency (i.e highest granularity or the lowest timeframe time-series data, eg: 5m ) with which you want to do your signal generation for the strategy. The process of creating this MTF dataframe with resampled data is called <em><strong>Alignment</strong></em>.</p><figure class="kg-card kg-image-card kg-width-wide kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Merged_DFs-1.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy" width="2326" height="505"><figcaption>Aligned and upsampled data frame</figcaption></figure><p>In alignment, we basically merge the MTF time-series &#xA0;<em>resampled</em> data into a single dataframe using <code>ffill()</code> and <code>shift()</code> operations. This is very easily done using <code>vbt.resampler()</code> objects and using those resampler objects as an argument in <code>vbt.resample_opening()</code> function for <strong>open</strong> price and <code>vbt.resample_closing()</code> when dealing with <strong>close</strong>, <strong>high</strong>, <strong>low</strong> prices and indicators.</p><hr><!--kg-card-begin: markdown--><h2 id="loading-and-resampling-data">Loading and Resampling Data</h2>
+<p>Loading the data using <code>vbt.HDF</code> functionality of the <code>1-minute</code> granularity</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Import Required Libaries
+import vectorbtpro as vbt
+import pandas as pd
+
+## Load m1 data
+m1_data = vbt.HDFData.fetch(&apos;../data/GU_OHLCV_3Y.h5&apos;)
+m1_data.wrapper.index #pandas doaesn&apos;t recognise the frequency because of missing timestamps
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-python">DatetimeIndex([&apos;2019-08-27 00:00:00+00:00&apos;, &apos;2019-08-27 00:01:00+00:00&apos;,
+               &apos;2019-08-27 00:02:00+00:00&apos;, &apos;2019-08-27 00:03:00+00:00&apos;,
+               &apos;2019-08-27 00:04:00+00:00&apos;, &apos;2019-08-27 00:05:00+00:00&apos;,
+               &apos;2019-08-27 00:06:00+00:00&apos;, &apos;2019-08-27 00:07:00+00:00&apos;,
+               &apos;2019-08-27 00:08:00+00:00&apos;, &apos;2019-08-27 00:09:00+00:00&apos;,
+               ...
+               &apos;2022-08-26 16:50:00+00:00&apos;, &apos;2022-08-26 16:51:00+00:00&apos;,
+               &apos;2022-08-26 16:52:00+00:00&apos;, &apos;2022-08-26 16:53:00+00:00&apos;,
+               &apos;2022-08-26 16:54:00+00:00&apos;, &apos;2022-08-26 16:55:00+00:00&apos;,
+               &apos;2022-08-26 16:56:00+00:00&apos;, &apos;2022-08-26 16:57:00+00:00&apos;,
+               &apos;2022-08-26 16:58:00+00:00&apos;, &apos;2022-08-26 16:59:00+00:00&apos;],
+              dtype=&apos;datetime64[ns, UTC]&apos;, name=&apos;time&apos;, length=1122468, freq=None)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Resampling (<code>Downsampling</code>) the Data from 1 Minute Timeframe / Granularity to other Timeframes/Granularities.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<ul>
+<li>Converting 1 Minute (<code>M1</code>) to 15 Minute (<code>M15</code>)</li>
+<li>Converting 1 Minute (<code>M1</code>) to 1 Hour (<code>H1</code>)</li>
+<li>Converting 1 Minute (<code>M1</code>) to 4 Hours (<code>H4</code>)</li>
+</ul>
+</blockquote>
+<p>This resampling uses the <code>vbt.resample()</code> method for the downsampling operations, after which we see the frequency is identified correctly as <code>15T</code> (15 mins)</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">m15_data = m1_data.resample(&apos;15T&apos;)
+h1_data = m1_data.resample(&quot;1h&quot;)
+h4_data = m1_data.resample(&apos;4h&apos;)
+print(m15_data.wrapper.index)
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-python">DatetimeIndex([&apos;2019-08-27 00:00:00+00:00&apos;, &apos;2019-08-27 00:15:00+00:00&apos;,
+               &apos;2019-08-27 00:30:00+00:00&apos;, &apos;2019-08-27 00:45:00+00:00&apos;,
+               &apos;2019-08-27 01:00:00+00:00&apos;, &apos;2019-08-27 01:15:00+00:00&apos;,
+               &apos;2019-08-27 01:30:00+00:00&apos;, &apos;2019-08-27 01:45:00+00:00&apos;,
+               &apos;2019-08-27 02:00:00+00:00&apos;, &apos;2019-08-27 02:15:00+00:00&apos;,
+               ...
+               &apos;2022-08-26 14:30:00+00:00&apos;, &apos;2022-08-26 14:45:00+00:00&apos;,
+               &apos;2022-08-26 15:00:00+00:00&apos;, &apos;2022-08-26 15:15:00+00:00&apos;,
+               &apos;2022-08-26 15:30:00+00:00&apos;, &apos;2022-08-26 15:45:00+00:00&apos;,
+               &apos;2022-08-26 16:00:00+00:00&apos;, &apos;2022-08-26 16:15:00+00:00&apos;,
+               &apos;2022-08-26 16:30:00+00:00&apos;, &apos;2022-08-26 16:45:00+00:00&apos;],
+              dtype=&apos;datetime64[ns, UTC]&apos;, name=&apos;time&apos;, length=105188, freq=&apos;15T&apos;)
+</code></pre>
+<!--kg-card-end: markdown--><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text"><strong>How can the user tell which <code>resample()</code> method was used in the above operation, is it <code>pandas</code> or <code>vbt.resample()</code> ?</strong><br>If the object you are resampling is of class <code>vbt</code> then the numba-compiled <code>resample()</code> function of VectorBT will be used automatically. If the resampled object is a <code>pandas.Series</code> or <code>pandas.DataFrame</code> then the pandas resample() method will be used automatically.</div></div><hr><!--kg-card-begin: markdown--><p>As seen in the code below the respective (OHLC) can be obtained using the <code>.get()</code> method.</p>
+<pre><code class="language-python"># Obtain all the closing  prices using the .get() method
+m15_close = m15_data.get()[&apos;Close&apos;]
+
+## h1 data
+h1_open  = h1_data.get()[&apos;Open&apos;]
+h1_close = h1_data.get()[&apos;Close&apos;]
+h1_high  = h1_data.get()[&apos;High&apos;]
+h1_low   = h1_data.get()[&apos;Low&apos;]
+
+## h4 data
+h4_open  = h4_data.get()[&apos;Open&apos;]
+h4_close = h4_data.get()[&apos;Close&apos;]
+h4_high  = h4_data.get()[&apos;High&apos;]
+h4_low   = h4_data.get()[&apos;Low&apos;]
+</code></pre>
+<p>OR, you can can also simply follow the pandas convention like <code>resampled_data.column_name</code> to retrieve the column data</p>
+<pre><code class="language-python"># Obtain all the closing  prices using the .get() method
+m15_close = m15_data.close
+
+## h1 data
+h1_open  = h1_data.open
+h1_close = h1_data.close
+h1_high  = h1_data.high
+h1_low   = h1_data.low
+
+## h4 data
+h4_open  = h4_data.open
+h4_close = h4_data.close
+h4_high  = h4_data.high
+h4_low   = h4_data.low
+</code></pre>
+<p>The OHLC for both the <code>H4</code> 4-Hourly Candle Data as well as the closing price for the 15m Candle Data was obtained.</p>
+<!--kg-card-end: markdown--><hr><!--kg-card-begin: markdown--><h2 id="multi-time-frame-indicator-creation">Multi-Time Frame Indicator Creation</h2>
+<p>VectorBT has a built-in method called <code>vbt.talib()</code> which calls the required indicator from <strong>talib</strong> library and runs it on the specified time-series data (Eg: <code>Close</code> Price or another indicator). We will now create the following indicators (<em>manually</em>) on the <code>M15</code>, <code>H1</code> and <code>H4</code> timeframes using the :</p>
+<ul>
+<li><code>RSI</code> of 21 period</li>
+<li><code>BBANDS</code> Bolllinger Bands</li>
+<li><code>BBANDS_RSI</code> Bollinger Bands on the RSI</li>
+</ul>
+<pre><code class="language-python">rsi_period = 21
+
+## 15m indicators
+m15_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = rsi_period).run(m15_close, skipna=True).real.ffill()
+m15_bbands = vbt.talib(&quot;BBANDS&quot;).run(m15_close, skipna=True)
+m15_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(m15_rsi, skipna=True)
+
+## h4 indicators
+h1_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = rsi_period).run(h1_close, skipna=True).real.ffill()
+h1_bbands = vbt.talib(&quot;BBANDS&quot;).run(h1_close, skipna=True)
+h1_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(h1_rsi, skipna=True)
+
+## h4 indicators
+h4_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = rsi_period).run(h4_close, skipna=True).real.ffill()
+h4_bbands = vbt.talib(&quot;BBANDS&quot;).run(h4_close, skipna=True)
+h4_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(h4_rsi, skipna=True)
+</code></pre>
+<p>When <code>talib()</code> creates the RSI indicator time-series, it is known to create it with NaNs (null-values), so it is a good idea to run <code>ffill()</code>, <em>forward filling</em> operation to fill the missing values. On this note, it is also a good idea in general, to investigate the talib results and compare it with the original time-series data (<code>Close</code> Price) for abnormal number of <code>NaN</code> values and then decide on <code>ffill()</code> operation</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>We will now initialize the empty dict called <code>data</code> and fill it with key - value pairs of the 15m time-series data.</p>
+<pre><code class="language-python">## Initialize  dictionary
+data = {}
+
+col_values = [
+    m15_close, m15_rsi, m15_bbands.upperband, m15_bbands.middleband, m15_bbands.lowerband, 
+    m15_bbands_rsi.upperband, m15_bbands_rsi.middleband, m15_bbands_rsi.lowerband
+    ]
+
+col_keys = [
+    &quot;m15_close&quot;, &quot;m15_rsi&quot;, &quot;m15_bband_price_upper&quot;,  &quot;m15_bband_price_middle&quot;, &quot;m15_bband_price_lower&quot;, 
+    &quot;m15_bband_rsi_upper&quot;,  &quot;m15_bband_rsi_middle&quot;, &quot;m15_bband_rsi_lower&quot;
+         ]
+
+# Assign key, value pairs for method of time series data to store in data dict
+for key, time_series in zip(col_keys, col_values):
+    data[key] = time_series.ffill()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="alternative-one-liner-method-of-indicator-creation">Alternative (<strong>One-Liner</strong>) Method of Indicator Creation</h3>
+<p>VectorBT also offers a more convenient one-liner method of creating this multi-time frame indicators</p>
+<pre><code class="language-python">rsi_period = 21
+
+rsi = vbt.talib(&quot;RSI&quot;, timeperiod=rsi_period).run(
+    m15_data.get(&quot;Close&quot;), 
+    timeframe=[&quot;15T&quot;, &quot;1H&quot; , &quot;4H&quot;], 
+    skipna=True, 
+    broadcast_kwargs=dict(wrapper_kwargs=dict(freq=&quot;15T&quot;))
+).real
+
+bbands_price = vbt.talib(&quot;BBANDS&quot;).run(
+    m15_data.get(&quot;Close&quot;), 
+    timeframe=[&quot;15T&quot;, &quot;1H&quot;, &quot;4H&quot;], 
+    skipna=True,
+    broadcast_kwargs=dict(wrapper_kwargs=dict(freq=&quot;15T&quot;))
+)
+
+bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(
+    rsi,
+    timeframe=vbt.Default([&quot;15T&quot;, &quot;1H&quot; ,&quot;4H&quot;]),
+    skipna=True,
+    per_column=True,
+    broadcast_kwargs=dict(wrapper_kwargs=dict(freq=&quot;15T&quot;))
+)
+
+</code></pre>
+<p><strong>Note</strong> : The method of indicator creation shown above using <code>talib(&apos;IndicatorName&apos;).run</code> with <code>broadcast_kwargs</code> argument automatically does the <a href="https://github.com/polakowo/vectorbt.pro/blob/df5370824c9368406c0a06ddd0befeb56727e4c4/vectorbtpro/indicators/factory.py#L2868"><code>ffill()</code> operation</a>. This one liner method doesn&apos;t resample to <code>15T</code> only because of <code>broadcast_kwargs</code> argument, in fact, using <code>broadcast_kwargs</code> we just provide vbt with the true frequency of your data in case this frequency cannot be inferred from data. Without specifying it the method will still work (we will just get a warning if frequency cannot be inferred) <br> So here we we specify the <code>broadcast_kwargs</code> argument, because <code>m15_data.get(&quot;Close&quot;)</code> contains gaps and pandas cannot infer its frequency as <code>15T</code>, this approach works only because of the <code>timeframe</code> argument and because indicators always return outputs of the same index as their inputs, such that we&apos;re forced to resample it back to the original frequency. If pandas can infer the frequency of the input series, we don&apos;t need to specify <code>broadcast_kwargs</code> argument at all.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Initialize  dictionary
+data = {}
+
+## Assign key, value pairs for method 2 of Automated One-liner MTF indicator creation method
+col_values = [
+    [m15_close.ffill(), rsi[&apos;15T&apos;], bbands_price[&apos;15T&apos;].upperband, bbands_price[&apos;15T&apos;].middleband, bbands_price[&apos;15T&apos;].lowerband, bbands_rsi[&apos;15T&apos;].upperband, bbands_rsi[&apos;15T&apos;].middleband, bbands_rsi[&apos;15T&apos;].lowerband],
+    [rsi[&apos;1H&apos;], bbands_price[&apos;1H&apos;].upperband, bbands_price[&apos;1H&apos;].middleband, bbands_price[&apos;1H&apos;].lowerband, bbands_rsi[&apos;1H&apos;].upperband, bbands_rsi[&apos;1H&apos;].middleband, bbands_rsi[&apos;1H&apos;].lowerband],
+    [rsi[&apos;4H&apos;], bbands_price[&apos;4H&apos;].upperband, bbands_price[&apos;4H&apos;].middleband, bbands_price[&apos;4H&apos;].lowerband, bbands_rsi[&apos;4H&apos;].upperband, bbands_rsi[&apos;4H&apos;].middleband, bbands_rsi[&apos;4H&apos;].lowerband]
+    ]
+
+col_keys = [
+    [&quot;m15_close&quot;, &quot;m15_rsi&quot;, &quot;m15_bband_price_upper&quot;,  &quot;m15_bband_price_middle&quot;, &quot;m15_bband_price_lower&quot;,  &quot;m15_bband_rsi_upper&quot;,  &quot;m15_bband_rsi_middle&quot;, &quot;m15_bband_rsi_lower&quot;], 
+    [&quot;h1_rsi&quot;, &quot;h1_bband_price_upper&quot;,  &quot;h1_bband_price_middle&quot;,  &quot;h1_bband_price_lower&quot;,  &quot;h1_bband_rsi_upper&quot;,  &quot;h1_bband_rsi_middle&quot;, &quot;h1_bband_rsi_lower&quot;],
+    [&quot;h4_rsi&quot;, &quot;h4_bband_price_upper&quot;,  &quot;h4_bband_price_middle&quot;,  &quot;h4_bband_price_lower&quot;,  &quot;h4_bband_rsi_upper&quot;,  &quot;h4_bband_rsi_middle&quot;, &quot;h4_bband_rsi_lower&quot; ],
+         ]
+
+## Assign key, value pairs for method 2 of Automated One-liner MTF indicator creation method
+for lst_series, lst_keys in zip(col_values, col_keys):
+    for key, time_series in zip(lst_keys, lst_series):
+        data[key] = time_series
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="alignment-up-sampling">Alignment &amp; Up-sampling</h2>
+<p>Let&apos;s now see what is <code>resampler</code> in VectorBT. Resampler is an instance of the Resampler class, which simply stores a source index and frequency, and a target index and frequency. The <code>vbt.resampler()</code> method can just work with the source index and target index and can automatically infer the source and target frequency. In contrast to Pandas, vectorbt can also accept an arbitrary target index for resampling</p>
+<pre><code class="language-python">Resampler(
+    source_index,
+    target_index,
+    source_freq=None,
+    target_freq=None,
+    silence_warnings=None
+)
+
+</code></pre>
+<p>where the arguments, are <br><br>
+<code>source_index</code> :&#x2002;is <code>index_like</code>, Index being resampled.<br>
+<code>target_index</code> :&#x2002;is <code>index_like</code> ,Index resulted from resampling.<br>
+<code>source_freq</code>  :&#x2002;<code>frequency_like</code> or <code>bool</code>, Frequency or date offset of the source index. Set to <code>False</code> to force-set the frequency to None.<br>
+<code>target_freq</code>  :&#x2002;<code>frequency_like</code> or <code>bool</code>,  Frequency or date offset of the target index. Set to <code>False</code> to force-set the frequency to None.<br>
+<code>silence_warnings</code> :&#x2002;<code>bool</code>, Whether to silence all warnings.</p>
+<p>We will now create a custom function called <code>create_resamplers()</code> using this <code>vbt.Resampler()</code> function to create a resampler object to convert <code>H4</code> time-series</p>
+<pre><code class="language-python">def create_resamplers(result_dict_keys_list : list, source_indices : list,  
+                      source_frequencies :list, target_index : pd.Series, target_freq : str):
+    &quot;&quot;&quot;
+    Creates a dictionary of vbtpro resampler objects.
+
+    Parameters
+    ==========
+    result_dict_keys_list : list, list of strings, which are keys of the output dictionary
+    source_indices        : list, list of pd.time series objects of the higher timeframes
+    source_frequencies    : list(str), which are short form representation of time series order. Eg:[&quot;1D&quot;, &quot;4h&quot;]
+    target_index          : pd.Series, target time series for the resampler objects
+    target_freq           : str, target time frequency for the resampler objects
+
+    Returns
+    ===========
+    resamplers_dict       : dict, vbt pro resampler objects
+    &quot;&quot;&quot;
+    
+    
+    resamplers = []
+    for si, sf in zip(source_indices, source_frequencies):
+        resamplers.append(vbt.Resampler(source_index = si,  target_index = target_index,
+                                        source_freq = sf, target_freq = target_freq))
+    return dict(zip(result_dict_keys_list, resamplers))
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Using this function we can create a dictionary of <code>vbt.Resampler</code> objecters stored by appropriately named keys.</p>
+<pre><code class="language-python">## Create Resampler Objects for upsampling
+src_indices = [h1_close.index, h4_close.index]
+src_frequencies = [&quot;1H&quot;,&quot;4H&quot;] 
+resampler_dict_keys = [&quot;h1_m15&quot;,&quot;h4_m15&quot;]
+
+list_resamplers = create_resamplers(resampler_dict_keys, src_indices, src_frequencies, m15_close.index, &quot;15T&quot;)
+
+print(list_resamplers)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>Output</strong>:</p>
+<pre><code class="language-python">{&apos;h1_m15&apos;: &lt;vectorbtpro.base.resampling.base.Resampler at 0x16c83de70&gt;,
+ &apos;h4_m15&apos;: &lt;vectorbtpro.base.resampling.base.Resampler at 0x16c5478e0&gt;}
+</code></pre>
+<p>The output shows that two <code>vbt.Resampler</code> class objects have been created in memory.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>The <code>resample_closing()</code> and <code>resample_opening()</code> operations don&apos;t require any <code>ffill()</code> operations and they automatically align the source time-series data to the target frequency, which in our case is <code>15T</code> (15 mins)</p>
+<pre><code class="language-python">## Add H1 OLH data - No need to do ffill() on resample_closing as it already does that by default
+data[&quot;h1_open&quot;] = h4_open.vbt.resample_opening(list_resamplers[&apos;h1_m15&apos;])
+
+## Add H4 OLH data - No need to do ffill() on resample_closing as it already does that by default
+data[&quot;h4_open&quot;] = h4_open.vbt.resample_opening(list_resamplers[&apos;h4_m15&apos;])
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>We use <code>resample_opening</code> only if information in the array happens exactly at the beginning of the bar (such as open price), and <code>resample_closing</code> if information happens after that (such as high, low, and close price). You can see the effect of this <code>resample_opening</code> operation with the <code>print() </code>statements below:</p>
+<pre><code class="language-python">print(h4_open.info()) ## Before resampling pandas series
+
+&lt;class &apos;pandas.core.series.Series&apos;&gt;
+DatetimeIndex: 6575 entries, 2019-08-27 00:00:00+00:00 to 2022-08-26 16:00:00+00:00
+Freq: 4H
+Series name: Open
+Non-Null Count  Dtype  
+--------------  -----  
+4841 non-null   float64
+dtypes: float64(1)
+memory usage: 102.7 KB
+None
+
+print(data[&quot;h4_open&quot;].info()) ## After resampling pandas series
+
+&lt;class &apos;pandas.core.series.Series&apos;&gt;
+DatetimeIndex: 105188 entries, 2019-08-27 00:00:00+00:00 to 2022-08-26 16:45:00+00:00
+Freq: 15T
+Series name: Open
+Non-Null Count   Dtype  
+--------------   -----  
+105188 non-null  float64
+dtypes: float64(1)
+memory usage: 1.6 MB
+None
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Use along with  Manual indicator creation method for MTF
+series_to_resample = [
+    [h1_high, h1_low, h1_close, h1_rsi, 
+    h1_bbands.upperband, h1_bbands.middleband, h1_bbands.lowerband,
+    h1_bbands_rsi.upperband, h1_bbands_rsi.middleband, h1_bbands_rsi.lowerband], 
+    [h4_high, h4_low, h4_close, h4_rsi,
+    h4_bbands.upperband, h4_bbands.middleband, h4_bbands.lowerband, 
+    h4_bbands_rsi.upperband, h4_bbands_rsi.middleband, h4_bbands_rsi.lowerband]
+    ]
+
+data_keys = [
+    [&quot;h1_high&quot;, &quot;h1_low&quot;, &quot;h1_close&quot;, &quot;h1_rsi&quot;, 
+    &quot;h1_bband_price_upper&quot;, &quot;h1_bband_price_middle&quot;,&quot;h1_bband_price_lower&quot;, 
+     &quot;h1_bband_rsi_upper&quot;,  &quot;h1_bband_rsi_middle&quot;, &quot;h1_bband_rsi_lower&quot;],
+    [&quot;h4_high&quot;, &quot;h4_low&quot;, &quot;h4_close&quot;, &quot;h4_rsi&quot;, 
+    &quot;h4_bband_price_upper&quot;, &quot;h4_bband_price_middle&quot;, &quot;h4_bband_price_lower&quot;, 
+     &quot;h4_bband_rsi_upper&quot;,  &quot;h4_bband_rsi_middle&quot;, &quot;h4_bband_rsi_lower&quot;]
+     ]
+
+## Create resampled time series data aligned to base line frequency (15min)
+
+for lst_series, lst_keys, resampler in zip(series_to_resample, data_keys, resampler_dict_keys):
+    for key, time_series in zip(lst_keys, lst_series):
+        resampled_time_series = time_series.vbt.resample_closing(list_resamplers[resampler])
+        data[key] = resampled_time_series
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="alignment-and-resampling-when-using-one-liner-method-of-indicator-creation-br">Alignment and Resampling when using <em>one-liner</em> method of indicator creation <br></h3>
+<p>In this method, we have already dealt with resampling and aligning the indicators, so all we have to do is just resample the open and closing prices of the respective timeframes required.</p>
+<pre><code class="language-python">## Resample prices to match base_line frequency (`15T`)
+
+series_to_resample = [
+    [h1_open, h1_high, h1_low, h1_close],
+    [h4_open, h4_high, h4_low, h4_close]
+    ]
+
+data_keys = [
+    [&quot;h1_open&quot;, &quot;h1_high&quot;, &quot;h1_low&quot;, &quot;h1_close&quot;],
+    [&quot;h4_open&quot;, &quot;h4_high&quot;, &quot;h4_low&quot; ,&quot;h4_close&quot;]
+    ]
+
+## Create resampled time series data aligned to base line frequency (15min)
+
+for lst_series, lst_keys, resampler in zip(series_to_resample, data_keys, resampler_dict_keys):
+    for key, time_series in zip(lst_keys, lst_series):
+        if key.lower().endswith(&apos;open&apos;):
+            print(f&apos;Resampling {key} differently using vbt.resample_opening using &quot;{resampler}&quot; resampler&apos;)
+            resampled_time_series = time_series.vbt.resample_opening(list_resamplers[resampler])
+        else:
+            resampled_time_series = time_series.vbt.resample_closing(list_resamplers[resampler])
+        data[key] = resampled_time_series
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="creating-the-master-dataframe">Creating The Master DataFrame</h2>
+<p>Now that we have resampled the various time series to the different timeframes, created and run our indicators, we can finally create the composite <code>mtf_df</code> dataframe from this data which is properly aligned to the baseline frequency (in our case <code>15T</code>) that will allow us to properly create the <code>Buy/Long</code> and <code>Sell/Short</code> conditions for whichever MTF (Multi Time Frame) Strategy that we indend to backtest.</p>
+<pre><code class="language-python">cols_order = [&apos;m15_close&apos;, &apos;m15_rsi&apos;, &apos;m15_bband_price_upper&apos;,&apos;m15_bband_price_middle&apos;, &apos;m15_bband_price_lower&apos;,
+              &apos;m15_bband_rsi_upper&apos;,&apos;m15_bband_rsi_middle&apos;, &apos;m15_bband_rsi_lower&apos;,
+              &apos;h1_open&apos;, &apos;h1_high&apos;, &apos;h1_low&apos;, &apos;h1_close&apos;, &apos;h1_rsi&apos;,
+              &apos;h1_bband_price_upper&apos;, &apos;h1_bband_price_middle&apos;, &apos;h1_bband_price_lower&apos;, 
+              &apos;h1_bband_rsi_upper&apos;, &apos;h1_bband_rsi_middle&apos;, &apos;h1_bband_rsi_lower&apos;,              
+              &apos;h4_open&apos;, &apos;h4_high&apos;, &apos;h4_low&apos;, &apos;h4_close&apos;, &apos;h4_rsi&apos;,
+              &apos;h4_bband_price_upper&apos;, &apos;h4_bband_price_middle&apos;, &apos;h4_bband_price_lower&apos;, 
+              &apos;h4_bband_rsi_upper&apos;, &apos;h4_bband_rsi_middle&apos;, &apos;h4_bband_rsi_lower&apos;
+              ]
+
+## construct a multi-timeframe dataframe
+mtf_df = pd.DataFrame(data)[cols_order]
+display(mtf_df)            
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-width-wide kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/mtf_df.png" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy" width="2000" height="711" srcset="http://localhost:2368/content/images/size/w600/2022/12/mtf_df.png 600w, http://localhost:2368/content/images/size/w1000/2022/12/mtf_df.png 1000w, http://localhost:2368/content/images/size/w1600/2022/12/mtf_df.png 1600w, http://localhost:2368/content/images/size/w2400/2022/12/mtf_df.png 2400w" sizes="(min-width: 1200px) 1200px"><figcaption>Final aligned and resampled, pandas MultiTimeFrame DataFrame</figcaption></figure><!--kg-card-begin: markdown--><p>The <code>mtf_df</code> multi-time frame master dataframe will have the following columns each of which will help us define the logic of the strategy.</p>
+<ol>
+<li><code>m15_close</code> : 15 Minute Closing Price</li>
+<li><code>m15_rsi</code> : RSI values on the <code>m15</code>closing price of period 21</li>
+<li><code>m15_bband_price_upper</code>: The upper bollinger band on <code>m15</code> closing price</li>
+<li><code>m15_bband_price_middle</code>: The middle bollinger band on <code>m15</code> closing price</li>
+<li><code>m15_bband_price_lower</code> : The lower bollinger band on <code>m15</code> closing price</li>
+<li><code>m15_bband_rsi_upper</code> : The Upper Bollinger Band on the <code>M15</code> RSI Values</li>
+<li><code>m15_bband_rsi_middle</code> : The Middle Bollinger Band on the <code>M15</code> RSI Values</li>
+<li><code>m15_bband_rsi_lower</code>: The Lower Bollinger band on the <code>M15</code> RSI Values</li>
+<li><code>h1_open</code>:  The opening price of the <code>H1</code> candle</li>
+<li><code>h1_high</code>: The High Price of the <code>H1</code> Candle</li>
+<li><code>h1_low</code>:  The Low Price of the <code>H1</code> Candle</li>
+<li><code>h1_close</code>: The Closing Price of the <code>H1</code> Candle</li>
+<li><code>h1_rsi</code> : RSI Values on the <code>H1</code> closing price of period 21</li>
+<li><code>h1_bband_price_upper</code>: The Upper Bollinger Band On <code>H1</code> Closing Price</li>
+<li><code>h1_bband_price_middle</code>: The Middle Bollinger Band On <code>H1</code> Closing Price</li>
+<li><code>h1_bband_price_lower</code>:The Lower Bollinger Band On <code>H1</code> Closing Price</li>
+<li><code>h1_bband_rsi_upper</code>: The Upper Bollinger Band on the <code>H1</code> RSI Value</li>
+<li><code>h1_bband_rsi_middle</code>: The Middle Bollinger Band on the <code>H1</code> RSI Value</li>
+<li><code>h1_bband_rsi_lower</code>: The Lower Bollinger Band on the <code>H1</code> RSI Value</li>
+<li><code>h4_open</code>:  The opening price of the <code>H4</code> candle</li>
+<li><code>h4_high</code>: The High Price of the <code>H4</code> Candle</li>
+<li><code>h4_low</code>:  The Low Price of the <code>H4</code> Candle</li>
+<li><code>h4_close</code>: The Closing Price of the <code>H4</code> Candle</li>
+<li><code>h4_rsi</code> : RSI Values on the <code>H4</code> closing price of period 21</li>
+<li><code>h4_bband_price_upper</code>: The Upper Bollinger Band On <code>H4</code> Closing Price</li>
+<li><code>h4_bband_price_middle</code>: The Middle Bollinger Band On <code>H4</code> Closing Price</li>
+<li><code>h4_bband_price_lower</code>:The Lower Bollinger Band On <code>H4</code> Closing Price</li>
+<li><code>h4_bband_rsi_upper</code>: The Upper Bollinger Band on the <code>H4</code> RSI Value</li>
+<li><code>h4_bband_rsi_middle</code>: The Middle Bollinger Band on the <code>H4</code> RSI Value</li>
+<li><code>h4_bband_rsi_lower</code>: The Lower Bollinger Band on the <code>H4</code> RSI Value</li>
+</ol>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(mtf_df.info())
+
+&lt;class &apos;pandas.core.frame.DataFrame&apos;&gt;
+DatetimeIndex: 105188 entries, 2019-08-27 00:00:00+00:00 to 2022-08-26 16:45:00+00:00
+Freq: 15T
+Data columns (total 33 columns):
+ #   Column                  Non-Null Count   Dtype  
+---  ------                  --------------   -----  
+ 0   m15_close               105188 non-null  float64
+ 1   m15_rsi                 105167 non-null  float64
+ 2   m15_bband_price_upper   105184 non-null  float64
+ 3   m15_bband_price_middle  105184 non-null  float64
+ 4   m15_bband_price_lower   105184 non-null  float64
+ 5   m15_bband_rsi_upper     105163 non-null  float64
+ 6   m15_bband_rsi_middle    105163 non-null  float64
+ 7   m15_bband_rsi_lower     105163 non-null  float64
+ 8   h1_open                 105188 non-null  float64
+ 9   h1_high                 105185 non-null  float64
+ 10  h1_low                  105185 non-null  float64
+ 11  h1_close                105185 non-null  float64
+ 12  h1_rsi                  105101 non-null  float64
+ 13  h1_bband_price_upper    105169 non-null  float64
+ 14  h1_bband_price_middle   105169 non-null  float64
+ 15  h1_bband_price_lower    105169 non-null  float64
+ 16  h1_bband_rsi_upper      105085 non-null  float64
+ 17  h1_bband_rsi_middle     105085 non-null  float64
+ 18  h1_bband_rsi_lower      105085 non-null  float64
+ 19  h4_open                 105188 non-null  float64
+ 20  h4_high                 105173 non-null  float64
+ 21  h4_low                  105173 non-null  float64
+ 22  h4_close                105173 non-null  float64
+ 23  h4_rsi                  104837 non-null  float64
+ 24  h4_bband_price_upper    105109 non-null  float64
+ 25  h4_bband_price_middle   105109 non-null  float64
+ 26  h4_bband_price_lower    105109 non-null  float64
+ 27  h4_bband_rsi_upper      104773 non-null  float64
+ 28  h4_bband_rsi_middle     104773 non-null  float64
+...
+ 32  signal                  105188 non-null  int64  
+dtypes: bool(2), float64(30), int64(1)
+memory usage: 29.9 MB
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="summary">Summary</h2>
+<p>In general, the resampling and alignment steps for creating a multi-time frame (MTF) dataframe can be summarized in the below diagram.</p>
+<ol>
+<li>We start with the highest granularity of OHLCV data possible (1m) and then downsample the data to higher timeframes (5m, 15m, 1h, 4h etc.)</li>
+<li>We then create the indicators on the multiple time frames required but at this juncture we don&apos;t forward fill the price data. After the indicator is created we can <code>ffill()</code> the resulting series if we are going with the manual method of indicator creation.</li>
+<li>In order to create the composite, merged MTF dataframe we employ <code>resample_opening()</code> on the open price or <code>resample_closing()</code> on every other time series, with the appropriate <code>vbt.Resampler()</code> objects, so that all the time-series are aligned to the base-line frequency time series.</li>
+</ol>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Resampling-and-Alignment---FlowChart-_4LightBG.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy"><figcaption>Steps for MultiTimeFrame DataFrame creation</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Tutorial Series]]></title><description><![CDATA[<p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code</p>]]></description><link>http://localhost:2368/vbt-tuts-toc/</link><guid isPermaLink="false">638a1a09db6f4b53ca5eb9a1</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[python]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 14 Nov 2022 07:00:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" alt="VectorBT Pro - Tutorial Series"><p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code in these tutorials, you would need to buy access to vectorBT pro from <strong>Oleg Polakow</strong> and <code>import vectorbtpro as vbt</code> in your code.</p><!--kg-card-begin: html--><h1 style="text-align: center;">TABLE OF CONTENTS</h1><!--kg-card-end: html--><!--kg-card-begin: markdown--><h2 id="1-comprehensive-basics">1. Comprehensive Basics</h2>
+<!--kg-card-end: markdown--><p> The tutorials in this chapter will use a toy strategy called the <code><a href="https://abouttrading.substack.com/p/the-double-bollinger-trading-strategy">Double Bollinger Band Strategy</a></code> to illustrate the vectorBT concepts </p><ul><li><strong><a href="https://qubitquants.github.io/aligning-mtf-data/index.html">Aligning Multi-Time Frame time series Data with Resampling</a></strong><br>Learn about the creation of multi-time frame (MTF) time-series data and their alignment using <code>resampling</code> methods. </li><li><strong><a href="https://qubitquants.github.io/strategydev/index.html">Strategy Development &amp; Signal Generation using</a></strong> <code>vbt.portfolio.from_signals()</code> <br>Learn how to create signals based on multiple confluences / criterion and exploration of backtesting (simulation) results with a variety of methods and plots from <code>vbt.portfolio</code> module.</li><li><strong><a href="https://qubitquants.github.io/vbt_plot_strategy/index.html">Plotting Indicators and Visualising Strategy with Cleaned Signals</a></strong><br>Learn basic plotting techniques available in VectorBT Pro and also advanced techniques like creating your own <code>plot_strategy()</code> function with all the major functionalities one would typically need.</li></ul><p></p><p>Many thanks to <a href="https://github.com/polakowo">Oleg Polakow</a>, for his continuing support to VectorBT Pro </p>]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Account Monitor & Data Visualisation Dashboard]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
+<p><strong>MongoDB ChangeStreams and WebSockets</strong></p>]]></description><link>http://localhost:2368/plotly-dashboard/</link><guid isPermaLink="false">638ccdb02467af9576eed1ca</guid><category><![CDATA[python]]></category><category><![CDATA[plotly]]></category><category><![CDATA[plotly-dash]]></category><category><![CDATA[mongoDB]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 05 Sep 2022 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="MT5PyBot &#x1F916; - Account Monitor &amp; Data Visualisation Dashboard"><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
+<p><strong>MongoDB ChangeStreams and WebSockets</strong> - <a href="https://community.plotly.com/t/mongodb-websocket-and-dash-plot/64808">https://community.plotly.com/t/mongodb-websocket-and-dash-plot/64808</a></p>
+<!--kg-card-end: markdown--><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/qYkeeI56dew?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Account Monitor and Data Visualization Dashboard"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTKjq1PEwo5KRhtk8SDtVXR9Cnli4j8s9omoUt5W1t6mNsLr9Jn15YEeLR3CNc30YX91OhLKDeHE6Kl/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="540" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖- Strategy and AlgoBot in Action]]></title><description><![CDATA[<p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></description><link>http://localhost:2368/strategy_algobot_action/</link><guid isPermaLink="false">638ca9bb2467af9576eed195</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[metatrader5]]></category><category><![CDATA[python]]></category><category><![CDATA[aws]]></category><category><![CDATA[ec2]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Wed, 31 Aug 2022 14:14:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/runningbot.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/runningbot.png" alt="MT5PyBot &#x1F916;- Strategy and AlgoBot in Action"><p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Architecture]]></title><description><![CDATA[<p><strong>MetaTrader5 (Python) Algorithmic Trading bot infrastructure </strong></p><p>In the presentation below, I talk about the <code>MetaTrader5</code> Algorithmic Trading bot infrastructure that we have built using the MetaTrader5 <code>python</code> library. Details include the architecture elements and their functionalities.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/8850EMr_AXU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Architecture of MetaTrader5 Python AlgoTrading Bot (MT5PyBot)"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR9TcCcoccIEcrlHFi25FL9Afz3qifQymOa74ei2xqP-ym1XfwxdM1fkMTIz7pxQ4lB2Cb7YNEZVu31/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></description><link>http://localhost:2368/mt5pybot/</link><guid isPermaLink="false">638a0ca6db6f4b53ca5eb94b</guid><category><![CDATA[python]]></category><category><![CDATA[metatrader5]]></category><category><![CDATA[algorithmic trading]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 15 Aug 2022 09:00:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/MT5-AlgoBot-Final-Architecture-1.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/MT5-AlgoBot-Final-Architecture-1.png" alt="MT5PyBot &#x1F916; - Architecture"><p><strong>MetaTrader5 (Python) Algorithmic Trading bot infrastructure </strong></p><p>In the presentation below, I talk about the <code>MetaTrader5</code> Algorithmic Trading bot infrastructure that we have built using the MetaTrader5 <code>python</code> library. Details include the architecture elements and their functionalities.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/8850EMr_AXU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Architecture of MetaTrader5 Python AlgoTrading Bot (MT5PyBot)"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR9TcCcoccIEcrlHFi25FL9Afz3qifQymOa74ei2xqP-ym1XfwxdM1fkMTIz7pxQ4lB2Cb7YNEZVu31/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item></channel></rss>
