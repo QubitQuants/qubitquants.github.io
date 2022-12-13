@@ -424,7 +424,7 @@ c2_long_entry = (mtf_df['m15_rsi'] &lt;= (bb_lower_fract * mtf_df['m15_bband_rsi
 <h5 id="short-condition-%E2%86%98"><strong>Short Condition</strong> ↘</h5>
 <p>Likewise, a long exit ( and also the short (sell) signal ) is generated whenever the H4 market (High) price breaks its upper Bollinger band, and the 15m RSI breaks above its upper Bollinger band.</p>
 <blockquote>
-<p>Here are the two conditions ( <code>c1_long_exit</code> and <code>c2_long_exit</code> ) that would qualify as a long exit (and also a short entry )</p>
+<p>Here are the two conditions ( <code>c1_long_exit</code> and <code>c2_long_exit</code> ) that would qualify as a long exit (and also as a short entry )</p>
 </blockquote>
 <pre><code class="language-python">c1_long_exit =  (mtf_df['h4_high'] &gt;= mtf_df['h4_bband_price_upper'])
 c2_long_exit = (mtf_df['m15_rsi'] &gt;= (bb_upper_fract * mtf_df['m15_bband_rsi_upper']))
