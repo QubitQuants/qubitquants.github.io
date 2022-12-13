@@ -5,16 +5,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals</title>
-    <link rel="stylesheet" href="../assets/built/screen.css%3Fv=cb9e41483e.css">
+    <link rel="stylesheet" href="../assets/built/screen.css%3Fv=996201925d.css">
     <link rel="stylesheet" href="https://use.typekit.net/nlf8nho.css">
 
     <!-- Favicon Situation -->
-    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
-    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
-    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
-    <link rel="manifest" href="../assets/images/site.webmanifest%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
-    <link rel="mask-icon" href="../assets/images/safari-pinned-tab.svg%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
-    <link rel="shortcut icon" href="../assets/images/favicon.ico%3Fv=YA3x6XqYr8%3Fv=cb9e41483e">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png%3Fv=YA3x6XqYr8%3Fv=996201925d">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png%3Fv=YA3x6XqYr8%3Fv=996201925d">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png%3Fv=YA3x6XqYr8%3Fv=996201925d">
+    <link rel="manifest" href="../assets/images/site.webmanifest%3Fv=YA3x6XqYr8%3Fv=996201925d">
+    <link rel="mask-icon" href="../assets/images/safari-pinned-tab.svg%3Fv=YA3x6XqYr8%3Fv=996201925d">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico%3Fv=YA3x6XqYr8%3Fv=996201925d">
     <meta name="msapplication-TileColor" content="#029aff">
     <meta name="msapplication-config" content="/assets/images/browserconfig.xml?v=YA3x6XqYr8">
     <meta name="theme-color" content="#ffffff">
@@ -120,9 +120,19 @@
     <link rel="alternate" type="application/rss+xml" title="Qubit Quants" href="../rss/index.html" />
     
     <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="27a6f7b1b53a260e5c12a43798" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="http://localhost:2368/" crossorigin="anonymous"></script>
-    <script defer src="../public/cards.min.js%3Fv=cb9e41483e"></script>
-    <link rel="stylesheet" type="text/css" href="../public/cards.min.css%3Fv=cb9e41483e.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/brands.min.css" integrity="sha512-+oRH6u1nDGSm3hH8poU85YFIVTdSnS2f+texdPGrURaJh8hzmhMiZrQth6l56P4ZQmxeZzd2DqVEMqQoJ8J89A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script defer src="../public/cards.min.js%3Fv=996201925d"></script>
+    <link rel="stylesheet" type="text/css" href="../public/cards.min.css%3Fv=996201925d.css">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q14D0SCYNP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Q14D0SCYNP');
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/brands.min.css" integrity="sha512-+oRH6u1nDGSm3hH8poU85YFIVTdSnS2f+texdPGrURaJh8hzmhMiZrQth6l56P4ZQmxeZzd2DqVEMqQoJ8J89A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
 /* Change post width - for older dawn theme versions use .kg-canvas*/     
 .gh-canvas {
@@ -608,7 +618,7 @@ print(f&quot;Total nr. of Entry Signals in Clean_Entry Array: {clean_entries.vbt
         Total nr. of Exit Signals in Clean_Exit Array: {clean_exits.vbt.signals.total()}&quot;)
 </code></pre>
 <p><strong>Output</strong></p>
-<pre><code>Length of Clean_Entries Array: 105188 || Length of Clean_Exits Array: 105188
+<pre><code class="language-python">Length of Clean_Entries Array: 105188 || Length of Clean_Exits Array: 105188
 Total nr. of Entry Signals in Clean_Entry Array: 268 || Total nr. of Exit Signals in Clean_Exit Array: 267
 </code></pre>
 <!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
@@ -672,7 +682,7 @@ print(f&quot;Length of H4_Entries (array): {len(h4_entries_agg)} || Length of H4
 print(f&quot;Aggregated H4_Entry Signals: {int(h4_entries_agg.sum())} || Aggregated H4_Exit Signals: {int(h4_exits_agg.sum())}&quot;)
 </code></pre>
 <p><strong>Output</strong></p>
-<pre><code>Length of H4_Entries (array): 6575 || Length of H4_Exits (array): 6575
+<pre><code class="language-python">Length of H4_Entries (array): 6575 || Length of H4_Exits (array): 6575
 Aggregated H4_Entry Signals: 268   || Aggregated H4_Exit Signals: 267
 </code></pre>
 <!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Though the result of this aggregation shows the same result we got above when printing the <code>clean_entries.vbt.signals.total()</code> and <code>clean_exits.vbt.signals.total()</code>, this does not help us in inferring the true order of the signals and the information loss created by downsampling cannot be compensated by aggregation.</p>
@@ -696,7 +706,8 @@ Irrespective of whether we use the clean entries and exits or just the regular e
                 </div>               
             </div>
             <div class="copyright" style="text-align:center">
-                <strong>Copyright Warning ©</strong> All rights belong to the author(s) of this publication. <br>
+                <br>
+                <strong>© Warning</strong> All rights belong to the author(s) of this publication. <br>
                 No part of this publication can be reproduced anywhere without prior approval from the author(s).
             </div>
         </footer>
@@ -824,7 +835,7 @@ Irrespective of whether we use the clean entries and exits or just the regular e
     </div>
 
      <div class="copyright">
-        <strong>DISCLAIMER</strong>: All Content is for educational purposes only. Nothing here is financial advise. 
+        <strong>DISCLAIMER</strong>: All Content here is for educational purposes only and is not financial advise. 
         Implement at your own risk. No liability assumed by Qubit Quants and it's authors
     </div>
 
@@ -926,7 +937,7 @@ Irrespective of whether we use the clean entries and exits or just the regular e
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous">
     </script>
-    <script src="../assets/built/main.min.js%3Fv=cb9e41483e"></script>
+    <script src="../assets/built/main.min.js%3Fv=996201925d"></script>
 
     
 </body>
