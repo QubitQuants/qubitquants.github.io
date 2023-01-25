@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VectorBT Pro - Aligning MTF time series Data with Resampling</title>
+    <link rel="stylesheet" href="../assets/built/screen.css%3Fv=5bf20839b7.css">
+    <link rel="stylesheet" href="https://use.typekit.net/nlf8nho.css">
+
+    <!-- Favicon Situation -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png%3Fv=YA3x6XqYr8%3Fv=5bf20839b7">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png%3Fv=YA3x6XqYr8%3Fv=5bf20839b7">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png%3Fv=YA3x6XqYr8%3Fv=5bf20839b7">
+    <link rel="manifest" href="../assets/images/site.webmanifest%3Fv=YA3x6XqYr8%3Fv=5bf20839b7">
+    <link rel="mask-icon" href="../assets/images/safari-pinned-tab.svg%3Fv=YA3x6XqYr8%3Fv=5bf20839b7">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico%3Fv=YA3x6XqYr8%3Fv=5bf20839b7">
+    <meta name="msapplication-TileColor" content="#029aff">
+    <meta name="msapplication-config" content="/assets/images/browserconfig.xml?v=YA3x6XqYr8">
+    <meta name="theme-color" content="#ffffff">
+    <!-- End Favicons -->
+
+    <script>
+        var siteUrl = 'http://localhost:2368';
+        // Force dark mode
+        // localStorage.setItem('dawn_theme', 'dark');
+        // document.documentElement.classList.add('theme-dark');          
+    </script>
+
+    <script>
+        var localTheme = localStorage.getItem('dawn_theme');
+        switch (localTheme) {
+            case 'dark':
+                document.documentElement.classList.add('theme-dark');
+                break;
+            case 'light':
+                document.documentElement.classList.add('theme-light');
+                break;
+            default:
+                break;
+        }
+    </script>
+
+    <link rel="canonical" href="index.html" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Qubit Quants" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="VectorBT Pro - Aligning MTF time series Data with Resampling" />
+    <meta property="og:description" content="Software Requirements : vectorbtpro, python3
+
+Resampling of the market data is needed for strategies that involve multiple time frames, often referred to as “top down analysis” or “Multi Time Frame (MTF) analysis”. There are two types of resampling, called upsampling and downsampling.
+
+Before thinking of upsampling and downsampling time-series data, let&#x27;s" />
+    <meta property="og:url" content="http://localhost:2368/aligning-mtf-data/" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000" />
+    <meta property="article:published_time" content="2022-11-26T08:30:00.000Z" />
+    <meta property="article:modified_time" content="2022-12-11T14:43:44.000Z" />
+    <meta property="article:tag" content="python" />
+    <meta property="article:tag" content="algorithmic trading" />
+    <meta property="article:tag" content="vectorBT" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VectorBT Pro - Aligning MTF time series Data with Resampling" />
+    <meta name="twitter:description" content="Software Requirements : vectorbtpro, python3
+
+Resampling of the market data is needed for strategies that involve multiple time frames, often referred to as “top down analysis” or “Multi Time Frame (MTF) analysis”. There are two types of resampling, called upsampling and downsampling.
+
+Before thinking of upsampling and downsampling time-series data, let&#x27;s" />
+    <meta name="twitter:url" content="http://localhost:2368/aligning-mtf-data/" />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Dilip Rajkumar" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="python, algorithmic trading, vectorBT" />
+    <meta name="twitter:site" content="@ghost" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="1500" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Qubit Quants",
+        "url": "http://localhost:2368/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2022/12/QQ_Text_DarkMode.png"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Dilip Rajkumar",
+        "image": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2022/12/ProfilePic.jpg",
+            "width": 315,
+            "height": 340
+        },
+        "url": "http://localhost:2368/author/dilip/",
+        "sameAs": [
+            "https://www.linkedin.com/in/sridiliprk/"
+        ]
+    },
+    "headline": "VectorBT Pro - Aligning MTF time series Data with Resampling",
+    "url": "http://localhost:2368/aligning-mtf-data/",
+    "datePublished": "2022-11-26T08:30:00.000Z",
+    "dateModified": "2022-12-11T14:43:44.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&ixlib=rb-4.0.3&q=80&w=2000",
+        "width": 2000,
+        "height": 1500
+    },
+    "keywords": "python, algorithmic trading, vectorBT",
+    "description": "Software Requirements : vectorbtpro, python3\n\nResampling of the market data is needed for strategies that involve multiple time frames, often referred to as “top down analysis” or “Multi Time Frame (MTF) analysis”. There are two types of resampling, called upsampling and downsampling.\n\nBefore thinking of upsampling and downsampling time-series data, let&#x27;s use the analogy of an UltraHD (4K)  television to better understand these terms intuitively. When you feed a 1080p video source to a 4K TV it ",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:2368/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.24" />
+    <link rel="alternate" type="application/rss+xml" title="Qubit Quants" href="../rss/index.html" />
+    
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="27a6f7b1b53a260e5c12a43798" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="http://localhost:2368/" crossorigin="anonymous"></script>
+    <script defer src="../public/cards.min.js%3Fv=5bf20839b7"></script>
+    <link rel="stylesheet" type="text/css" href="../public/cards.min.css%3Fv=5bf20839b7.css">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q14D0SCYNP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Q14D0SCYNP');
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/brands.min.css" integrity="sha512-+oRH6u1nDGSm3hH8poU85YFIVTdSnS2f+texdPGrURaJh8hzmhMiZrQth6l56P4ZQmxeZzd2DqVEMqQoJ8J89A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+/* Change post width - for older dawn theme versions use .kg-canvas*/     
+.gh-canvas {
+    display: grid;
+    grid-template-columns: [full-start] minmax(4vw,auto) [wide-start] minmax(auto,140px) [main-start] min(900px,calc(100% - 8vw)) [main-end] minmax(auto,140px) [wide-end] minmax(4vw,auto) [full-end];
+}
+    
+.kg-canvas {
+    display: grid;
+    grid-template-columns: [full-start] minmax(4vw,auto) [wide-start] minmax(auto,140px) [main-start] min(900px,calc(100% - 8vw)) [main-end] minmax(auto,140px) [wide-end] minmax(4vw,auto) [full-end];
+}
+
+.cover-cta, .gh-powered-by, .gh-foot-menu {
+    display: None;
+    }
+
+</style><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+
+<body class="post-template tag-python tag-algorithmic-trading tag-vectorbt">
+    <svg width="0" height="0" style="display: none;">
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="arrow-left">
+    <path d="M26.667 14.667v2.667h-16L18 24.667l-1.893 1.893L5.547 16l10.56-10.56L18 7.333l-7.333 7.333h16z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="arrow-right">
+    <path d="M5.333 14.667v2.667h16L14 24.667l1.893 1.893L26.453 16 15.893 5.44 14 7.333l7.333 7.333h-16z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="brightness-2">
+    <path
+        d="M13.333 2.667c-2.427 0-4.707.667-6.667 1.8 4 2.307 6.667 6.6 6.667 11.533s-2.667 9.227-6.667 11.533c1.96 1.133 4.24 1.8 6.667 1.8 7.36 0 13.333-5.973 13.333-13.333S20.693 2.667 13.333 2.667z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="chevron-left">
+    <path d="M20.547 22.107L14.44 16l6.107-6.12L18.667 8l-8 8 8 8 1.88-1.893z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="chevron-right">
+    <path d="M11.453 22.107L17.56 16l-6.107-6.12L13.333 8l8 8-8 8-1.88-1.893z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="circle-half-full">
+    <path
+        d="M16 2.667c-7.36 0-13.333 5.973-13.333 13.333s5.973 13.333 13.333 13.333c7.36 0 13.333-5.973 13.333-13.333s-5.973-13.333-13.333-13.333zM16 5.333c5.893 0 10.667 4.773 10.667 10.667s-4.773 10.667-10.667 10.667v-21.333z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="dots-horizontal">
+    <path
+        d="M21.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM13.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM5.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="facebook-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zM24 6.667h-3.333A4.672 4.672 0 0 0 16 11.334v3.333h-2.667v4H16V28h4v-9.333h4v-4h-4V12c0-.733.6-1.333 1.333-1.333H24v-4z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="facebook">
+    <path
+        d="M22.667 2.667V8H20c-.92 0-1.333 1.08-1.333 2v3.333h4v5.333h-4v10.667h-5.333V18.666h-4v-5.333h4V8a5.332 5.332 0 0 1 5.333-5.333h4z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="flickr-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M11.1,7.6
+    c1.7,0,3.2,1.4,3.2,3.2c0,1.7-1.4,3.2-3.1,3.2c-1.7,0-3.2-1.4-3.2-3.2S9.3,7.7,11.1,7.6z M25,24.2c-0.1,0.1-0.2,0.2-0.5,0.2
+    c0,0,0,0-0.1,0H12.3c-0.9,0-1.8,0-2.7,0c-0.4,0-0.8,0-1.2,0c-0.4,0-0.8,0.1-1.2,0h0c0,0-0.1,0-0.1,0c-0.3-0.2,0.3-0.5,0.3-0.7
+    c0.3-0.3,3.3-4.6,3.3-4.7c0.4-0.6,1-1,1.5-1c0.8,0,1.3,0.9,2,1.3c0.9,0.5,1.5-0.2,1.9-0.9c0.3-0.5,0.6-1,0.9-1.4
+    c0.2-0.3,0.3-0.6,0.5-0.8c0.2-0.3,0.4-0.7,0.7-1l0.4-0.7c0,0,0.1-0.1,0.1-0.2c0.2-0.2,0.3-0.4,0.5-0.4c0.1,0,0.3,0.2,0.4,0.4
+    c1.5,2.7,3,5.4,4.5,8l0.7,1.3c0.1,0.1,0.1,0.2,0.1,0.3C25,24,25,24.1,25,24.2z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="instapaper-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M17.5,23.5
+    c0.1,0.2,0.3,0.4,0.5,0.6c0.2,0.2,0.7,0.2,1.3,0.2v0.3h-6.6v-0.3c0.8,0,1.4-0.2,1.6-0.5c0.2-0.3,0.3-1.1,0.3-2.2V10.4
+    c0-1.2-0.1-2-0.3-2.3c-0.2-0.4-0.7-0.5-1.5-0.5V7.4h6.6v0.2h0c-0.3,0-0.7,0-1.1,0.2s-0.6,0.3-0.7,0.6c-0.1,0.3-0.1,0.9-0.1,1.8v11.4
+    C17.4,22.7,17.4,23.3,17.5,23.5z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="linkedin-box">
+    <path
+        d="M25.333 4c1.473 0 2.667 1.194 2.667 2.667v0 18.667c0 1.473-1.194 2.667-2.667 2.667v0h-18.667c-1.473 0-2.667-1.194-2.667-2.667v0-18.667c0-1.473 1.194-2.667 2.667-2.667v0h18.667zM24.667 24.667v-7.067c0-2.401-1.946-4.347-4.347-4.347v0c-1.133 0-2.453 0.693-3.093 1.733v-1.48h-3.72v11.16h3.72v-6.573c0-1.027 0.827-1.867 1.853-1.867 1.031 0 1.867 0.836 1.867 1.867v0 6.573h3.72zM9.173 11.413c1.237 0 2.24-1.003 2.24-2.24v0c0-1.24-1-2.253-2.24-2.253-1.244 0-2.253 1.009-2.253 2.253v0c0 1.24 1.013 2.24 2.253 2.24zM11.027 24.667v-11.16h-3.693v11.16h3.693z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 -2 28 28" id="github-box">
+    <path 
+        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z">
+        </path>
+</symbol>
+
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" id="loader">
+    <path opacity="0.3" fill="currentColor"
+        d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946 s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634 c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z" />
+    <path fill="currentColor"
+        d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0 C22.32,8.481,24.301,9.057,26.013,10.047z">
+        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 20 20" to="360 20 20"
+            dur="0.5s" repeatCount="indefinite" />
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="magnify">
+    <path
+        d="M12.667 4a8.667 8.667 0 0 1 8.667 8.667c0 2.147-.787 4.12-2.08 5.64l.36.36h1.053l6.667 6.667-2 2-6.667-6.667v-1.053l-.36-.36a8.689 8.689 0 0 1-5.64 2.08C7.88 21.334 4 17.454 4 12.667S7.88 4 12.667 4zm0 2.667c-3.333 0-6 2.667-6 6s2.667 6 6 6 6-2.667 6-6-2.667-6-6-6z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="menu-down">
+    <path d="M9.333 13.333L16 20l6.667-6.667H9.334z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="pinboard-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M14.5,22.5
+    c-0.4-0.1,0.1-2.4,0-2.7l-4.9-5.9c-0.3-0.1-3.2,1.2-2.6,0l6.5-6.6c1.2-0.7,0,2.3,0.1,2.6l5.9,4.8c0.3,0.1,3.5-1.1,2.9,0.1l-7.5,7.6
+    C14.8,22.5,14.7,22.5,14.5,22.5z M24.2,24.6l-5.6-5.4l0.7-0.7C19.3,18.9,27.4,25.4,24.2,24.6z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="rss-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zM10 20c-1.107 0-2 .893-2 2s.893 2 2 2 2-.893 2-2-.893-2-2-2zm-2-6.667V16c4.413 0 8 3.587 8 8h2.667c0-5.893-4.773-10.667-10.667-10.667zM8 8v2.667c7.36 0 13.333 5.973 13.333 13.333H24c0-8.84-7.16-16-16-16z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="spotify-box">
+<path
+    d="M25.2,4H6.6C5.1,4,3.9,5.2,3.9,6.7v18.7c0,1.4,1.2,2.6,2.7,2.6h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C27.9,5.2,26.7,4,25.2,4z
+     M20.1,22.8c-1.6,0-2.9-1.1-2.9-2.4c0-1.3,1.3-2.4,2.9-2.4c0.3,0,0.7,0,1,0.1l0-5.8l-6.3,2l0.1,8.2c0,1.3-1.3,2.4-2.9,2.4
+    C10.3,25,9,24,9,22.6c0-1.3,1.3-2.4,2.9-2.4c0.3,0,0.7,0,1,0.1v-9.9L22.9,7L23,20.4C23,21.8,21.7,22.8,20.1,22.8z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="star">
+    <path
+        d="M16 23.027L24.24 28l-2.187-9.373 7.28-6.307-9.587-.827-3.747-8.827-3.747 8.827-9.587.827 7.267 6.307L7.759 28l8.24-4.973z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="table-of-contents">
+    <path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="twitter-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zm16.946 8.44c.64-.533 1.387-1.173 1.72-1.88-.547.28-1.2.453-1.92.547.667-.48 1.213-1.107 1.493-1.96-.693.373-1.4.693-2.28.853-2.067-2.493-7.013-.467-6.133 3.267-3.48-.213-5.6-1.787-7.36-3.72-1 1.627-.133 4.093 1.053 4.773-.613-.04-1.08-.227-1.52-.44.053 2.053 1.187 3.04 2.773 3.573a4.47 4.47 0 0 1-1.52.04c.493 1.427 1.52 2.32 3.28 2.507-1.2 1.013-3.413 1.72-5.2 1.44 1.533.973 3.28 1.747 5.707 1.64 5.88-.267 9.813-4.48 9.907-10.64z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="twitter">
+    <path
+        d="M29.947 8a11.423 11.423 0 0 1-3.28.92 5.738 5.738 0 0 0 2.507-3.173 11.52 11.52 0 0 1-3.627 1.4C24.494 6 23.014 5.334 21.334 5.334c-3.133 0-5.693 2.56-5.693 5.72 0 .453.053.893.147 1.307A16.261 16.261 0 0 1 4.001 6.388a5.663 5.663 0 0 0-.773 2.867c0 1.987 1 3.747 2.547 4.747-.947 0-1.827-.267-2.6-.667v.04a5.724 5.724 0 0 0 4.587 5.613 5.644 5.644 0 0 1-2.574.093c.72 2.253 2.813 3.933 5.333 3.973-1.947 1.547-4.413 2.453-7.107 2.453-.453 0-.907-.027-1.36-.08A16.19 16.19 0 0 0 10.827 28c10.507 0 16.28-8.72 16.28-16.28 0-.253 0-.493-.013-.747A11.42 11.42 0 0 0 29.947 8z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="white-balance-sunny">
+    <path
+        d="M4.733 24.72l1.88 1.88 2.4-2.387L7.12 22.32zm9.934 5.213h2.667V26h-2.667zM16 7.333c-4.413 0-8 3.587-8 8s3.587 8 8 8 8-3.587 8-8c0-4.427-3.587-8-8-8zm10.667 9.334h4V14h-4zm-3.68 7.546l2.4 2.387 1.88-1.88-2.387-2.4zm4.28-18.266l-1.88-1.88-2.4 2.387 1.893 1.893zM17.333.733h-2.667v3.933h2.667zM5.333 14h-4v2.667h4zm3.68-7.547l-2.4-2.387-1.88 1.88 2.387 2.4 1.893-1.893z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="window-close">
+    <path
+        d="M17.947 16l7.387 7.387v1.947h-1.947L16 17.947l-7.387 7.387H6.666v-1.947L14.053 16 6.666 8.613V6.666h1.947L16 14.053l7.387-7.387h1.947v1.947L17.947 16z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="title-link">
+   <path d="M19 3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.94,14.81L11.73,17C11.08,17.67 10.22,18 9.36,18C8.5,18 7.64,17.67 7,17C5.67,15.71 5.67,13.58 7,12.26L8.35,10.9L8.34,11.5C8.33,12 8.41,12.5 8.57,12.94L8.62,13.09L8.22,13.5C7.91,13.8 7.74,14.21 7.74,14.64C7.74,15.07 7.91,15.47 8.22,15.78C8.83,16.4 9.89,16.4 10.5,15.78L12.7,13.59C13,13.28 13.18,12.87 13.18,12.44C13.18,12 13,11.61 12.7,11.3C12.53,11.14 12.44,10.92 12.44,10.68C12.44,10.45 12.53,10.23 12.7,10.06C13.03,9.73 13.61,9.74 13.94,10.06C14.57,10.7 14.92,11.54 14.92,12.44C14.92,13.34 14.57,14.18 13.94,14.81M17,11.74L15.66,13.1V12.5C15.67,12 15.59,11.5 15.43,11.06L15.38,10.92L15.78,10.5C16.09,10.2 16.26,9.79 16.26,9.36C16.26,8.93 16.09,8.53 15.78,8.22C15.17,7.6 14.1,7.61 13.5,8.22L11.3,10.42C11,10.72 10.82,11.13 10.82,11.56C10.82,12 11,12.39 11.3,12.7C11.47,12.86 11.56,13.08 11.56,13.32C11.56,13.56 11.47,13.78 11.3,13.94C11.13,14.11 10.91,14.19 10.68,14.19C10.46,14.19 10.23,14.11 10.06,13.94C8.75,12.63 8.75,10.5 10.06,9.19L12.27,7C13.58,5.67 15.71,5.68 17,7C17.65,7.62 18,8.46 18,9.36C18,10.26 17.65,11.1 17,11.74Z">
+   </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="feed-link">
+  <path d="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z">
+  </path>
+</symbol>
+
+</svg>
+    <div class="site">
+        <header class="site-header container">
+    <div class="header-left">
+        <a class="logo" href="../index.html">
+                <img class="logo-image" src="../content/images/2022/12/QQ_Text_DarkMode.png" alt="Qubit Quants">
+        </a>
+    </div>
+        <nav class="main-nav hidden-xs hidden-sm hidden-md">
+                <a class="menu-item menu-item-home"
+        href="../index.html">Home</a>
+    <a class="menu-item menu-item-about"
+        href="../about/index.html">About</a>
+
+        </nav>
+
+        <button class="button-icon hidden-lg hidden-xl js-modal" data-modal="search" aria-label="Search">
+            <svg class="icon">
+                <use xlink:href="#magnify"></use>
+            </svg>
+        </button>
+        <div class="burger hidden-lg hidden-xl">
+            <div class="burger-bar"></div>
+            <div class="burger-bar"></div>
+        </div>
+
+        <div class="mobile-menu hidden-lg hidden-xl">
+            <div class="container">
+                <nav class="mobile-nav">
+                        <a class="menu-item menu-item-home"
+        href="../index.html">Home</a>
+    <a class="menu-item menu-item-about"
+        href="../about/index.html">About</a>
+
+                </nav>
+            </div>
+        </div>
+    <div class="header-right hidden-xs hidden-sm hidden-md">
+            <button class="button-icon js-modal" data-modal="search" aria-label="Search">
+                <svg class="icon">
+                    <use xlink:href="#magnify"></use>
+                </svg>
+            </button>
+    </div>
+</header>
+
+        <header class="sticky">
+            <div class="sticky-title">VectorBT Pro - Aligning MTF time series Data with Resampling</div>
+            <button class="button-icon sticky-toc-button" aria-label="Table of Contents">
+                <svg class="icon">
+                    <use xlink:href="#table-of-contents"></use>
+                </svg>
+                <div class="sticky-toc"></div>
+            </button>
+            <div class="sticky-track">
+                <div class="sticky-progress"></div>
+            </div>
+        </header>
+        <div class="site-content">
+            
+<div class="content-area">
+    <main class="site-main">
+            <article class="single post tag-python tag-algorithmic-trading tag-vectorbt featured">
+    <header class="single-header kg-canvas">
+            <div class="single-meta">
+                <span class="single-meta-item single-meta-date">
+                    <time datetime="2022-11-26">
+                        Nov 26, 2022
+                    </time>
+                </span>
+                <span class="single-meta-item single-meta-length">
+                    14 min read
+                </span>
+                    <span class="single-meta-item single-meta-tag">
+                        <a class="post-tag post-tag-python" href="../tag/python/index.html">
+                            python
+                        </a>
+                    </span>
+            </div>
+            <h1 class="single-title">VectorBT Pro - Aligning MTF time series Data with Resampling</h1>
+                <div class="single-media kg-width-narrow u-placeholder horizontal">
+                    <img class="lazyload u-object-fit" data-srcset="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;400 400w,
+https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;750 750w,
+https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960 960w,
+https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;1140 1140w"
+                        data-sizes="auto" src="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960"
+                        srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                        alt="VectorBT Pro - Aligning MTF time series Data with Resampling">
+                </div>
+    </header>
+    <div class="single-content kg-canvas u-text-format">
+            <blockquote>Software Requirements : vectorbtpro, python3</blockquote><p><strong>Resampling</strong> of the market data is needed for strategies that involve multiple time frames, often referred to as “<em>top down analysis</em>” or “<em>Multi Time Frame</em> (MTF) analysis”. There are two types of resampling, called <strong>upsampling</strong> and <strong>downsampling</strong>.<br><br>Before thinking of <em><code>upsampling</code></em> and <em><code>downsampling</code></em> time-series data, let's use the analogy of an UltraHD (4K)  television to better understand these terms intuitively. When you feed a 1080p video source to a 4K TV it will <em>Upsample</em> the pixels, giving you a high resolution image. Essentially, you will get a high granularity (finer, hi-res image) from a low granularity (coarse, low-res image). The opposite ( <em>downsampling </em>) happens when you play a 4K video file on an old 📺 HD TV.<br><br>In the context of time series data,</p><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">💡</div><div class="kg-callout-text"><strong>Downsampling</strong> means going from high frequency time-series data (holds more information about the price within a time interval) to low frequency time-series data (holds less information about the price within the same time interval)<br><strong>Example</strong>: 15 Minute Data → 1 Hour Data</div></div><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">💡</div><div class="kg-callout-text"><strong>Upsampling</strong> means going from a low frequency time-series data (holds less information about the price within a time interval) to a higher frequency (holds more information about the price within a time interval)<br><strong>Example</strong> : 1 Hour Data → 15 Minute Data</div></div><p>In multi-time frame strategy analysis, we have to deal with the problem of integrating time series data (eg: <code>close</code> price) from multiple time frames.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2022/12/Merge_How-1.svg" class="kg-image" alt loading="lazy" width="1507" height="458"><figcaption>How to merge timeseries data with different frequencies?</figcaption></figure><p>To make our data-analytics and back-testing simulation process easier, we usually like to have a single time-series dataframe ( <code>mtf_df</code> ) which contains all the values from whatever time-frames we require (eg: 5m, 15min, 1h. 4h, 1D, 1W etc.) . This MTF dataframe will have a <em>base-line</em> frequency which will typically be the highest frequency (i.e highest granularity or the lowest timeframe time-series data, eg: 5m ) with which you want to do your signal generation for the strategy. The process of creating this MTF dataframe with resampled data is called <em><strong>Alignment</strong></em>.</p><figure class="kg-card kg-image-card kg-width-wide kg-card-hascaption"><img src="../content/images/2022/12/Merged_DFs-1.svg" class="kg-image" alt loading="lazy" width="2326" height="505"><figcaption>Aligned and upsampled data frame</figcaption></figure><p>In alignment, we basically merge the MTF time-series  <em>resampled</em> data into a single dataframe using <code>ffill()</code> and <code>shift()</code> operations. This is very easily done using <code>vbt.resampler()</code> objects and using those resampler objects as an argument in <code>vbt.resample_opening()</code> function for <strong>open</strong> price and <code>vbt.resample_closing()</code> when dealing with <strong>close</strong>, <strong>high</strong>, <strong>low</strong> prices and indicators.</p><hr><!--kg-card-begin: markdown--><h2 id="loading-and-resampling-data">Loading and Resampling Data</h2>
+<p>Loading the data using <code>vbt.HDF</code> functionality of the <code>1-minute</code> granularity</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Import Required Libaries
+import vectorbtpro as vbt
+import pandas as pd
+
+## Load m1 data
+m1_data = vbt.HDFData.fetch('../data/GU_OHLCV_3Y.h5')
+m1_data.wrapper.index #pandas doaesn't recognise the frequency because of missing timestamps
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-python">DatetimeIndex(['2019-08-27 00:00:00+00:00', '2019-08-27 00:01:00+00:00',
+               '2019-08-27 00:02:00+00:00', '2019-08-27 00:03:00+00:00',
+               '2019-08-27 00:04:00+00:00', '2019-08-27 00:05:00+00:00',
+               '2019-08-27 00:06:00+00:00', '2019-08-27 00:07:00+00:00',
+               '2019-08-27 00:08:00+00:00', '2019-08-27 00:09:00+00:00',
+               ...
+               '2022-08-26 16:50:00+00:00', '2022-08-26 16:51:00+00:00',
+               '2022-08-26 16:52:00+00:00', '2022-08-26 16:53:00+00:00',
+               '2022-08-26 16:54:00+00:00', '2022-08-26 16:55:00+00:00',
+               '2022-08-26 16:56:00+00:00', '2022-08-26 16:57:00+00:00',
+               '2022-08-26 16:58:00+00:00', '2022-08-26 16:59:00+00:00'],
+              dtype='datetime64[ns, UTC]', name='time', length=1122468, freq=None)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Resampling (<code>Downsampling</code>) the Data from 1 Minute Timeframe / Granularity to other Timeframes/Granularities.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<ul>
+<li>Converting 1 Minute (<code>M1</code>) to 15 Minute (<code>M15</code>)</li>
+<li>Converting 1 Minute (<code>M1</code>) to 1 Hour (<code>H1</code>)</li>
+<li>Converting 1 Minute (<code>M1</code>) to 4 Hours (<code>H4</code>)</li>
+</ul>
+</blockquote>
+<p>This resampling uses the <code>vbt.resample()</code> method for the downsampling operations, after which we see the frequency is identified correctly as <code>15T</code> (15 mins)</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">m15_data = m1_data.resample('15T')
+h1_data = m1_data.resample(&quot;1h&quot;)
+h4_data = m1_data.resample('4h')
+print(m15_data.wrapper.index)
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-python">DatetimeIndex(['2019-08-27 00:00:00+00:00', '2019-08-27 00:15:00+00:00',
+               '2019-08-27 00:30:00+00:00', '2019-08-27 00:45:00+00:00',
+               '2019-08-27 01:00:00+00:00', '2019-08-27 01:15:00+00:00',
+               '2019-08-27 01:30:00+00:00', '2019-08-27 01:45:00+00:00',
+               '2019-08-27 02:00:00+00:00', '2019-08-27 02:15:00+00:00',
+               ...
+               '2022-08-26 14:30:00+00:00', '2022-08-26 14:45:00+00:00',
+               '2022-08-26 15:00:00+00:00', '2022-08-26 15:15:00+00:00',
+               '2022-08-26 15:30:00+00:00', '2022-08-26 15:45:00+00:00',
+               '2022-08-26 16:00:00+00:00', '2022-08-26 16:15:00+00:00',
+               '2022-08-26 16:30:00+00:00', '2022-08-26 16:45:00+00:00'],
+              dtype='datetime64[ns, UTC]', name='time', length=105188, freq='15T')
+</code></pre>
+<!--kg-card-end: markdown--><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">💡</div><div class="kg-callout-text"><strong>How can the user tell which <code>resample()</code> method was used in the above operation, is it <code>pandas</code> or <code>vbt.resample()</code> ?</strong><br>If the object you are resampling is of class <code>vbt</code> then the numba-compiled <code>resample()</code> function of VectorBT will be used automatically. If the resampled object is a <code>pandas.Series</code> or <code>pandas.DataFrame</code> then the pandas resample() method will be used automatically.</div></div><hr><!--kg-card-begin: markdown--><p>As seen in the code below the respective (OHLC) can be obtained using the <code>.get()</code> method.</p>
+<pre><code class="language-python"># Obtain all the closing  prices using the .get() method
+m15_close = m15_data.get()['Close']
+
+## h1 data
+h1_open  = h1_data.get()['Open']
+h1_close = h1_data.get()['Close']
+h1_high  = h1_data.get()['High']
+h1_low   = h1_data.get()['Low']
+
+## h4 data
+h4_open  = h4_data.get()['Open']
+h4_close = h4_data.get()['Close']
+h4_high  = h4_data.get()['High']
+h4_low   = h4_data.get()['Low']
+</code></pre>
+<p>OR, you can can also simply follow the pandas convention like <code>resampled_data.column_name</code> to retrieve the column data</p>
+<pre><code class="language-python"># Obtain all the closing  prices using the .get() method
+m15_close = m15_data.close
+
+## h1 data
+h1_open  = h1_data.open
+h1_close = h1_data.close
+h1_high  = h1_data.high
+h1_low   = h1_data.low
+
+## h4 data
+h4_open  = h4_data.open
+h4_close = h4_data.close
+h4_high  = h4_data.high
+h4_low   = h4_data.low
+</code></pre>
+<p>The OHLC for both the <code>H4</code> 4-Hourly Candle Data as well as the closing price for the 15m Candle Data was obtained.</p>
+<!--kg-card-end: markdown--><hr><!--kg-card-begin: markdown--><h2 id="multi-time-frame-indicator-creation">Multi-Time Frame Indicator Creation</h2>
+<p>VectorBT has a built-in method called <code>vbt.talib()</code> which calls the required indicator from <strong>talib</strong> library and runs it on the specified time-series data (Eg: <code>Close</code> Price or another indicator). We will now create the following indicators (<em>manually</em>) on the <code>M15</code>, <code>H1</code> and <code>H4</code> timeframes using the :</p>
+<ul>
+<li><code>RSI</code> of 21 period</li>
+<li><code>BBANDS</code> Bolllinger Bands</li>
+<li><code>BBANDS_RSI</code> Bollinger Bands on the RSI</li>
+</ul>
+<pre><code class="language-python">rsi_period = 21
+
+## 15m indicators
+m15_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = rsi_period).run(m15_close, skipna=True).real.ffill()
+m15_bbands = vbt.talib(&quot;BBANDS&quot;).run(m15_close, skipna=True)
+m15_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(m15_rsi, skipna=True)
+
+## h4 indicators
+h1_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = rsi_period).run(h1_close, skipna=True).real.ffill()
+h1_bbands = vbt.talib(&quot;BBANDS&quot;).run(h1_close, skipna=True)
+h1_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(h1_rsi, skipna=True)
+
+## h4 indicators
+h4_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = rsi_period).run(h4_close, skipna=True).real.ffill()
+h4_bbands = vbt.talib(&quot;BBANDS&quot;).run(h4_close, skipna=True)
+h4_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(h4_rsi, skipna=True)
+</code></pre>
+<p>When <code>talib()</code> creates the RSI indicator time-series, it is known to create it with NaNs (null-values), so it is a good idea to run <code>ffill()</code>, <em>forward filling</em> operation to fill the missing values. On this note, it is also a good idea in general, to investigate the talib results and compare it with the original time-series data (<code>Close</code> Price) for abnormal number of <code>NaN</code> values and then decide on <code>ffill()</code> operation</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>We will now initialize the empty dict called <code>data</code> and fill it with key - value pairs of the 15m time-series data.</p>
+<pre><code class="language-python">## Initialize  dictionary
+data = {}
+
+col_values = [
+    m15_close, m15_rsi, m15_bbands.upperband, m15_bbands.middleband, m15_bbands.lowerband, 
+    m15_bbands_rsi.upperband, m15_bbands_rsi.middleband, m15_bbands_rsi.lowerband
+    ]
+
+col_keys = [
+    &quot;m15_close&quot;, &quot;m15_rsi&quot;, &quot;m15_bband_price_upper&quot;,  &quot;m15_bband_price_middle&quot;, &quot;m15_bband_price_lower&quot;, 
+    &quot;m15_bband_rsi_upper&quot;,  &quot;m15_bband_rsi_middle&quot;, &quot;m15_bband_rsi_lower&quot;
+         ]
+
+# Assign key, value pairs for method of time series data to store in data dict
+for key, time_series in zip(col_keys, col_values):
+    data[key] = time_series.ffill()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="alternative-one-liner-method-of-indicator-creation">Alternative (<strong>One-Liner</strong>) Method of Indicator Creation</h3>
+<p>VectorBT also offers a more convenient one-liner method of creating this multi-time frame indicators</p>
+<pre><code class="language-python">rsi_period = 21
+
+rsi = vbt.talib(&quot;RSI&quot;, timeperiod=rsi_period).run(
+    m15_data.get(&quot;Close&quot;), 
+    timeframe=[&quot;15T&quot;, &quot;1H&quot; , &quot;4H&quot;], 
+    skipna=True, 
+    broadcast_kwargs=dict(wrapper_kwargs=dict(freq=&quot;15T&quot;))
+).real
+
+bbands_price = vbt.talib(&quot;BBANDS&quot;).run(
+    m15_data.get(&quot;Close&quot;), 
+    timeframe=[&quot;15T&quot;, &quot;1H&quot;, &quot;4H&quot;], 
+    skipna=True,
+    broadcast_kwargs=dict(wrapper_kwargs=dict(freq=&quot;15T&quot;))
+)
+
+bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(
+    rsi,
+    timeframe=vbt.Default([&quot;15T&quot;, &quot;1H&quot; ,&quot;4H&quot;]),
+    skipna=True,
+    per_column=True,
+    broadcast_kwargs=dict(wrapper_kwargs=dict(freq=&quot;15T&quot;))
+)
+
+</code></pre>
+<p><strong>Note</strong> : The method of indicator creation shown above using <code>talib('IndicatorName').run</code> with <code>broadcast_kwargs</code> argument automatically does the <a href="https://github.com/polakowo/vectorbt.pro/blob/df5370824c9368406c0a06ddd0befeb56727e4c4/vectorbtpro/indicators/factory.py#L2868"><code>ffill()</code> operation</a>. This one liner method doesn't resample to <code>15T</code> only because of <code>broadcast_kwargs</code> argument, in fact, using <code>broadcast_kwargs</code> we just provide vbt with the true frequency of your data in case this frequency cannot be inferred from data. Without specifying it the method will still work (we will just get a warning if frequency cannot be inferred) <br> So here we we specify the <code>broadcast_kwargs</code> argument, because <code>m15_data.get(&quot;Close&quot;)</code> contains gaps and pandas cannot infer its frequency as <code>15T</code>, this approach works only because of the <code>timeframe</code> argument and because indicators always return outputs of the same index as their inputs, such that we're forced to resample it back to the original frequency. If pandas can infer the frequency of the input series, we don't need to specify <code>broadcast_kwargs</code> argument at all.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Initialize  dictionary
+data = {}
+
+## Assign key, value pairs for method 2 of Automated One-liner MTF indicator creation method
+col_values = [
+    [m15_close.ffill(), rsi['15T'], bbands_price['15T'].upperband, bbands_price['15T'].middleband, bbands_price['15T'].lowerband, bbands_rsi['15T'].upperband, bbands_rsi['15T'].middleband, bbands_rsi['15T'].lowerband],
+    [rsi['1H'], bbands_price['1H'].upperband, bbands_price['1H'].middleband, bbands_price['1H'].lowerband, bbands_rsi['1H'].upperband, bbands_rsi['1H'].middleband, bbands_rsi['1H'].lowerband],
+    [rsi['4H'], bbands_price['4H'].upperband, bbands_price['4H'].middleband, bbands_price['4H'].lowerband, bbands_rsi['4H'].upperband, bbands_rsi['4H'].middleband, bbands_rsi['4H'].lowerband]
+    ]
+
+col_keys = [
+    [&quot;m15_close&quot;, &quot;m15_rsi&quot;, &quot;m15_bband_price_upper&quot;,  &quot;m15_bband_price_middle&quot;, &quot;m15_bband_price_lower&quot;,  &quot;m15_bband_rsi_upper&quot;,  &quot;m15_bband_rsi_middle&quot;, &quot;m15_bband_rsi_lower&quot;], 
+    [&quot;h1_rsi&quot;, &quot;h1_bband_price_upper&quot;,  &quot;h1_bband_price_middle&quot;,  &quot;h1_bband_price_lower&quot;,  &quot;h1_bband_rsi_upper&quot;,  &quot;h1_bband_rsi_middle&quot;, &quot;h1_bband_rsi_lower&quot;],
+    [&quot;h4_rsi&quot;, &quot;h4_bband_price_upper&quot;,  &quot;h4_bband_price_middle&quot;,  &quot;h4_bband_price_lower&quot;,  &quot;h4_bband_rsi_upper&quot;,  &quot;h4_bband_rsi_middle&quot;, &quot;h4_bband_rsi_lower&quot; ],
+         ]
+
+## Assign key, value pairs for method 2 of Automated One-liner MTF indicator creation method
+for lst_series, lst_keys in zip(col_values, col_keys):
+    for key, time_series in zip(lst_keys, lst_series):
+        data[key] = time_series
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="alignment-up-sampling">Alignment &amp; Up-sampling</h2>
+<p>Let's now see what is <code>resampler</code> in VectorBT. Resampler is an instance of the Resampler class, which simply stores a source index and frequency, and a target index and frequency. The <code>vbt.resampler()</code> method can just work with the source index and target index and can automatically infer the source and target frequency. In contrast to Pandas, vectorbt can also accept an arbitrary target index for resampling</p>
+<pre><code class="language-python">Resampler(
+    source_index,
+    target_index,
+    source_freq=None,
+    target_freq=None,
+    silence_warnings=None
+)
+
+</code></pre>
+<p>where the arguments, are <br><br>
+<code>source_index</code> : is <code>index_like</code>, Index being resampled.<br>
+<code>target_index</code> : is <code>index_like</code> ,Index resulted from resampling.<br>
+<code>source_freq</code>  : <code>frequency_like</code> or <code>bool</code>, Frequency or date offset of the source index. Set to <code>False</code> to force-set the frequency to None.<br>
+<code>target_freq</code>  : <code>frequency_like</code> or <code>bool</code>,  Frequency or date offset of the target index. Set to <code>False</code> to force-set the frequency to None.<br>
+<code>silence_warnings</code> : <code>bool</code>, Whether to silence all warnings.</p>
+<p>We will now create a custom function called <code>create_resamplers()</code> using this <code>vbt.Resampler()</code> function to create a resampler object to convert <code>H4</code> time-series</p>
+<pre><code class="language-python">def create_resamplers(result_dict_keys_list : list, source_indices : list,  
+                      source_frequencies :list, target_index : pd.Series, target_freq : str):
+    &quot;&quot;&quot;
+    Creates a dictionary of vbtpro resampler objects.
+
+    Parameters
+    ==========
+    result_dict_keys_list : list, list of strings, which are keys of the output dictionary
+    source_indices        : list, list of pd.time series objects of the higher timeframes
+    source_frequencies    : list(str), which are short form representation of time series order. Eg:[&quot;1D&quot;, &quot;4h&quot;]
+    target_index          : pd.Series, target time series for the resampler objects
+    target_freq           : str, target time frequency for the resampler objects
+
+    Returns
+    ===========
+    resamplers_dict       : dict, vbt pro resampler objects
+    &quot;&quot;&quot;
+    
+    
+    resamplers = []
+    for si, sf in zip(source_indices, source_frequencies):
+        resamplers.append(vbt.Resampler(source_index = si,  target_index = target_index,
+                                        source_freq = sf, target_freq = target_freq))
+    return dict(zip(result_dict_keys_list, resamplers))
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Using this function we can create a dictionary of <code>vbt.Resampler</code> objecters stored by appropriately named keys.</p>
+<pre><code class="language-python">## Create Resampler Objects for upsampling
+src_indices = [h1_close.index, h4_close.index]
+src_frequencies = [&quot;1H&quot;,&quot;4H&quot;] 
+resampler_dict_keys = [&quot;h1_m15&quot;,&quot;h4_m15&quot;]
+
+list_resamplers = create_resamplers(resampler_dict_keys, src_indices, src_frequencies, m15_close.index, &quot;15T&quot;)
+
+print(list_resamplers)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>Output</strong>:</p>
+<pre><code class="language-python">{'h1_m15': &lt;vectorbtpro.base.resampling.base.Resampler at 0x16c83de70&gt;,
+ 'h4_m15': &lt;vectorbtpro.base.resampling.base.Resampler at 0x16c5478e0&gt;}
+</code></pre>
+<p>The output shows that two <code>vbt.Resampler</code> class objects have been created in memory.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>The <code>resample_closing()</code> and <code>resample_opening()</code> operations don't require any <code>ffill()</code> operations and they automatically align the source time-series data to the target frequency, which in our case is <code>15T</code> (15 mins)</p>
+<pre><code class="language-python">## Add H1 OLH data - No need to do ffill() on resample_closing as it already does that by default
+data[&quot;h1_open&quot;] = h4_open.vbt.resample_opening(list_resamplers['h1_m15'])
+
+## Add H4 OLH data - No need to do ffill() on resample_closing as it already does that by default
+data[&quot;h4_open&quot;] = h4_open.vbt.resample_opening(list_resamplers['h4_m15'])
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>We use <code>resample_opening</code> only if information in the array happens exactly at the beginning of the bar (such as open price), and <code>resample_closing</code> if information happens after that (such as high, low, and close price). You can see the effect of this <code>resample_opening</code> operation with the <code>print() </code>statements below:</p>
+<pre><code class="language-python">print(h4_open.info()) ## Before resampling pandas series
+
+&lt;class 'pandas.core.series.Series'&gt;
+DatetimeIndex: 6575 entries, 2019-08-27 00:00:00+00:00 to 2022-08-26 16:00:00+00:00
+Freq: 4H
+Series name: Open
+Non-Null Count  Dtype  
+--------------  -----  
+4841 non-null   float64
+dtypes: float64(1)
+memory usage: 102.7 KB
+None
+
+print(data[&quot;h4_open&quot;].info()) ## After resampling pandas series
+
+&lt;class 'pandas.core.series.Series'&gt;
+DatetimeIndex: 105188 entries, 2019-08-27 00:00:00+00:00 to 2022-08-26 16:45:00+00:00
+Freq: 15T
+Series name: Open
+Non-Null Count   Dtype  
+--------------   -----  
+105188 non-null  float64
+dtypes: float64(1)
+memory usage: 1.6 MB
+None
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Use along with  Manual indicator creation method for MTF
+series_to_resample = [
+    [h1_high, h1_low, h1_close, h1_rsi, 
+    h1_bbands.upperband, h1_bbands.middleband, h1_bbands.lowerband,
+    h1_bbands_rsi.upperband, h1_bbands_rsi.middleband, h1_bbands_rsi.lowerband], 
+    [h4_high, h4_low, h4_close, h4_rsi,
+    h4_bbands.upperband, h4_bbands.middleband, h4_bbands.lowerband, 
+    h4_bbands_rsi.upperband, h4_bbands_rsi.middleband, h4_bbands_rsi.lowerband]
+    ]
+
+data_keys = [
+    [&quot;h1_high&quot;, &quot;h1_low&quot;, &quot;h1_close&quot;, &quot;h1_rsi&quot;, 
+    &quot;h1_bband_price_upper&quot;, &quot;h1_bband_price_middle&quot;,&quot;h1_bband_price_lower&quot;, 
+     &quot;h1_bband_rsi_upper&quot;,  &quot;h1_bband_rsi_middle&quot;, &quot;h1_bband_rsi_lower&quot;],
+    [&quot;h4_high&quot;, &quot;h4_low&quot;, &quot;h4_close&quot;, &quot;h4_rsi&quot;, 
+    &quot;h4_bband_price_upper&quot;, &quot;h4_bband_price_middle&quot;, &quot;h4_bband_price_lower&quot;, 
+     &quot;h4_bband_rsi_upper&quot;,  &quot;h4_bband_rsi_middle&quot;, &quot;h4_bband_rsi_lower&quot;]
+     ]
+
+## Create resampled time series data aligned to base line frequency (15min)
+
+for lst_series, lst_keys, resampler in zip(series_to_resample, data_keys, resampler_dict_keys):
+    for key, time_series in zip(lst_keys, lst_series):
+        resampled_time_series = time_series.vbt.resample_closing(list_resamplers[resampler])
+        data[key] = resampled_time_series
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="alignment-and-resampling-when-using-one-liner-method-of-indicator-creation-br">Alignment and Resampling when using <em>one-liner</em> method of indicator creation <br></h3>
+<p>In this method, we have already dealt with resampling and aligning the indicators, so all we have to do is just resample the open and closing prices of the respective timeframes required.</p>
+<pre><code class="language-python">## Resample prices to match base_line frequency (`15T`)
+
+series_to_resample = [
+    [h1_open, h1_high, h1_low, h1_close],
+    [h4_open, h4_high, h4_low, h4_close]
+    ]
+
+data_keys = [
+    [&quot;h1_open&quot;, &quot;h1_high&quot;, &quot;h1_low&quot;, &quot;h1_close&quot;],
+    [&quot;h4_open&quot;, &quot;h4_high&quot;, &quot;h4_low&quot; ,&quot;h4_close&quot;]
+    ]
+
+## Create resampled time series data aligned to base line frequency (15min)
+
+for lst_series, lst_keys, resampler in zip(series_to_resample, data_keys, resampler_dict_keys):
+    for key, time_series in zip(lst_keys, lst_series):
+        if key.lower().endswith('open'):
+            print(f'Resampling {key} differently using vbt.resample_opening using &quot;{resampler}&quot; resampler')
+            resampled_time_series = time_series.vbt.resample_opening(list_resamplers[resampler])
+        else:
+            resampled_time_series = time_series.vbt.resample_closing(list_resamplers[resampler])
+        data[key] = resampled_time_series
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="creating-the-master-dataframe">Creating The Master DataFrame</h2>
+<p>Now that we have resampled the various time series to the different timeframes, created and run our indicators, we can finally create the composite <code>mtf_df</code> dataframe from this data which is properly aligned to the baseline frequency (in our case <code>15T</code>) that will allow us to properly create the <code>Buy/Long</code> and <code>Sell/Short</code> conditions for whichever MTF (Multi Time Frame) Strategy that we indend to backtest.</p>
+<pre><code class="language-python">cols_order = ['m15_close', 'm15_rsi', 'm15_bband_price_upper','m15_bband_price_middle', 'm15_bband_price_lower',
+              'm15_bband_rsi_upper','m15_bband_rsi_middle', 'm15_bband_rsi_lower',
+              'h1_open', 'h1_high', 'h1_low', 'h1_close', 'h1_rsi',
+              'h1_bband_price_upper', 'h1_bband_price_middle', 'h1_bband_price_lower', 
+              'h1_bband_rsi_upper', 'h1_bband_rsi_middle', 'h1_bband_rsi_lower',              
+              'h4_open', 'h4_high', 'h4_low', 'h4_close', 'h4_rsi',
+              'h4_bband_price_upper', 'h4_bband_price_middle', 'h4_bband_price_lower', 
+              'h4_bband_rsi_upper', 'h4_bband_rsi_middle', 'h4_bband_rsi_lower'
+              ]
+
+## construct a multi-timeframe dataframe
+mtf_df = pd.DataFrame(data)[cols_order]
+display(mtf_df)            
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-width-wide kg-card-hascaption"><img src="../content/images/2022/12/mtf_df.png" class="kg-image" alt loading="lazy" width="2000" height="711" srcset="../content/images/size/w600/2022/12/mtf_df.png 600w, ../content/images/size/w1000/2022/12/mtf_df.png 1000w, ../content/images/size/w1600/2022/12/mtf_df.png 1600w, ../content/images/size/w2400/2022/12/mtf_df.png 2400w" sizes="(min-width: 1200px) 1200px"><figcaption>Final aligned and resampled, pandas MultiTimeFrame DataFrame</figcaption></figure><!--kg-card-begin: markdown--><p>The <code>mtf_df</code> multi-time frame master dataframe will have the following columns each of which will help us define the logic of the strategy.</p>
+<ol>
+<li><code>m15_close</code> : 15 Minute Closing Price</li>
+<li><code>m15_rsi</code> : RSI values on the <code>m15</code>closing price of period 21</li>
+<li><code>m15_bband_price_upper</code>: The upper bollinger band on <code>m15</code> closing price</li>
+<li><code>m15_bband_price_middle</code>: The middle bollinger band on <code>m15</code> closing price</li>
+<li><code>m15_bband_price_lower</code> : The lower bollinger band on <code>m15</code> closing price</li>
+<li><code>m15_bband_rsi_upper</code> : The Upper Bollinger Band on the <code>M15</code> RSI Values</li>
+<li><code>m15_bband_rsi_middle</code> : The Middle Bollinger Band on the <code>M15</code> RSI Values</li>
+<li><code>m15_bband_rsi_lower</code>: The Lower Bollinger band on the <code>M15</code> RSI Values</li>
+<li><code>h1_open</code>:  The opening price of the <code>H1</code> candle</li>
+<li><code>h1_high</code>: The High Price of the <code>H1</code> Candle</li>
+<li><code>h1_low</code>:  The Low Price of the <code>H1</code> Candle</li>
+<li><code>h1_close</code>: The Closing Price of the <code>H1</code> Candle</li>
+<li><code>h1_rsi</code> : RSI Values on the <code>H1</code> closing price of period 21</li>
+<li><code>h1_bband_price_upper</code>: The Upper Bollinger Band On <code>H1</code> Closing Price</li>
+<li><code>h1_bband_price_middle</code>: The Middle Bollinger Band On <code>H1</code> Closing Price</li>
+<li><code>h1_bband_price_lower</code>:The Lower Bollinger Band On <code>H1</code> Closing Price</li>
+<li><code>h1_bband_rsi_upper</code>: The Upper Bollinger Band on the <code>H1</code> RSI Value</li>
+<li><code>h1_bband_rsi_middle</code>: The Middle Bollinger Band on the <code>H1</code> RSI Value</li>
+<li><code>h1_bband_rsi_lower</code>: The Lower Bollinger Band on the <code>H1</code> RSI Value</li>
+<li><code>h4_open</code>:  The opening price of the <code>H4</code> candle</li>
+<li><code>h4_high</code>: The High Price of the <code>H4</code> Candle</li>
+<li><code>h4_low</code>:  The Low Price of the <code>H4</code> Candle</li>
+<li><code>h4_close</code>: The Closing Price of the <code>H4</code> Candle</li>
+<li><code>h4_rsi</code> : RSI Values on the <code>H4</code> closing price of period 21</li>
+<li><code>h4_bband_price_upper</code>: The Upper Bollinger Band On <code>H4</code> Closing Price</li>
+<li><code>h4_bband_price_middle</code>: The Middle Bollinger Band On <code>H4</code> Closing Price</li>
+<li><code>h4_bband_price_lower</code>:The Lower Bollinger Band On <code>H4</code> Closing Price</li>
+<li><code>h4_bband_rsi_upper</code>: The Upper Bollinger Band on the <code>H4</code> RSI Value</li>
+<li><code>h4_bband_rsi_middle</code>: The Middle Bollinger Band on the <code>H4</code> RSI Value</li>
+<li><code>h4_bband_rsi_lower</code>: The Lower Bollinger Band on the <code>H4</code> RSI Value</li>
+</ol>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(mtf_df.info())
+
+&lt;class 'pandas.core.frame.DataFrame'&gt;
+DatetimeIndex: 105188 entries, 2019-08-27 00:00:00+00:00 to 2022-08-26 16:45:00+00:00
+Freq: 15T
+Data columns (total 33 columns):
+ #   Column                  Non-Null Count   Dtype  
+---  ------                  --------------   -----  
+ 0   m15_close               105188 non-null  float64
+ 1   m15_rsi                 105167 non-null  float64
+ 2   m15_bband_price_upper   105184 non-null  float64
+ 3   m15_bband_price_middle  105184 non-null  float64
+ 4   m15_bband_price_lower   105184 non-null  float64
+ 5   m15_bband_rsi_upper     105163 non-null  float64
+ 6   m15_bband_rsi_middle    105163 non-null  float64
+ 7   m15_bband_rsi_lower     105163 non-null  float64
+ 8   h1_open                 105188 non-null  float64
+ 9   h1_high                 105185 non-null  float64
+ 10  h1_low                  105185 non-null  float64
+ 11  h1_close                105185 non-null  float64
+ 12  h1_rsi                  105101 non-null  float64
+ 13  h1_bband_price_upper    105169 non-null  float64
+ 14  h1_bband_price_middle   105169 non-null  float64
+ 15  h1_bband_price_lower    105169 non-null  float64
+ 16  h1_bband_rsi_upper      105085 non-null  float64
+ 17  h1_bband_rsi_middle     105085 non-null  float64
+ 18  h1_bband_rsi_lower      105085 non-null  float64
+ 19  h4_open                 105188 non-null  float64
+ 20  h4_high                 105173 non-null  float64
+ 21  h4_low                  105173 non-null  float64
+ 22  h4_close                105173 non-null  float64
+ 23  h4_rsi                  104837 non-null  float64
+ 24  h4_bband_price_upper    105109 non-null  float64
+ 25  h4_bband_price_middle   105109 non-null  float64
+ 26  h4_bband_price_lower    105109 non-null  float64
+ 27  h4_bband_rsi_upper      104773 non-null  float64
+ 28  h4_bband_rsi_middle     104773 non-null  float64
+...
+ 32  signal                  105188 non-null  int64  
+dtypes: bool(2), float64(30), int64(1)
+memory usage: 29.9 MB
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="summary">Summary</h2>
+<p>In general, the resampling and alignment steps for creating a multi-time frame (MTF) dataframe can be summarized in the below diagram.</p>
+<ol>
+<li>We start with the highest granularity of OHLCV data possible (1m) and then downsample the data to higher timeframes (5m, 15m, 1h, 4h etc.)</li>
+<li>We then create the indicators on the multiple time frames required but at this juncture we don't forward fill the price data. After the indicator is created we can <code>ffill()</code> the resulting series if we are going with the manual method of indicator creation.</li>
+<li>In order to create the composite, merged MTF dataframe we employ <code>resample_opening()</code> on the open price or <code>resample_closing()</code> on every other time series, with the appropriate <code>vbt.Resampler()</code> objects, so that all the time-series are aligned to the base-line frequency time series.</li>
+</ol>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2022/12/Resampling-and-Alignment---FlowChart-_4LightBG.svg" class="kg-image" alt loading="lazy"><figcaption>Steps for MultiTimeFrame DataFrame creation</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>
+    </div>
+        <footer class="single-footer container medium">
+            <div class="single-footer-middle">
+             <div class="single-footer-top">
+                <h3 class="single-footer-title">Published by:</h3>
+                <div class="author-list">
+                    <div class="author-image-placeholder u-placeholder square">
+                        <a href="../author/dilip/index.html" title="Dilip Rajkumar">
+                            <img class="author-image u-object-fit" src="../content/images/size/w150/2022/12/ProfilePic.jpg" alt="Dilip Rajkumar" loading="lazy">
+                        </a>
+                    </div>
+                </div>               
+            </div>
+            <div class="copyright" style="text-align:center">
+                <br>
+                <strong>© Warning</strong> All rights belong to the author(s) of this publication. <br>
+                No part of this publication can be reproduced anywhere without prior approval from the author(s).
+            </div>
+        </footer>
+        <script src="https://utteranc.es/client.js"
+        repo="QubitQuants/qubitquants.github.io"
+        issue-term="pathname"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+        </script>
+</article>                    
+<section class="related-wrapper">
+            <div class="container medium">
+                <h3 class="related-title">You might also like...</h3>
+                <div class="related-feed">
+                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Jan
+        </div>
+        <div class="feed-calendar-day">
+            22
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - MultiAsset Data Acquisition</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            6 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../multi_asset_data_acquisition/index.html" aria-label="VectorBT Pro - MultiAsset Data Acquisition"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Jan
+        </div>
+        <div class="feed-calendar-day">
+            22
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - MultiAsset Portfolio Simulation</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            16 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../multi_asset_portfolio_simulation/index.html" aria-label="VectorBT Pro - MultiAsset Portfolio Simulation"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Jan
+        </div>
+        <div class="feed-calendar-day">
+            22
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Custom Dashboard for Portfolio Simulation and Strategy Visualisation</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            1 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../vbt_dashboard/index.html" aria-label="VectorBT Pro - Custom Dashboard for Portfolio Simulation and Strategy Visualisation"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Nov
+        </div>
+        <div class="feed-calendar-day">
+            30
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            11 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../vbt_plot_strategy/index.html" aria-label="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Nov
+        </div>
+        <div class="feed-calendar-day">
+            28
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Strategy Development and Signal Generation</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            7 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../strategydev/index.html" aria-label="VectorBT Pro - Strategy Development and Signal Generation"></a>
+</article>                </div>
+            </div>
+        </section>
+                </main>
+</div>
+        </div>
+        </section>
+        <footer class="site-footer container">
+    <div class="social">
+        <a class="social-item social-item-linkedin"
+        href="https://www.linkedin.com/groups/14112759/" target="_blank"
+        rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg class="icon">
+            <use xlink:href="#linkedin-box"></use>
+        </svg>
+        </a>
+        
+        <a class="social-item social-item-github"
+        href="https://github.com/qubitquants" target="_blank"
+        rel="noopener noreferrer" aria-label="GitHub">
+        <svg class="icon">
+            <use xlink:href="#github-box"></use>
+        </svg>
+        </a>
+
+        <a class="social-item social-item-rss"
+            href="../rss/index.html"
+            target="_blank" rel="noopener noreferrer" aria-label="RSS">
+            <svg class="icon">
+                <use xlink:href="#rss-box"></use>
+            </svg>
+        </a>
+
+    </div>
+
+    <nav class="footer-nav">
+        
+        <a class="menu-item js-theme" href="index.html#" data-system="System theme" data-dark="Dark theme" data-light="Light theme">
+            <svg class="icon theme-icon theme-icon-system">
+                <use xlink:href="#circle-half-full"></use>
+            </svg>
+            <svg class="icon theme-icon theme-icon-dark">
+                <use xlink:href="#brightness-2"></use>
+            </svg>
+            <svg class="icon theme-icon theme-icon-light">
+                <use xlink:href="#white-balance-sunny"></use>
+            </svg>
+            <span class="theme-text">System theme</span>
+        </a>
+    </nav>
+
+    <div class="copyright">
+        <strong>Copyright</strong> © 2022 Qubit Quants
+    </div>
+
+     <div class="copyright">
+        <strong>DISCLAIMER</strong>: All Content here is for educational purposes only and is not financial advise. 
+        Implement at your own risk. No liability assumed by Qubit Quants and it's authors
+    </div>
+
+    <script>
+        var links = document.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          if (links[i].hostname != window.location.hostname) {
+            links[i].target = '_blank';
+            links[i].rel = 'noopener';
+          }
+        }
+    </script>
+
+</footer>        <div class="modal-overlay">
+    <div class="modal modal-search">
+        <div class="form-wrapper">
+            <input class="modal-input search-input" type="search" placeholder="Enter keyword...">
+            <button class="form-button search-button" aria-label="Search">
+                <svg class="icon icon-search">
+                    <use xlink:href="#magnify"></use>
+                </svg>
+                <svg class="icon icon-close">
+                    <use xlink:href="#window-close"></use>
+                </svg>
+            </button>
+        </div>
+                <div class="popular-wrapper">
+                    <h4 class="popular-title">Popular tags</h4>
+                    <div class="popular-feed">
+                            <a class="popular" href="../tag/vectorbt/index.html">vectorBT</a>
+                            <a class="popular" href="../tag/python/index.html">python</a>
+                            <a class="popular" href="../tag/algorithmic-trading/index.html">algorithmic trading</a>
+                            <a class="popular" href="../tag/plotly/index.html">plotly</a>
+                            <a class="popular" href="../tag/metatrader5/index.html">metatrader5</a>
+                    </div>
+                </div>
+        <div class="search-result"></div>
+    </div>
+    <button class="button-icon modal-close" aria-label="Close">
+        <svg class="icon icon-close">
+            <use xlink:href="#window-close"></use>
+        </svg>
+    </button>
+</div>        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe.
+        It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides.
+          PhotoSwipe keeps only 3 of them in the DOM to save memory.
+          Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>    </div>
+
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous">
+    </script>
+    <script src="../assets/built/main.min.js%3Fv=5bf20839b7"></script>
+
+    
+</body>
+
+</html>
