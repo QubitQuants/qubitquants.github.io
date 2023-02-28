@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>VectorBT Pro - Parameter Optimisation of a Strategy</title>
+    <link rel="stylesheet" href="../assets/built/screen.css%3Fv=44b41c135e.css">
+    <link rel="stylesheet" href="https://use.typekit.net/nlf8nho.css">
+
+    <!-- Favicon Situation -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png%3Fv=YA3x6XqYr8%3Fv=44b41c135e">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png%3Fv=YA3x6XqYr8%3Fv=44b41c135e">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png%3Fv=YA3x6XqYr8%3Fv=44b41c135e">
+    <link rel="manifest" href="../assets/images/site.webmanifest%3Fv=YA3x6XqYr8%3Fv=44b41c135e">
+    <link rel="mask-icon" href="../assets/images/safari-pinned-tab.svg%3Fv=YA3x6XqYr8%3Fv=44b41c135e">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico%3Fv=YA3x6XqYr8%3Fv=44b41c135e">
+    <meta name="msapplication-TileColor" content="#029aff">
+    <meta name="msapplication-config" content="/assets/images/browserconfig.xml?v=YA3x6XqYr8">
+    <meta name="theme-color" content="#ffffff">
+    <!-- End Favicons -->
+
+    <script>
+        var siteUrl = 'http://localhost:2368';
+        // Force dark mode
+        // localStorage.setItem('dawn_theme', 'dark');
+        // document.documentElement.classList.add('theme-dark');          
+    </script>
+
+    <script>
+        var localTheme = localStorage.getItem('dawn_theme');
+        switch (localTheme) {
+            case 'dark':
+                document.documentElement.classList.add('theme-dark');
+                break;
+            case 'light':
+                document.documentElement.classList.add('theme-light');
+                break;
+            default:
+                break;
+        }
+    </script>
+
+    <link rel="icon" href="../content/images/size/w256h256/2023/01/android-chrome-192x192.png" type="image/png" />
+    <link rel="canonical" href="index.html" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
+    <meta property="og:site_name" content="Qubit Quants" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="VectorBT Pro - Parameter Optimisation of a Strategy" />
+    <meta property="og:description" content="In this tutorial, we will see how to do Parameter Optimization on the Double Bollinger Band strategy we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like total_" />
+    <meta property="og:url" content="http://localhost:2368/parameter-optimization/" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000" />
+    <meta property="article:published_time" content="2023-02-28T09:00:00.000Z" />
+    <meta property="article:modified_time" content="2023-02-28T09:54:16.000Z" />
+    <meta property="article:tag" content="algorithmic trading" />
+    <meta property="article:tag" content="parameter optimization" />
+    <meta property="article:tag" content="cross-validation" />
+    <meta property="article:tag" content="vectorBT" />
+    <meta property="article:tag" content="signal generation" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VectorBT Pro - Parameter Optimisation of a Strategy" />
+    <meta name="twitter:description" content="In this tutorial, we will see how to do Parameter Optimization on the Double Bollinger Band strategy we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like total_" />
+    <meta name="twitter:url" content="http://localhost:2368/parameter-optimization/" />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Dilip Rajkumar" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="algorithmic trading, parameter optimization, cross-validation, vectorBT, signal generation" />
+    <meta name="twitter:site" content="@ghost" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="2392" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Qubit Quants",
+        "url": "http://localhost:2368/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2022/12/QQ_Text_DarkMode.png"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Dilip Rajkumar",
+        "image": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2022/12/ProfilePic.jpg",
+            "width": 315,
+            "height": 340
+        },
+        "url": "http://localhost:2368/author/dilip/",
+        "sameAs": [
+            "https://www.linkedin.com/in/sridiliprk/"
+        ]
+    },
+    "headline": "VectorBT Pro - Parameter Optimisation of a Strategy",
+    "url": "http://localhost:2368/parameter-optimization/",
+    "datePublished": "2023-02-28T09:00:00.000Z",
+    "dateModified": "2023-02-28T09:54:16.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&ixlib=rb-4.0.3&q=80&w=2000",
+        "width": 2000,
+        "height": 2392
+    },
+    "keywords": "algorithmic trading, parameter optimization, cross-validation, vectorBT, signal generation",
+    "description": "In this tutorial, we will see how to do Parameter Optimization on the Double Bollinger Band strategy we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like total_returns, Sharpe Ratio, Sortino Ratio, Win Rate etc. or also to minimize certain metrics like Total Drawdown. Quintessentially, we will see how to:\n\n\n * Use the vbt.Parameterized() decorator to easil",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:2368/"
+    }
+}
+    </script>
+
+    <meta name="generator" content="Ghost 5.24" />
+    <link rel="alternate" type="application/rss+xml" title="Qubit Quants" href="../rss/index.html" />
+    
+    <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="27a6f7b1b53a260e5c12a43798" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="http://localhost:2368/" crossorigin="anonymous"></script>
+    <script defer src="../public/cards.min.js%3Fv=44b41c135e"></script>
+    <link rel="stylesheet" type="text/css" href="../public/cards.min.css%3Fv=44b41c135e.css">
+    <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-Q14D0SCYNP"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-Q14D0SCYNP');
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/brands.min.css" integrity="sha512-+oRH6u1nDGSm3hH8poU85YFIVTdSnS2f+texdPGrURaJh8hzmhMiZrQth6l56P4ZQmxeZzd2DqVEMqQoJ8J89A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
+/* Change post width - for older dawn theme versions use .kg-canvas*/     
+.gh-canvas {
+    display: grid;
+    grid-template-columns: [full-start] minmax(4vw,auto) [wide-start] minmax(auto,140px) [main-start] min(900px,calc(100% - 8vw)) [main-end] minmax(auto,140px) [wide-end] minmax(4vw,auto) [full-end];
+}
+    
+.kg-canvas {
+    display: grid;
+    grid-template-columns: [full-start] minmax(4vw,auto) [wide-start] minmax(auto,140px) [main-start] min(900px,calc(100% - 8vw)) [main-end] minmax(auto,140px) [wide-end] minmax(4vw,auto) [full-end];
+}
+
+.cover-cta, .gh-powered-by, .gh-foot-menu {
+    display: None;
+    }
+
+</style><style>:root {--ghost-accent-color: #FF1A75;}</style>
+</head>
+
+<body class="post-template tag-algorithmic-trading tag-parameter-optimization tag-cross-validation tag-vectorbt tag-signal-generation">
+    <svg width="0" height="0" style="display: none;">
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="arrow-left">
+    <path d="M26.667 14.667v2.667h-16L18 24.667l-1.893 1.893L5.547 16l10.56-10.56L18 7.333l-7.333 7.333h16z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="arrow-right">
+    <path d="M5.333 14.667v2.667h16L14 24.667l1.893 1.893L26.453 16 15.893 5.44 14 7.333l7.333 7.333h-16z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="brightness-2">
+    <path
+        d="M13.333 2.667c-2.427 0-4.707.667-6.667 1.8 4 2.307 6.667 6.6 6.667 11.533s-2.667 9.227-6.667 11.533c1.96 1.133 4.24 1.8 6.667 1.8 7.36 0 13.333-5.973 13.333-13.333S20.693 2.667 13.333 2.667z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="chevron-left">
+    <path d="M20.547 22.107L14.44 16l6.107-6.12L18.667 8l-8 8 8 8 1.88-1.893z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="chevron-right">
+    <path d="M11.453 22.107L17.56 16l-6.107-6.12L13.333 8l8 8-8 8-1.88-1.893z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="circle-half-full">
+    <path
+        d="M16 2.667c-7.36 0-13.333 5.973-13.333 13.333s5.973 13.333 13.333 13.333c7.36 0 13.333-5.973 13.333-13.333s-5.973-13.333-13.333-13.333zM16 5.333c5.893 0 10.667 4.773 10.667 10.667s-4.773 10.667-10.667 10.667v-21.333z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="dots-horizontal">
+    <path
+        d="M21.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM13.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0zM5.333 16c0-1.473 1.194-2.667 2.667-2.667v0c1.473 0 2.667 1.194 2.667 2.667v0c0 1.473-1.194 2.667-2.667 2.667v0c-1.473 0-2.667-1.194-2.667-2.667v0z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="facebook-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zM24 6.667h-3.333A4.672 4.672 0 0 0 16 11.334v3.333h-2.667v4H16V28h4v-9.333h4v-4h-4V12c0-.733.6-1.333 1.333-1.333H24v-4z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="facebook">
+    <path
+        d="M22.667 2.667V8H20c-.92 0-1.333 1.08-1.333 2v3.333h4v5.333h-4v10.667h-5.333V18.666h-4v-5.333h4V8a5.332 5.332 0 0 1 5.333-5.333h4z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="flickr-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M11.1,7.6
+    c1.7,0,3.2,1.4,3.2,3.2c0,1.7-1.4,3.2-3.1,3.2c-1.7,0-3.2-1.4-3.2-3.2S9.3,7.7,11.1,7.6z M25,24.2c-0.1,0.1-0.2,0.2-0.5,0.2
+    c0,0,0,0-0.1,0H12.3c-0.9,0-1.8,0-2.7,0c-0.4,0-0.8,0-1.2,0c-0.4,0-0.8,0.1-1.2,0h0c0,0-0.1,0-0.1,0c-0.3-0.2,0.3-0.5,0.3-0.7
+    c0.3-0.3,3.3-4.6,3.3-4.7c0.4-0.6,1-1,1.5-1c0.8,0,1.3,0.9,2,1.3c0.9,0.5,1.5-0.2,1.9-0.9c0.3-0.5,0.6-1,0.9-1.4
+    c0.2-0.3,0.3-0.6,0.5-0.8c0.2-0.3,0.4-0.7,0.7-1l0.4-0.7c0,0,0.1-0.1,0.1-0.2c0.2-0.2,0.3-0.4,0.5-0.4c0.1,0,0.3,0.2,0.4,0.4
+    c1.5,2.7,3,5.4,4.5,8l0.7,1.3c0.1,0.1,0.1,0.2,0.1,0.3C25,24,25,24.1,25,24.2z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="instapaper-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M17.5,23.5
+    c0.1,0.2,0.3,0.4,0.5,0.6c0.2,0.2,0.7,0.2,1.3,0.2v0.3h-6.6v-0.3c0.8,0,1.4-0.2,1.6-0.5c0.2-0.3,0.3-1.1,0.3-2.2V10.4
+    c0-1.2-0.1-2-0.3-2.3c-0.2-0.4-0.7-0.5-1.5-0.5V7.4h6.6v0.2h0c-0.3,0-0.7,0-1.1,0.2s-0.6,0.3-0.7,0.6c-0.1,0.3-0.1,0.9-0.1,1.8v11.4
+    C17.4,22.7,17.4,23.3,17.5,23.5z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="linkedin-box">
+    <path
+        d="M25.333 4c1.473 0 2.667 1.194 2.667 2.667v0 18.667c0 1.473-1.194 2.667-2.667 2.667v0h-18.667c-1.473 0-2.667-1.194-2.667-2.667v0-18.667c0-1.473 1.194-2.667 2.667-2.667v0h18.667zM24.667 24.667v-7.067c0-2.401-1.946-4.347-4.347-4.347v0c-1.133 0-2.453 0.693-3.093 1.733v-1.48h-3.72v11.16h3.72v-6.573c0-1.027 0.827-1.867 1.853-1.867 1.031 0 1.867 0.836 1.867 1.867v0 6.573h3.72zM9.173 11.413c1.237 0 2.24-1.003 2.24-2.24v0c0-1.24-1-2.253-2.24-2.253-1.244 0-2.253 1.009-2.253 2.253v0c0 1.24 1.013 2.24 2.253 2.24zM11.027 24.667v-11.16h-3.693v11.16h3.693z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 -2 28 28" id="github-box">
+    <path 
+        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z">
+        </path>
+</symbol>
+
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" id="loader">
+    <path opacity="0.3" fill="currentColor"
+        d="M20.201,5.169c-8.254,0-14.946,6.692-14.946,14.946c0,8.255,6.692,14.946,14.946,14.946 s14.946-6.691,14.946-14.946C35.146,11.861,28.455,5.169,20.201,5.169z M20.201,31.749c-6.425,0-11.634-5.208-11.634-11.634 c0-6.425,5.209-11.634,11.634-11.634c6.425,0,11.633,5.209,11.633,11.634C31.834,26.541,26.626,31.749,20.201,31.749z" />
+    <path fill="currentColor"
+        d="M26.013,10.047l1.654-2.866c-2.198-1.272-4.743-2.012-7.466-2.012h0v3.312h0 C22.32,8.481,24.301,9.057,26.013,10.047z">
+        <animateTransform attributeType="xml" attributeName="transform" type="rotate" from="0 20 20" to="360 20 20"
+            dur="0.5s" repeatCount="indefinite" />
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="magnify">
+    <path
+        d="M12.667 4a8.667 8.667 0 0 1 8.667 8.667c0 2.147-.787 4.12-2.08 5.64l.36.36h1.053l6.667 6.667-2 2-6.667-6.667v-1.053l-.36-.36a8.689 8.689 0 0 1-5.64 2.08C7.88 21.334 4 17.454 4 12.667S7.88 4 12.667 4zm0 2.667c-3.333 0-6 2.667-6 6s2.667 6 6 6 6-2.667 6-6-2.667-6-6-6z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="menu-down">
+    <path d="M9.333 13.333L16 20l6.667-6.667H9.334z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="pinboard-box">
+<path
+    d="M25.3,4H6.7C5.2,4,4,5.2,4,6.7v18.7C4,26.8,5.2,28,6.7,28h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C28,5.2,26.8,4,25.3,4z M14.5,22.5
+    c-0.4-0.1,0.1-2.4,0-2.7l-4.9-5.9c-0.3-0.1-3.2,1.2-2.6,0l6.5-6.6c1.2-0.7,0,2.3,0.1,2.6l5.9,4.8c0.3,0.1,3.5-1.1,2.9,0.1l-7.5,7.6
+    C14.8,22.5,14.7,22.5,14.5,22.5z M24.2,24.6l-5.6-5.4l0.7-0.7C19.3,18.9,27.4,25.4,24.2,24.6z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="rss-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zM10 20c-1.107 0-2 .893-2 2s.893 2 2 2 2-.893 2-2-.893-2-2-2zm-2-6.667V16c4.413 0 8 3.587 8 8h2.667c0-5.893-4.773-10.667-10.667-10.667zM8 8v2.667c7.36 0 13.333 5.973 13.333 13.333H24c0-8.84-7.16-16-16-16z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/1999/svg" viewBox="0 0 32 32" id="spotify-box">
+<path
+    d="M25.2,4H6.6C5.1,4,3.9,5.2,3.9,6.7v18.7c0,1.4,1.2,2.6,2.7,2.6h18.7c1.5,0,2.7-1.2,2.7-2.7V6.7C27.9,5.2,26.7,4,25.2,4z
+     M20.1,22.8c-1.6,0-2.9-1.1-2.9-2.4c0-1.3,1.3-2.4,2.9-2.4c0.3,0,0.7,0,1,0.1l0-5.8l-6.3,2l0.1,8.2c0,1.3-1.3,2.4-2.9,2.4
+    C10.3,25,9,24,9,22.6c0-1.3,1.3-2.4,2.9-2.4c0.3,0,0.7,0,1,0.1v-9.9L22.9,7L23,20.4C23,21.8,21.7,22.8,20.1,22.8z">
+</path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="star">
+    <path
+        d="M16 23.027L24.24 28l-2.187-9.373 7.28-6.307-9.587-.827-3.747-8.827-3.747 8.827-9.587.827 7.267 6.307L7.759 28l8.24-4.973z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="table-of-contents">
+    <path d="M3 9h14V7H3v2m0 4h14v-2H3v2m0 4h14v-2H3v2m16 0h2v-2h-2v2m0-10v2h2V7h-2m0 6h2v-2h-2v2z"></path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="twitter-box">
+    <path
+        d="M6.667 4h18.667c1.467 0 2.667 1.2 2.667 2.667v18.667c0 1.467-1.2 2.667-2.667 2.667H6.667A2.675 2.675 0 0 1 4 25.334V6.667C4 5.2 5.2 4 6.667 4zm16.946 8.44c.64-.533 1.387-1.173 1.72-1.88-.547.28-1.2.453-1.92.547.667-.48 1.213-1.107 1.493-1.96-.693.373-1.4.693-2.28.853-2.067-2.493-7.013-.467-6.133 3.267-3.48-.213-5.6-1.787-7.36-3.72-1 1.627-.133 4.093 1.053 4.773-.613-.04-1.08-.227-1.52-.44.053 2.053 1.187 3.04 2.773 3.573a4.47 4.47 0 0 1-1.52.04c.493 1.427 1.52 2.32 3.28 2.507-1.2 1.013-3.413 1.72-5.2 1.44 1.533.973 3.28 1.747 5.707 1.64 5.88-.267 9.813-4.48 9.907-10.64z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="twitter">
+    <path
+        d="M29.947 8a11.423 11.423 0 0 1-3.28.92 5.738 5.738 0 0 0 2.507-3.173 11.52 11.52 0 0 1-3.627 1.4C24.494 6 23.014 5.334 21.334 5.334c-3.133 0-5.693 2.56-5.693 5.72 0 .453.053.893.147 1.307A16.261 16.261 0 0 1 4.001 6.388a5.663 5.663 0 0 0-.773 2.867c0 1.987 1 3.747 2.547 4.747-.947 0-1.827-.267-2.6-.667v.04a5.724 5.724 0 0 0 4.587 5.613 5.644 5.644 0 0 1-2.574.093c.72 2.253 2.813 3.933 5.333 3.973-1.947 1.547-4.413 2.453-7.107 2.453-.453 0-.907-.027-1.36-.08A16.19 16.19 0 0 0 10.827 28c10.507 0 16.28-8.72 16.28-16.28 0-.253 0-.493-.013-.747A11.42 11.42 0 0 0 29.947 8z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="white-balance-sunny">
+    <path
+        d="M4.733 24.72l1.88 1.88 2.4-2.387L7.12 22.32zm9.934 5.213h2.667V26h-2.667zM16 7.333c-4.413 0-8 3.587-8 8s3.587 8 8 8 8-3.587 8-8c0-4.427-3.587-8-8-8zm10.667 9.334h4V14h-4zm-3.68 7.546l2.4 2.387 1.88-1.88-2.387-2.4zm4.28-18.266l-1.88-1.88-2.4 2.387 1.893 1.893zM17.333.733h-2.667v3.933h2.667zM5.333 14h-4v2.667h4zm3.68-7.547l-2.4-2.387-1.88 1.88 2.387 2.4 1.893-1.893z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="window-close">
+    <path
+        d="M17.947 16l7.387 7.387v1.947h-1.947L16 17.947l-7.387 7.387H6.666v-1.947L14.053 16 6.666 8.613V6.666h1.947L16 14.053l7.387-7.387h1.947v1.947L17.947 16z">
+    </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="title-link">
+   <path d="M19 3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5A2,2 0 0,0 19,3M13.94,14.81L11.73,17C11.08,17.67 10.22,18 9.36,18C8.5,18 7.64,17.67 7,17C5.67,15.71 5.67,13.58 7,12.26L8.35,10.9L8.34,11.5C8.33,12 8.41,12.5 8.57,12.94L8.62,13.09L8.22,13.5C7.91,13.8 7.74,14.21 7.74,14.64C7.74,15.07 7.91,15.47 8.22,15.78C8.83,16.4 9.89,16.4 10.5,15.78L12.7,13.59C13,13.28 13.18,12.87 13.18,12.44C13.18,12 13,11.61 12.7,11.3C12.53,11.14 12.44,10.92 12.44,10.68C12.44,10.45 12.53,10.23 12.7,10.06C13.03,9.73 13.61,9.74 13.94,10.06C14.57,10.7 14.92,11.54 14.92,12.44C14.92,13.34 14.57,14.18 13.94,14.81M17,11.74L15.66,13.1V12.5C15.67,12 15.59,11.5 15.43,11.06L15.38,10.92L15.78,10.5C16.09,10.2 16.26,9.79 16.26,9.36C16.26,8.93 16.09,8.53 15.78,8.22C15.17,7.6 14.1,7.61 13.5,8.22L11.3,10.42C11,10.72 10.82,11.13 10.82,11.56C10.82,12 11,12.39 11.3,12.7C11.47,12.86 11.56,13.08 11.56,13.32C11.56,13.56 11.47,13.78 11.3,13.94C11.13,14.11 10.91,14.19 10.68,14.19C10.46,14.19 10.23,14.11 10.06,13.94C8.75,12.63 8.75,10.5 10.06,9.19L12.27,7C13.58,5.67 15.71,5.68 17,7C17.65,7.62 18,8.46 18,9.36C18,10.26 17.65,11.1 17,11.74Z">
+   </path>
+</symbol>
+
+<symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" id="feed-link">
+  <path d="M10.59,13.41C11,13.8 11,14.44 10.59,14.83C10.2,15.22 9.56,15.22 9.17,14.83C7.22,12.88 7.22,9.71 9.17,7.76V7.76L12.71,4.22C14.66,2.27 17.83,2.27 19.78,4.22C21.73,6.17 21.73,9.34 19.78,11.29L18.29,12.78C18.3,11.96 18.17,11.14 17.89,10.36L18.36,9.88C19.54,8.71 19.54,6.81 18.36,5.64C17.19,4.46 15.29,4.46 14.12,5.64L10.59,9.17C9.41,10.34 9.41,12.24 10.59,13.41M13.41,9.17C13.8,8.78 14.44,8.78 14.83,9.17C16.78,11.12 16.78,14.29 14.83,16.24V16.24L11.29,19.78C9.34,21.73 6.17,21.73 4.22,19.78C2.27,17.83 2.27,14.66 4.22,12.71L5.71,11.22C5.7,12.04 5.83,12.86 6.11,13.65L5.64,14.12C4.46,15.29 4.46,17.19 5.64,18.36C6.81,19.54 8.71,19.54 9.88,18.36L13.41,14.83C14.59,13.66 14.59,11.76 13.41,10.59C13,10.2 13,9.56 13.41,9.17Z">
+  </path>
+</symbol>
+
+</svg>
+    <div class="site">
+        <header class="site-header container">
+    <div class="header-left">
+        <a class="logo" href="../index.html">
+                <img class="logo-image" src="../content/images/2022/12/QQ_Text_DarkMode.png" alt="Qubit Quants">
+        </a>
+    </div>
+        <nav class="main-nav hidden-xs hidden-sm hidden-md">
+                <a class="menu-item menu-item-home"
+        href="../index.html">Home</a>
+    <a class="menu-item menu-item-about"
+        href="../about/index.html">About</a>
+
+        </nav>
+
+        <button class="button-icon hidden-lg hidden-xl js-modal" data-modal="search" aria-label="Search">
+            <svg class="icon">
+                <use xlink:href="#magnify"></use>
+            </svg>
+        </button>
+        <div class="burger hidden-lg hidden-xl">
+            <div class="burger-bar"></div>
+            <div class="burger-bar"></div>
+        </div>
+
+        <div class="mobile-menu hidden-lg hidden-xl">
+            <div class="container">
+                <nav class="mobile-nav">
+                        <a class="menu-item menu-item-home"
+        href="../index.html">Home</a>
+    <a class="menu-item menu-item-about"
+        href="../about/index.html">About</a>
+
+                </nav>
+            </div>
+        </div>
+    <div class="header-right hidden-xs hidden-sm hidden-md">
+            <button class="button-icon js-modal" data-modal="search" aria-label="Search">
+                <svg class="icon">
+                    <use xlink:href="#magnify"></use>
+                </svg>
+            </button>
+    </div>
+</header>
+
+        <header class="sticky">
+            <div class="sticky-title">VectorBT Pro - Parameter Optimisation of a Strategy</div>
+            <button class="button-icon sticky-toc-button" aria-label="Table of Contents">
+                <svg class="icon">
+                    <use xlink:href="#table-of-contents"></use>
+                </svg>
+                <div class="sticky-toc"></div>
+            </button>
+            <div class="sticky-track">
+                <div class="sticky-progress"></div>
+            </div>
+        </header>
+        <div class="site-content">
+            
+<div class="content-area">
+    <main class="site-main">
+            <article class="single post tag-algorithmic-trading tag-parameter-optimization tag-cross-validation tag-vectorbt tag-signal-generation">
+    <header class="single-header kg-canvas">
+            <div class="single-meta">
+                <span class="single-meta-item single-meta-date">
+                    <time datetime="2023-02-28">
+                        Feb 28, 2023
+                    </time>
+                </span>
+                <span class="single-meta-item single-meta-length">
+                    20 min read
+                </span>
+                    <span class="single-meta-item single-meta-tag">
+                        <a class="post-tag post-tag-algorithmic-trading" href="../tag/algorithmic-trading/index.html">
+                            algorithmic trading
+                        </a>
+                    </span>
+            </div>
+            <h1 class="single-title">VectorBT Pro - Parameter Optimisation of a Strategy</h1>
+                <div class="single-media kg-width-wide u-placeholder horizontal">
+                    <img class="lazyload u-object-fit" data-srcset="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;400 400w,
+https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;750 750w,
+https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960 960w,
+https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;1140 1140w"
+                        data-sizes="auto" src="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960"
+                        srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                        alt="VectorBT Pro - Parameter Optimisation of a Strategy">
+                </div>
+    </header>
+    <div class="single-content kg-canvas u-text-format">
+            <!--kg-card-begin: markdown--><p>In this tutorial, we will see how to do <code>Parameter Optimization</code> on the <code>Double Bollinger Band strategy</code> we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like <code>total_returns</code>, <code>Sharpe Ratio</code>, <code>Sortino Ratio</code>, <code>Win Rate</code> etc. or also to minimize certain metrics like <code>Total Drawdown</code>. Quintessentially, we will see how to:</p>
+<ul>
+<li>Use the <code>vbt.Parameterized()</code> decorator to easily convert any strategy function into a parameter optimization simulation.</li>
+<li>Use the <code>vbt.Splitter</code> object to create <code>train</code> and <code>test</code> splits for cross validation of the parameter optimization process.</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="loading-and-resampling-market-data">Loading and resampling market data</h2>
+<p>As always, we begin by loading the market data, in this case <code>BTCUSDT</code> (one minute) data from Binance. We will then resample the <code>M1</code> data to higher timeframes and store this resampled data in a dictionary for quick in memory access during the parameter optimization process.</p>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+import vectorbtpro as vbt
+
+## Acquire BTCUSDT 1m crypto data from Binance
+
+data = vbt.BinanceData.fetch(
+    [&quot;BTCUSDT&quot;], 
+    start=&quot;2019-01-01 UTC&quot;, 
+    end=&quot;2023-02-02 UTC&quot;,
+    timeframe=&quot;1m&quot;
+    )
+
+## Save acquired data locally for persistance
+data.to_hdf(&quot;/Users/john.doe/vbt_pro_tutorials/data/Binance_BTCUSDT_OHLCV_3Y_m1.h5&quot;)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>To read <code>hdf</code> files of market data downloaded from Binance, VectorBT Pro has this <code>vbt.BinanceData.from_hdf()</code> method which automatically deals with resampling issues for all the columns.</p>
+<pre><code class="language-python">## Load m1 data - GBPUSD
+m1_data = vbt.BinanceData.from_hdf('../data/Binance_BTCUSDT_OHLCV_3Y_m1.h5')
+
+## Resample m1 data to higher timeframes
+m5_data  = m1_data.resample('5T')   # Convert 1 minute to 5 mins
+m15_data = m1_data.resample('15T')  # Convert 1 minute to 15 mins
+m30_data = m1_data.resample('30T')  # Convert 1 minute to 30 mins
+h1_data  = m1_data.resample(&quot;1H&quot;)   # Convert 1 minute to 1 hour
+h2_data  = m1_data.resample(&quot;2H&quot;)   # Convert 1 minute to 2 hour
+h4_data  = m1_data.resample('4H')   # Convert 1 minute to 4 hour
+h12_data = m1_data.resample('12H')  # Convert 1 minute to 12 hour
+d1_data  = m1_data.resample('1D')   # Convert 1 minute to Daily data
+
+mtf_data = { &quot;1T&quot; : m1_data, &quot;5T&quot; : m5_data, &quot;15T&quot; : m15_data, &quot;30T&quot; : m30_data,
+             &quot;1H&quot; : h1_data, &quot;2H&quot; : h2_data, &quot;4H&quot; : h4_data, &quot;12H&quot; : h12_data, &quot;1D&quot; : d1_data }
+</code></pre>
+<p>We will also create helper functions like:</p>
+<ul>
+<li><code>remapped_tf</code> - to retrive mapped key values from this <code>freq_dict</code> mapper dict</li>
+<li><code>flatten_list</code> - to flatten a 2D list into a 1D list</li>
+<li><code>create_list_numbers</code> - to generate a range list of numbers</li>
+</ul>
+<pre><code class="language-python">freq_dict = { &quot;1T&quot; : 1, &quot;5T&quot; : 5, &quot;15T&quot; : 15, &quot;30T&quot; : 30,
+              &quot;1H&quot; : 60, &quot;2H&quot; : 120, &quot;4H&quot; : 240, &quot;8H&quot; : 480,
+              &quot;12H&quot; : 720, &quot;1D&quot;: 1440 }  
+
+def remapped_tf(input_value : int) -&gt; str:
+    &quot;&quot;&quot;Map an integer to a string timeframe format&quot;&quot;&quot;
+    tf_freq = {1 : &quot;1T&quot;, 5 : &quot;5T&quot;, 15 : &quot;15T&quot;, 30 : &quot;30T&quot;, 60 :&quot;1H&quot;, 
+                  120 : &quot;2H&quot;, 240 : &quot;4H&quot;, 720 : &quot;12H&quot;, 1440 : &quot;1D&quot;}
+    new_value = tf_freq.get(input_value)
+    return new_value      
+
+def flatten_list(list_2D : list):
+    &quot;&quot;&quot;Flatten a list of list of strings&quot;&quot;&quot;
+    flat_list = list_2D if len(list_2D) == 0 else [item for sublist in list_2D for item in sublist]
+    return flat_list
+
+def create_list_numbers(r1, r2, step):
+    &quot;&quot;&quot;Create a list of numbers between two bounds (r1, r2 which can be float or int) and incrementing
+       each number using the specified `step` value &quot;&quot;&quot;
+    if type(r1) == float and type(r2) == float:
+        return list(np.round(np.arange(r1, r2+step, step), 2))
+    return list(np.arange(r1, r2+step, step))                            
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>You might remember this <code>create_resamplers</code> function from our first tutorial which we used for <code>upsampling</code>.</p>
+<pre><code class="language-python">def create_resamplers(result_dict_keys_list : list, source_indices : list,  
+                      source_frequencies :list, target_index : pd.Series, target_freq : str):
+    &quot;&quot;&quot;
+    Creates a dictionary of vbtpro resampler objects.
+
+    Parameters
+    ==========
+    result_dict_keys_list : list, list of strings, which are keys of the output dictionary
+    source_indices        : list, list of pd.time series objects of the higher timeframes
+    source_frequencies    : list(str), which are short form representation of time series order. Eg:[&quot;1D&quot;, &quot;4h&quot;]
+    target_index          : pd.Series, target time series for the resampler objects
+    target_freq           : str, target time frequency for the resampler objects
+
+    Returns
+    ===========
+    resamplers_dict       : dict, vbt pro resampler objects
+    &quot;&quot;&quot;
+    
+    
+    resamplers = []
+    for si, sf in zip(source_indices, source_frequencies):
+        resamplers.append(vbt.Resampler(source_index = si,  target_index = target_index,
+                                        source_freq = sf, target_freq = target_freq))
+    return dict(zip(result_dict_keys_list, resamplers))
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="vbtparameterized-decorator"><code>@vbt.parameterized</code> decorator</h2>
+<p>The decorator <code>@vbt.parameterized</code> is engine-agnostic and parameterizes a strategy function and returns a new function with the same signature as the passed one. This decorator enhances our <code>optimal_2BB</code> strategy function (below) to take arguments wrapped with <code>vbt.Param</code>, and build the grid of parameter combinations, run the <code>optimal_2BB</code> function on each parameter combination, and merge the results using concatenation. <br><br>
+The following arguments are used in the <code>@vbt.parameterized()</code> decorator:</p>
+<ul>
+<li><code>random_subset = 1000</code>, randomly selects 1000 combinations out of millions of combinations, like we do in <code>random selection</code></li>
+<li><code>merge_func = &quot;concat&quot;</code>, concats the output of each output row-wise, to the same <code>pd.Series</code>, other values for <code>merg_func</code> are <code>&quot;column_stack&quot;</code></li>
+<li><code>show_progress = True</code>, shows the <code>tqdm</code> progress bar of the simulation</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">@vbt.parameterized(merge_func = &quot;concat&quot;, random_subset = 1000, show_progress=True)  
+def optimal_2BB(lower_tf : int = 1, higher_tf: int = 5,
+                ltf_rsi_timeperiod : int = 21, 
+                bb_price_timeperiod : int = 14, bb_rsi_timeperiod : int = 14,
+                bb_price_nbdevup : int = 2, bb_price_nbdevdn: int = 2,
+                bb_rsi_nbdevup : int = 2, bb_rsi_nbdevdn : int = 2,
+                output_metric : str | list = &quot;total_return&quot;,
+                index = None
+                ):
+    
+    lower_tf  = remapped_tf(lower_tf)
+    higher_tf = remapped_tf(higher_tf)
+    # print(&quot;New Lower TF:&quot;, lower_tf, &quot;New Higher TF:&quot;, higher_tf)
+    
+    if index is None:
+        ltf_data = mtf_data[lower_tf]
+        htf_data = mtf_data[higher_tf]
+    else:
+        # print(f&quot;Start Index:{index[0]} || End Index: {index[-1]}&quot;)
+        ltf_data = mtf_data[lower_tf].loc[index[0]:index[-1]]
+        htf_data = mtf_data[higher_tf].loc[index[0]:index[-1]]
+
+    ### Get OHLC prices for lower and higher timeframes
+    ltf_open, ltf_high, ltf_low, ltf_close = ltf_data.get('Open'), ltf_data.get('High'), ltf_data.get('Low'), ltf_data.get('Close')
+    htf_open, htf_high, htf_low, htf_close = htf_data.get('Open'), htf_data.get('High'), htf_data.get('Low'), htf_data.get('Close')
+
+    ltf_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = ltf_rsi_timeperiod).run(ltf_close, skipna=True).real.ffill()
+    ltf_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(ltf_rsi, timeperiod = bb_rsi_timeperiod, nbdevup = bb_rsi_nbdevup, nbdevdn = bb_rsi_nbdevdn, skipna=True)    
+    htf_bbands_price = vbt.talib(&quot;BBANDS&quot;).run(htf_close, timeperiod = bb_price_timeperiod, nbdevup = bb_price_nbdevup, nbdevdn = bb_price_nbdevdn, skipna=True)
+
+    ## Initialize  dictionary
+    data = {}
+
+    col_values = [ ltf_close, ltf_rsi,ltf_bbands_rsi.upperband, ltf_bbands_rsi.middleband, ltf_bbands_rsi.lowerband ]
+
+    col_keys = [ &quot;ltf_close&quot;, &quot;ltf_rsi&quot;, &quot;ltf_bbands_rsi_upper&quot;,  &quot;ltf_bbands_rsi_middle&quot;, &quot;ltf_bbands_rsi_lower&quot; ]
+
+    # Assign key, value pairs for method of time series data to store in data dict
+    for key, time_series in zip(col_keys, col_values):
+        data[key] = time_series.ffill()
+
+    resampler_dict_keys = [higher_tf + &quot;_&quot; + lower_tf]
+
+    list_resamplers = create_resamplers(result_dict_keys_list = resampler_dict_keys,
+                                        source_indices = [htf_close.index], 
+                                        source_frequencies = [higher_tf], 
+                                        target_index = ltf_close.index,
+                                        target_freq = lower_tf)
+
+    # print(list_resamplers)
+    
+    ## Use along with  Manual indicator creation method for MTF
+    series_to_resample = [
+        [htf_open, htf_high, htf_low, htf_close, 
+        htf_bbands_price.upperband, htf_bbands_price.middleband, htf_bbands_price.lowerband]
+        ]
+
+
+    resample_data_keys = [
+        [&quot;htf_open&quot;, &quot;htf_high&quot;, &quot;htf_low&quot;, &quot;htf_close&quot;, 
+        &quot;htf_bbands_price_upper&quot;,  &quot;htf_bbands_price_middle&quot;,  &quot;htf_bbands_price_lower&quot;]
+            ]    
+
+    df_cols_order = col_keys + flatten_list(resample_data_keys)
+    ## Create resampled time series data aligned to base line frequency (15min)
+    # print(&quot;COLUMNS ORDER:&quot;, df_cols_order)
+    
+    for lst_series, lst_keys, resampler in zip(series_to_resample, resample_data_keys, resampler_dict_keys):
+        for key, time_series in zip(lst_keys, lst_series):
+            if key.lower().endswith('open'):
+                # print(f'Resampling {key} differently using vbt.resample_opening using &quot;{resampler}&quot; resampler')
+                resampled_time_series = time_series.vbt.resample_opening(list_resamplers[resampler])
+            else:
+                resampled_time_series = time_series.vbt.resample_closing(list_resamplers[resampler])
+            data[key] = resampled_time_series
+    
+
+    ## construct a multi-timeframe dataframe
+    mtf_df = pd.DataFrame(data)[df_cols_order]
+
+    # print(&quot;DataFrame Output:\n&quot;, mtf_df.head())
+
+    ## Long Entry Conditions
+    c1_long_entry = (mtf_df['htf_low'] &lt;= mtf_df['htf_bbands_price_lower'])
+    c2_long_entry = (mtf_df['ltf_rsi'] &lt;= mtf_df['ltf_bbands_rsi_lower'] )
+
+    ## Long Exit Conditions
+    c1_long_exit =  (mtf_df['htf_high'] &gt;= mtf_df['htf_bbands_price_upper'])
+    c2_long_exit =  (mtf_df['ltf_rsi']  &gt;= mtf_df['ltf_bbands_rsi_upper'])             
+
+    ## Create entries and exit columns using the above conditions
+    mtf_df['entry'] = c1_long_entry &amp; c2_long_entry
+    mtf_df['exit']  = c1_long_exit &amp; c2_long_exit
+
+    mtf_df['signal'] = 0   
+    mtf_df['signal'] = np.where( mtf_df['entry'], 1, 0)
+    mtf_df['signal'] = np.where( mtf_df['exit'] , -1, mtf_df['signal'])
+
+    entries = mtf_df.signal == 1.0
+    exits = mtf_df.signal == -1.0
+
+    pf = vbt.Portfolio.from_signals(
+        close = ltf_close, 
+        entries = entries, 
+        exits = exits, 
+        direction = &quot;both&quot;, ## This setting trades both long and short signals
+        freq = pd.Timedelta(minutes = freq_dict[lower_tf]), 
+        init_cash = 100000
+    )
+
+    if type(output_metric) == str:
+        return pf.deep_getattr(output_metric) ## When tuning a single metric
+    elif type(output_metric) == list:
+        return pd.Series({k: getattr(pf, k) for k in output_metric}) ## When you want to tune a list of metrics
+</code></pre>
+<h4 id="double-bollinger-bandstrategy">Double Bollinger Band - Strategy</h4>
+<p>As a quick recap, the rules of the strategy coded in <code>optimal_2BB</code> are as follows:</p>
+<ol>
+<li>
+<p>A long (buy) signal is generated whenever the higher timeframe (Low) price goes below its lower Bollinger band, and the lower timeframe RSI goes below its lower Bollinger band (RSI).</p>
+</li>
+<li>
+<p>A short (sell) signal is generated whenever the higher timeframe (High) price breaks its upper Bollinger band, and the lower timeframe RSI breaks above its upper Bollinger band (RSI).</p>
+</li>
+</ol>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>We can invoke the parameter optimization process by passing the list of parameters we want for each argument wrapped in the <code>vbt.Param</code> class.<br>
+The <code>vbt.Param</code> class also accepts conditions, like in our case we don't want the <code>lower_tf</code> to have a value greater than the <code>higher_tf</code> so we specify that using the <code>condition</code> argument inside the <code>vbt.Param</code> class. In this particular case we are just specifying one metric (<code>total_return</code>) to tune our parameter optimization.</p>
+<pre><code class="language-python">pf_results = optimal_2BB(
+    lower_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720, 1440]),
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = &quot;total_return&quot;
+ )
+
+print(f&quot;Best Total Returns: {round(pf_results.max(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Best Total Returns:{pf_results.idxmax()}&quot;)
+
+print(f&quot;Worst Total Returns: {round(pf_results.min(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Worst Total Returns:{pf_results.idxmin()}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code class="language-bash">Best Total Returns: 8917.26 %
+Parameter Combinations with Best Total Returns:(1, 1, 19, 20, 22, 1.75, 2.25, 1.5, 2.0)
+Worst Total Returns: -4.41 %
+Parameter Combinations with Worst Total Returns:(120, 1440, 18, 19, 22, 2.5, 2.0, 2.25, 2.5)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Since for this simulation, we selected only a single output metric ( <code>total_returns</code> ), we get a multi-index pandas series which we can sort to quickly see the most promising results</p>
+<pre><code class="language-python">pf_results.sort_values(ascending=False)
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2023/02/pf_sim_multi_index_series.png" class="kg-image" alt loading="lazy" width="2000" height="425" srcset="../content/images/size/w600/2023/02/pf_sim_multi_index_series.png 600w, ../content/images/size/w1000/2023/02/pf_sim_multi_index_series.png 1000w, ../content/images/size/w1600/2023/02/pf_sim_multi_index_series.png 1600w, ../content/images/size/w2400/2023/02/pf_sim_multi_index_series.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Portfolio Simulation Results (Multi-index Pandas Series)</figcaption></figure><!--kg-card-begin: markdown--><p>We can also pass multiple metrics as a list to the <code>output_metric</code> argument, and the output the entire portfolio simulation a multi-index pandas series. Of course, in this case, it is not like <em>we are tuning multiple knobs and dials to get an optimal value for all the metrics passed</em>, but we are just returning multiple metrics as part of the output of each simulation.</p>
+<pre><code class="language-python">pf_results = optimal_2BB(
+    lower_tf = vbt.Param([5, 30], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15]),
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = [&quot;total_profit&quot;, &quot;total_return&quot;, &quot;max_drawdown&quot;, &quot;sharpe_ratio&quot;]
+ )</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>To flatten the multi-index series and convert it into a pandas DataFrame, we can use this following code:</p>
+<pre><code class="language-python">pf_results_df = pf_results.unstack(level = -1)
+pf_results_df = pf_results_df[['total_return','max_drawdown','sharpe_ratio']].sort_values(
+                by=['total_return', 'max_drawdown'], 
+                ascending=False)
+pf_results_df.reset_index(inplace=True)
+pf_results_df
+</code></pre>
+<p><img src="../content/images/2023/02/pf_results_flattened_dataframe.png" alt="pf_results_flattened_dataframe" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## To check if our condition for `lower_tf` works
+print(&quot;Length of DF:&quot;,len(pf_results_df[pf_results_df['lower_tf'] &gt; pf_results_df['higher_tf']]))
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code class="language-bash">Length of DF: 0
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(f&quot;Best Total Returns: {round(pf_results_df['total_return'].max(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Best Total Returns:&quot;)
+pd.DataFrame(pf_results_df.iloc[pf_results_df['total_return'].idxmax()]).T
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-bash">Best Total Returns: 504.49 %
+Parameter Combinations with Best Total Returns:
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>lower_tf</th>
+<th>higher_tf</th>
+<th>ltf_rsi_timeperiod</th>
+<th>bb_price_timeperiod</th>
+<th>bb_rsi_timeperiod</th>
+<th>bb_price_nbdevup</th>
+<th>bb_price_nbdevdn</th>
+<th>bb_rsi_nbdevup</th>
+<th>bb_rsi_nbdevdn</th>
+<th>total_return</th>
+<th>max_drawdown</th>
+<th>sharpe_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>5</td>
+<td>5</td>
+<td>18.0</td>
+<td>18.0</td>
+<td>19.0</td>
+<td>2.25</td>
+<td>1.5</td>
+<td>1.75</td>
+<td>2.0</td>
+<td>504.490043</td>
+<td>-0.389288</td>
+<td>2.328832</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(f&quot;Worst Total Returns: {round(pf_results_df['total_return'].min(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Worst Total Returns:&quot;)
+pd.DataFrame(pf_results_df.iloc[pf_results_df['total_return'].idxmin()]).T
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-bash">Worst Total Returns: -0.98 %
+Parameter Combinations with Worst Total Returns:
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>lower_tf</th>
+<th>higher_tf</th>
+<th>ltf_rsi_timeperiod</th>
+<th>bb_price_timeperiod</th>
+<th>bb_rsi_timeperiod</th>
+<th>bb_price_nbdevup</th>
+<th>bb_price_nbdevdn</th>
+<th>bb_rsi_nbdevup</th>
+<th>bb_rsi_nbdevdn</th>
+<th>total_return</th>
+<th>max_drawdown</th>
+<th>sharpe_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>999</td>
+<td>5</td>
+<td>15</td>
+<td>20.0</td>
+<td>22.0</td>
+<td>20.0</td>
+<td>2.25</td>
+<td>2.5</td>
+<td>2.25</td>
+<td>2.5</td>
+<td>-0.977365</td>
+<td>-0.991565</td>
+<td>-0.704983</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="cross-validation">Cross Validation</h2>
+<p>Cross-Validation (CV) is a technique used to curb <a href="https://en.wikipedia.org/wiki/Curve_fitting">overfitting</a>, which involves partitioning a sample of data into complementary subsets, performing the analysis on one subset of data called the <code>training</code> or <code>in-sample</code> (IS) set, and validating the analysis on the other subset of data called the <code>testing</code>, <code>validation</code> or <code>out-of-sample</code> (OOS) set. This procedure is repeated until we have multiple OOS periods and can draw statistics from these results combined. CV is mainly done for the following reasons:</p>
+<ul>
+<li>Improve robustness testing of the strategy</li>
+<li>Mitigate the risk of running wrong predictions. <br>
+<ul>
+<li>This is because, the input data, usually retrieved from a limited time frame slice of history, is highly biased and can not produce reliable forecasts. One way to mitigate the risk of running wrong predictions is to do CV, where we re-run backtests many times but each with slightly different data input</li>
+</ul>
+</li>
+</ul>
+<h3 id="splitter-class"><code>Splitter</code> Class</h3>
+<p>At the heart of implementing CV functionality in vectorBT Pro is the class <code>Splitter</code>, whose main responsibility is to produce arbitrary splits and perform operations on those splits. The workings of this class are quite simple- the user calls one of the class methods with the prefix <code>from_</code>to generate splits; in return, a splitter instance is returned with splits and their labels being saved in a memory-efficient array format. This instance can be used to analyze the split distribution, to chunk array-like objects, and to run User Defined Functions (UDFs).<br>
+The splitter class has many methods like:</p>
+<ul>
+<li><code>from_rolling</code> and<code>from_n_rolling</code></li>
+<li><code>from_expanding</code>and <code>from_n_expanding</code></li>
+<li><code>from_splits</code></li>
+<li><code>from_ranges</code></li>
+<li><code>from_grouper</code></li>
+<li><code>from_random</code></li>
+<li><code>from_sklearn</code></li>
+<li><code>from_split_func</code></li>
+</ul>
+<p>In this tutorial we will just go over the <code>from_rolling</code> splitter method as it is the typical requirement of creating data splits. It is beyond the scope of this tutorial, to go over all the splitter methods above, so it is recommended to read the <code>vectorbtpro</code> documentation to decide which method would best fit your use case.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Let's create a splitter schema using <code>splitter.from_rolling()</code> method for cross-validation of our <code>optimal_2BB</code> strategy.</p>
+<pre><code class="language-python">## Global Plot Settings
+vbt.settings.set_theme(&quot;dark&quot;)
+vbt.settings['plotting']['layout']['width'] = 1600
+
+splitter = vbt.Splitter.from_rolling(
+    index  = d1_data.index, 
+    length = 360, 
+    split = 0.5,
+    set_labels = [&quot;train&quot;, &quot;test&quot;]
+    )
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>The arguments we have used in the <code>from_rolling</code> method for the above schema are as follows:</p>
+<ul>
+<li><code>index</code> - datatime index series required to create the splits from. In this case, we used the the index series from the daily (<code>d1_data</code>) data.</li>
+<li><code>length</code> - can be <code>int</code>, <code>float</code>, or <code>timedelta_like</code> . Floating values between 0 and 1 are considered relative. Length can also be negative. We have used 360 days as the length of a single split.</li>
+<li><code>split</code> - Ranges to split the range into. If None, will produce the entire range as a single range. Here <code>split = 0.5</code> means, we will be splitting the length of 360 days into equal splits for <code>train</code> and <code>test</code> sets.</li>
+<li><code>set_labels</code> - Labels corresponding to the selected row/column groups. In our case we are creating two sets called <code>train</code> and <code>test</code></li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">splitter.plot().show()
+</code></pre>
+<p><strong>Output</strong>:<br>
+<img src="../content/images/2023/02/Splitter_Test_Train.png" alt="Splitter_Test_Train" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>The smallest unit of a splitter is a range, which is a period of time that can be mapped onto data. On the plot above, we can count a total of 14 ranges - 7 blue ones for train sets and 7 orange ones for test sets. Multiple ranges next to each other and representing a single test are called a split; there are 6 splits present in the chart, such that we expect one pipeline to be tested on 6 different data ranges. Different range types within each split are called sets. We have used the two sets - &quot;training&quot; and &quot;test&quot; (commonly used in backtesting). The number of sets is fixed throughout all splits.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">splitter.splits
+</code></pre>
+<p><strong>Output</strong>:<br></p>
+<table>
+<thead>
+<tr>
+<th>set</th>
+<th>train</th>
+<th>test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>split</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0</td>
+<td>slice(0,180,None)</td>
+<td>slice(180,360,None)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>slice(180,360,None)</td>
+<td>slice(360,540,None)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>slice(360,540,None)</td>
+<td>slice(540,720,None)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>slice(540,720,None)</td>
+<td>slice(720,900,None)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>slice(720,900,None)</td>
+<td>slice(900,1080,None)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>slice(900,1080,None)</td>
+<td>slice(1080,1260,None)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>slice(1080,1260,None)</td>
+<td>slice(1260,1440,None)</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Time is being tracked separately in <code>Splitter.index</code> while assets aren't being tracked at all since they have no implications on splitting.</p>
+<pre><code class="language-python">splitter.index
+</code></pre>
+<p><strong>Output</strong>:<br></p>
+<pre><code class="language-bash">DatetimeIndex(['2019-01-01 00:00:00+00:00', '2019-01-02 00:00:00+00:00',
+               '2019-01-03 00:00:00+00:00', '2019-01-04 00:00:00+00:00',
+               '2019-01-05 00:00:00+00:00', '2019-01-06 00:00:00+00:00',
+               '2019-01-07 00:00:00+00:00', '2019-01-08 00:00:00+00:00',
+               '2019-01-09 00:00:00+00:00', '2019-01-10 00:00:00+00:00',
+               ...
+               '2023-01-23 00:00:00+00:00', '2023-01-24 00:00:00+00:00',
+               '2023-01-25 00:00:00+00:00', '2023-01-26 00:00:00+00:00',
+               '2023-01-27 00:00:00+00:00', '2023-01-28 00:00:00+00:00',
+               '2023-01-29 00:00:00+00:00', '2023-01-30 00:00:00+00:00',
+               '2023-01-31 00:00:00+00:00', '2023-02-01 00:00:00+00:00'],
+              dtype='datetime64[ns, UTC]', name='Open time', length=1493, freq='D')
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(&quot;Total Nr. of Splits:&quot;,len(close_slices.index))
+df_splits = pd.DataFrame(close_slices.index.tolist(), columns=[&quot;split&quot;, &quot;period&quot;])
+unique_splits = df_splits[&quot;split&quot;].unique().tolist()
+print(&quot;Unique Splits:&quot;, unique_splits)
+df_splits
+</code></pre>
+<p><strong>Output:</strong><br></p>
+<pre><code class="language-bash">Total Nr. of Splits: 14
+Unique Splits: [0, 1, 2, 3, 4, 5, 6]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>split</th>
+<th>period</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>train</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>test</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>train</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>test</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>train</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>test</td>
+</tr>
+<tr>
+<td>6</td>
+<td>3</td>
+<td>train</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3</td>
+<td>test</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4</td>
+<td>train</td>
+</tr>
+<tr>
+<td>9</td>
+<td>4</td>
+<td>test</td>
+</tr>
+<tr>
+<td>10</td>
+<td>5</td>
+<td>train</td>
+</tr>
+<tr>
+<td>11</td>
+<td>5</td>
+<td>test</td>
+</tr>
+<tr>
+<td>12</td>
+<td>6</td>
+<td>train</td>
+</tr>
+<tr>
+<td>13</td>
+<td>6</td>
+<td>test</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="compute-baseline-returns-across-splits">Compute Baseline Returns across <code>splits</code></h3>
+<p>The baseline returns is just the buy and hold returns for buying and holding the asset for the period of the split.</p>
+<pre><code class="language-python">def get_total_return(close_prices):
+    return close_prices.vbt.to_returns().vbt.returns.total()
+
+base_line_returns = close_slices.apply(get_total_return)
+base_line_returns
+</code></pre>
+<p><strong>Output:</strong><br></p>
+<pre><code class="language-bash">split  set  
+0      train    2.134762
+       test    -0.336472
+1      train   -0.336472
+       test     0.326704
+2      train    0.326704
+       test     1.523051
+3      train    1.523051
+       test     0.576598
+4      train    0.576598
+       test     0.377110
+5      train    0.377110
+       test    -0.527897
+6      train   -0.527897
+       test    -0.226275
+dtype: float64
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>Print upper and lower bound in each split</strong></p>
+<pre><code class="language-python">train_slices = [slice(close_slices[i, &quot;train&quot;].index[0], close_slices[i, &quot;train&quot;].index[-1]) for i in unique_splits]
+train_slices
+</code></pre>
+<p><strong>Output:</strong><br></p>
+<pre><code class="language-bash">[slice(Timestamp('2019-01-01 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2019-06-29 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2019-06-30 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2019-12-26 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2019-12-27 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2020-06-23 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2020-06-24 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2020-12-20 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2020-12-21 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2021-06-18 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2021-06-19 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2021-12-15 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2021-12-16 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2022-06-13 00:00:00+0000', tz='UTC', freq='D'), None)]
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">test_slices = [slice(close_slices[i, &quot;test&quot;].index[0], close_slices[i, &quot;test&quot;].index[-1]) for i in unique_splits]
+test_slices
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-bash">[slice(Timestamp('2019-06-30 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2019-12-26 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2019-12-27 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2020-06-23 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2020-06-24 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2020-12-20 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2020-12-21 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2021-06-18 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2021-06-19 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2021-12-15 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2021-12-16 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2022-06-13 00:00:00+0000', tz='UTC', freq='D'), None),
+ slice(Timestamp('2022-06-14 00:00:00+0000', tz='UTC', freq='D'), Timestamp('2022-12-10 00:00:00+0000', tz='UTC', freq='D'), None)]
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="splitterapplyapplying-our-optimal2bb-function-to-the-splitter-sets"><code>Splitter.apply</code> - Applying our <code>optimal_2BB</code> function to the splitter sets</h2>
+<p>We can use the <code>splitter.apply()</code> to apply the different splits on our strategy <code>optimal_2BB</code> function, by selecting the splits by their set label (eg: <code>train</code> or <code>test</code>). We would pass our strategy function (<code>optimal_2BB</code>) to the <code>apply_func</code> argument of the <code>splitter_apply</code> method and the arguments of the <code>optimal_2BB</code> function typically follow after the <code>apply_func</code> argument.<br><br>
+The <code>splitter.apply()</code> method also has lots of arguments on its own and below we will see the  significant ones used here:</p>
+<ul>
+<li><code>index</code> argument allows us to pass the <code>splitter.index</code> variable containing our timeseries index, wrapped with the class <code>vbt.Takeable</code> which represents an object from which a range can be taken. The <code>vbt.Takeable</code> method will select a slice from it and substitute the instruction with that slice.</li>
+<li><code>set_</code> argument allows us to select the <code>set_label</code> from the splitter object, in our case either <code>train</code> or <code>test</code></li>
+<li><code>_random_subset</code> argument over-rides the argument <code>random_subset</code> in <code>vbt.parameterized</code> and determines the nr. of simulations to run per split</li>
+<li><code>merge_func</code> argument with the value <code>concat</code> allows to append the result of each simulation in the train set row-wise (<code>axis = 0</code>)</li>
+<li><code>execute_kwargs</code> control the execution of each split/set/range</li>
+<li><code>_execute_kwargs</code> control the execution of your parameter combinations</li>
+</ul>
+<p>When we use this <code>optimal_2BB</code> function during cross-validation by calling <code>splitter.apply()</code> method, we have to pass an <code>index</code> argument to our <code>optimal_2BB</code> function. We slice the dataframe using this <code>index</code> argument (eg: <code>mtf_data[lower_tf]loc[index[0]:index[-1]]</code>) inside the <code>optimal_2BB</code> function since we are doing <code>vbt.Splitter.from_rolling()</code>in this tutorial.</p>
+<p>Generally, if the splitter produces date ranges that contain no gaps, such as in <code>from_rolling</code> method and most other cross-validation schemes for time-series data, we can use the first and the last date (also called <code>&quot;bounds&quot;</code>) of each produced date range to select the subset of data.<br>
+For splitter versions that produce gaps, such as for k-fold cross-validation schemes (which are rarely used anyway), we must use the entire index to select the subset of data.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="performance-on-train-splits">Performance on <code>train</code> splits</h3>
+<p>Below we will see the <code>splitter.apply</code> used on our <code>train</code> splits</p>
+<pre><code class="language-python">train_perf = splitter.apply(
+    apply_func = optimal_2BB, ## apply your strategy function to the splitter object, followed by its arguments
+    lower_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720, 1440]),    
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = &quot;sharpe_ratio&quot;,
+    #### Arguments of splitter.apply() not related to strategy
+    index =  vbt.Takeable(splitter.index), ## DataTime index from the splitter object
+    set_ = &quot;train&quot;,  ## Specify the set to be used for this CV simulation - train or test
+    _random_subset = 500, ## Specify the nr. of simulations to run per train split
+    merge_func = &quot;concat&quot;, ## concat the results
+    execute_kwargs=dict(show_progress=True), ## execute_kwargs control the execution of each split/set/range - Show Progress bar of the simulation
+    _execute_kwargs=dict(show_progress=False, clear_cache=50, collect_garbage=50) ## _execute_kwargs control the execution of your parameter combinations
+    )
+    
+train_perf.sort_values(ascending=False)
+</code></pre>
+<p>An argument having underscore <code>_</code> as the prefix (eg: <code>_random_subset</code>) here means that the argument overrides the default argument value passed to the <code>vbt.parameterized()</code> decorator. In this case, <code>_random_subset = 500</code> means we will be doing only 500 simulations for each train split (7 train splits in total), as opposed to the default value of <code>random_subset = 1000</code> set in the <code>vbt.parameterized()</code> decorator above the <code>optimal_2BB</code> function definition.</p>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2023/02/train_split_performance-1.png" class="kg-image" alt loading="lazy" width="2000" height="453" srcset="../content/images/size/w600/2023/02/train_split_performance-1.png 600w, ../content/images/size/w1000/2023/02/train_split_performance-1.png 1000w, ../content/images/size/w1600/2023/02/train_split_performance-1.png 1600w, ../content/images/size/w2400/2023/02/train_split_performance-1.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Parameter Optimization Results on <code>train</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h3 id="statistics-on-train-split">Statistics on <code>train</code> split</h3>
+<pre><code class="language-python">train_split_describe = pd.concat([train_perf[train_perf.index.get_level_values('split') == i].describe()\
+                                for i in unique_splits], axis = 1, 
+                                keys = [f&quot;Train_Split_{i}&quot; for i in unique_splits])
+train_split_describe 
+</code></pre>
+<p><strong>Output:</strong><br>
+<img src="../content/images/2023/02/train_split_describe-1.png" alt="train_split_describe-1" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Compute baseline, best and worst returns for the overlaid line plots
+train_split_best_returns = train_split_describe.loc['max'].reset_index(drop=True)
+train_split_worst_returns = train_split_describe.loc['min'].reset_index(drop=True)
+train_splits_baseline_returns = pd.Series([base_line_returns[i, &quot;train&quot;] for i in unique_splits])
+
+## Create Box Plot for train_performance
+train_split_fig = train_perf.vbt.boxplot(
+    by_level=&quot;split&quot;,
+    trace_kwargs=dict(
+        line=dict(color=&quot;lightskyblue&quot;),
+        opacity=0.4,
+        showlegend=False
+        ),
+        xaxis_title=&quot;Train Splits&quot;,
+        yaxis_title=&quot;Sharpe Ratio&quot;
+        )
+
+train_split_best_returns.vbt.plot(trace_kwargs=dict(name=&quot;Best Returns&quot;, line=dict(color=&quot;limegreen&quot;, dash=&quot;dash&quot;)), fig=train_split_fig)
+train_split_worst_returns.vbt.plot(trace_kwargs=dict(name=&quot;Worst Returns&quot;, line=dict(color=&quot;tomato&quot;, dash=&quot;dash&quot;)), fig=train_split_fig)
+train_splits_baseline_returns.vbt.plot(trace_kwargs=dict(name=&quot;Baseline&quot;, line=dict(color=&quot;yellow&quot;, dash=&quot;dash&quot;)), fig=train_split_fig)
+train_split_fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2023/02/train_split_perf_box_plot-1.png" class="kg-image" alt loading="lazy" width="1600" height="350" srcset="../content/images/size/w600/2023/02/train_split_perf_box_plot-1.png 600w, ../content/images/size/w1000/2023/02/train_split_perf_box_plot-1.png 1000w, ../content/images/2023/02/train_split_perf_box_plot-1.png 1600w" sizes="(min-width: 720px) 720px"><figcaption>Box Plot to view simulation statistics on <code>train</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h3 id="performance-statistics-on-test-splits">Performance Statistics on <code>test</code> splits</h3>
+<pre><code class="language-python">test_perf = splitter.apply(
+    apply_func = optimal_2BB, ## apply your strategy function to the splitter object, followed by its arguments
+    lower_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720, 1440]),    
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = &quot;sharpe_ratio&quot;,
+    #### Arguments of splitter.apply() not related to strategy
+    index =  vbt.Takeable(splitter.index), ## DataTime index from the splitter object
+    _random_subset = 500, ## Specify the nr. of simulations to run per test split
+    set_ = &quot;test&quot;,  ## Specify the set to be used for this CV simulation - train or test
+    merge_func =&quot;concat&quot;, ## concat the results
+    execute_kwargs=dict(show_progress=True), ## execute_kwargs control the execution of each split/set/range - Show Progress bar of the simulation
+    _execute_kwargs=dict(show_progress=False, clear_cache=50, collect_garbage=50) ## _execute_kwargs control the execution of your parameter combinations
+    )
+    
+test_perf.sort_values(ascending=False)
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2023/02/test_split_performance-1.png" class="kg-image" alt loading="lazy" width="2000" height="501" srcset="../content/images/size/w600/2023/02/test_split_performance-1.png 600w, ../content/images/size/w1000/2023/02/test_split_performance-1.png 1000w, ../content/images/size/w1600/2023/02/test_split_performance-1.png 1600w, ../content/images/size/w2400/2023/02/test_split_performance-1.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Parameter Optimization Results on <code>test</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h3 id="statistics-on-test-split">Statistics on <code>test</code> split</h3>
+<pre><code class="language-python">test_split_describe = pd.concat([test_perf[test_perf.index.get_level_values('split') == i].describe()\
+                                for i in unique_splits], axis = 1, 
+                                keys = [f&quot;Test_Split_{i}&quot; for i in unique_splits])
+test_split_describe  
+</code></pre>
+<p><img src="../content/images/2023/02/test_split_describe-1.png" alt="test_split_describe-1" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Compute baseline, best and worst returns for the overlaid line plots
+test_split_best_returns = test_split_describe.loc['max'].reset_index(drop=True)
+test_split_worst_returns = test_split_describe.loc['min'].reset_index(drop=True)
+test_splits_baseline_returns = pd.Series([base_line_returns[i, &quot;test&quot;] for i in unique_splits])
+
+## Create Box Plot for test_performance statistics
+test_split_fig = test_perf.vbt.boxplot(
+    by_level=&quot;split&quot;,
+    trace_kwargs=dict(
+        line=dict(color=&quot;lightskyblue&quot;),
+        opacity=0.4,
+        showlegend=False
+        ),
+        xaxis_title=&quot;Test Splits&quot;,
+        yaxis_title=&quot;Sharpe Ratio&quot;
+        )
+
+test_split_best_returns.vbt.plot(trace_kwargs=dict(name=&quot;Best Returns&quot;, line=dict(color=&quot;limegreen&quot;, dash=&quot;dash&quot;)), fig=test_split_fig)
+test_split_worst_returns.vbt.plot(trace_kwargs=dict(name=&quot;Worst Returns&quot;, line=dict(color=&quot;tomato&quot;, dash=&quot;dash&quot;)), fig=test_split_fig)
+test_splits_baseline_returns.vbt.plot(trace_kwargs=dict(name=&quot;Baseline&quot;, line=dict(color=&quot;yellow&quot;, dash=&quot;dash&quot;)), fig=test_split_fig)
+test_split_fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2023/02/test_split_perf_box_plot-1.png" class="kg-image" alt loading="lazy" width="1600" height="350" srcset="../content/images/size/w600/2023/02/test_split_perf_box_plot-1.png 600w, ../content/images/size/w1000/2023/02/test_split_perf_box_plot-1.png 1000w, ../content/images/2023/02/test_split_perf_box_plot-1.png 1600w" sizes="(min-width: 720px) 720px"><figcaption>Box Plot to view simulation statistics on <code>test</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h2 id="bonusline-by-line-profiling-of-a-python-function">BONUS - <code>Line-by-Line</code> Profiling of a python function</h2>
+<p>It is sometimes important to optimize your strategy function to reduce the time taken for each simulation. We can do, <em>line by line</em> profiling of <code>optimal_2BB</code> function using this <code>%load_ext line_profiler</code>. <br> When applying the <code>line_profiler</code> you have to remove the <code>vbt.parameterized()</code> decorator, and apply the <code>line_profiler</code> on the unwrapped raw <code>optimal_2BB</code> strategy function. Below is a snapshot of the results you will get from the <code>line_profiler</code> which you can use to optimize aspects of your strategy function which have very higher <code>Time per hit</code> cost.</p>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="../content/images/2023/02/line_profiler_output.png" class="kg-image" alt loading="lazy" width="2000" height="979" srcset="../content/images/size/w600/2023/02/line_profiler_output.png 600w, ../content/images/size/w1000/2023/02/line_profiler_output.png 1000w, ../content/images/size/w1600/2023/02/line_profiler_output.png 1600w, ../content/images/size/w2400/2023/02/line_profiler_output.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Line Profiler Results on <code>optimal_2BB</code> function</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/main/Parameter%20Optimization.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>
+    </div>
+        <footer class="single-footer container medium">
+            <div class="single-footer-middle">
+             <div class="single-footer-top">
+                <h3 class="single-footer-title">Published by:</h3>
+                <div class="author-list">
+                    <div class="author-image-placeholder u-placeholder square">
+                        <a href="../author/dilip/index.html" title="Dilip Rajkumar">
+                            <img class="author-image u-object-fit" src="../content/images/size/w150/2022/12/ProfilePic.jpg" alt="Dilip Rajkumar" loading="lazy">
+                        </a>
+                    </div>
+                </div>               
+            </div>
+            <div class="copyright" style="text-align:center">
+                <br>
+                <strong>© Warning</strong> All rights belong to the author(s) of this publication. <br>
+                No part of this publication can be reproduced anywhere without prior approval from the author(s).
+            </div>
+        </footer>
+        <script src="https://utteranc.es/client.js"
+        repo="QubitQuants/qubitquants.github.io"
+        issue-term="pathname"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+        </script>
+    </article>                    
+    <section class="related-wrapper">
+            <div class="container medium">
+                <h3 class="related-title">You might also like...</h3>
+                <div class="related-feed">
+                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Jan
+        </div>
+        <div class="feed-calendar-day">
+            22
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - MultiAsset Data Acquisition</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            6 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../multi_asset_data_acquisition/index.html" aria-label="VectorBT Pro - MultiAsset Data Acquisition"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Jan
+        </div>
+        <div class="feed-calendar-day">
+            22
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - MultiAsset Portfolio Simulation</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            16 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../multi_asset_portfolio_simulation/index.html" aria-label="VectorBT Pro - MultiAsset Portfolio Simulation"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Jan
+        </div>
+        <div class="feed-calendar-day">
+            22
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Custom Dashboard for Portfolio Simulation and Strategy Visualisation</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            1 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../vbt_dashboard/index.html" aria-label="VectorBT Pro - Custom Dashboard for Portfolio Simulation and Strategy Visualisation"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Nov
+        </div>
+        <div class="feed-calendar-day">
+            30
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            11 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../vbt_plot_strategy/index.html" aria-label="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Nov
+        </div>
+        <div class="feed-calendar-day">
+            28
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Strategy Development and Signal Generation</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            7 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../strategydev/index.html" aria-label="VectorBT Pro - Strategy Development and Signal Generation"></a>
+</article>                </div>
+            </div>
+        </section>
+                </main>
+</div>
+        </div>
+        </section>
+        <footer class="site-footer container">
+    <div class="social">
+        <a class="social-item social-item-linkedin"
+        href="https://www.linkedin.com/groups/14112759/" target="_blank"
+        rel="noopener noreferrer" aria-label="LinkedIn">
+        <svg class="icon">
+            <use xlink:href="#linkedin-box"></use>
+        </svg>
+        </a>
+        
+        <a class="social-item social-item-github"
+        href="https://github.com/qubitquants" target="_blank"
+        rel="noopener noreferrer" aria-label="GitHub">
+        <svg class="icon">
+            <use xlink:href="#github-box"></use>
+        </svg>
+        </a>
+
+        <a class="social-item social-item-rss"
+            href="../rss/index.html"
+            target="_blank" rel="noopener noreferrer" aria-label="RSS">
+            <svg class="icon">
+                <use xlink:href="#rss-box"></use>
+            </svg>
+        </a>
+
+    </div>
+
+    <nav class="footer-nav">
+        
+        <a class="menu-item js-theme" href="index.html#" data-system="System theme" data-dark="Dark theme" data-light="Light theme">
+            <svg class="icon theme-icon theme-icon-system">
+                <use xlink:href="#circle-half-full"></use>
+            </svg>
+            <svg class="icon theme-icon theme-icon-dark">
+                <use xlink:href="#brightness-2"></use>
+            </svg>
+            <svg class="icon theme-icon theme-icon-light">
+                <use xlink:href="#white-balance-sunny"></use>
+            </svg>
+            <span class="theme-text">System theme</span>
+        </a>
+    </nav>
+
+    <div class="copyright">
+        <strong>Copyright</strong> © 2022 Qubit Quants
+    </div>
+
+     <div class="copyright">
+        <strong>DISCLAIMER</strong>: All Content here is for educational purposes only and is not financial advise. 
+        Implement at your own risk. No liability assumed by Qubit Quants and it's authors
+    </div>
+
+    <script>
+        var links = document.querySelectorAll('a');
+        for (var i = 0; i < links.length; i++) {
+          if (links[i].hostname != window.location.hostname) {
+            links[i].target = '_blank';
+            links[i].rel = 'noopener';
+          }
+        }
+    </script>
+
+</footer>        <div class="modal-overlay">
+    <div class="modal modal-search">
+        <div class="form-wrapper">
+            <input class="modal-input search-input" type="search" placeholder="Enter keyword...">
+            <button class="form-button search-button" aria-label="Search">
+                <svg class="icon icon-search">
+                    <use xlink:href="#magnify"></use>
+                </svg>
+                <svg class="icon icon-close">
+                    <use xlink:href="#window-close"></use>
+                </svg>
+            </button>
+        </div>
+                <div class="popular-wrapper">
+                    <h4 class="popular-title">Popular tags</h4>
+                    <div class="popular-feed">
+                            <a class="popular" href="../tag/vectorbt/index.html">vectorBT</a>
+                            <a class="popular" href="../tag/python/index.html">python</a>
+                            <a class="popular" href="../tag/algorithmic-trading/index.html">algorithmic trading</a>
+                            <a class="popular" href="../tag/plotly/index.html">plotly</a>
+                            <a class="popular" href="../tag/metatrader5/index.html">metatrader5</a>
+                    </div>
+                </div>
+        <div class="search-result"></div>
+    </div>
+    <button class="button-icon modal-close" aria-label="Close">
+        <svg class="icon icon-close">
+            <use xlink:href="#window-close"></use>
+        </svg>
+    </button>
+</div>        <!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Background of PhotoSwipe.
+        It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+        <!-- Container that holds slides.
+          PhotoSwipe keeps only 3 of them in the DOM to save memory.
+          Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+            <div class="pswp__top-bar">
+                <!--  Controls are self-explanatory. Order can be changed. -->
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+                <button class="pswp__button pswp__button--share" title="Share"></button>
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)"></button>
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+        </div>
+    </div>
+</div>    </div>
+
+    <script
+        src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous">
+    </script>
+    <script src="../assets/built/main.min.js%3Fv=44b41c135e"></script>
+
+    
+</body>
+
+</html>

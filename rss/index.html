@@ -1,4 +1,764 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Qubit Quants]]></title><description><![CDATA[Welcome to Qubit Quants. The blogging platform to elevate your algorithmic and quantitative trading endeavours.]]></description><link>http://localhost:2368/</link><image><url>http://localhost:2368/favicon.png</url><title>Qubit Quants</title><link>http://localhost:2368/</link></image><generator>Ghost 5.24</generator><lastBuildDate>Wed, 25 Jan 2023 01:32:55 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[VectorBT Pro - MultiAsset Data Acquisition]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called <code>Dukascopy-node</code></p>]]></description><link>http://localhost:2368/multi_asset_data_acquisition/</link><guid isPermaLink="false">63cd6f15ecd6fd45f2c84561</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[data acquisition]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 17:27:21 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - MultiAsset Data Acquisition"><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called <code>Dukascopy-node</code> to download M1 (1 minute) historical data for the following currency pairs.<br></p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Qubit Quants]]></title><description><![CDATA[Welcome to Qubit Quants. The blogging platform to elevate your algorithmic and quantitative trading endeavours.]]></description><link>http://localhost:2368/</link><image><url>http://localhost:2368/favicon.png</url><title>Qubit Quants</title><link>http://localhost:2368/</link></image><generator>Ghost 5.24</generator><lastBuildDate>Tue, 28 Feb 2023 13:49:41 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[VectorBT Pro - Parameter Optimisation of a Strategy]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will see how to do <code>Parameter Optimization</code> on the <code>Double Bollinger Band strategy</code> we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like <code>total_</code></p>]]></description><link>http://localhost:2368/parameter-optimization/</link><guid isPermaLink="false">63fcc5cd8867ca123ef5e729</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[parameter optimization]]></category><category><![CDATA[cross-validation]]></category><category><![CDATA[vectorBT]]></category><category><![CDATA[signal generation]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Tue, 28 Feb 2023 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Parameter Optimisation of a Strategy"><p>In this tutorial, we will see how to do <code>Parameter Optimization</code> on the <code>Double Bollinger Band strategy</code> we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like <code>total_returns</code>, <code>Sharpe Ratio</code>, <code>Sortino Ratio</code>, <code>Win Rate</code> etc. or also to minimize certain metrics like <code>Total Drawdown</code>. Quintessentially, we will see how to:</p>
+<ul>
+<li>Use the <code>vbt.Parameterized()</code> decorator to easily convert any strategy function into a parameter optimization simulation.</li>
+<li>Use the <code>vbt.Splitter</code> object to create <code>train</code> and <code>test</code> splits for cross validation of the parameter optimization process.</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="loading-and-resampling-market-data">Loading and resampling market data</h2>
+<p>As always, we begin by loading the market data, in this case <code>BTCUSDT</code> (one minute) data from Binance. We will then resample the <code>M1</code> data to higher timeframes and store this resampled data in a dictionary for quick in memory access during the parameter optimization process.</p>
+<pre><code class="language-python">import numpy as np
+import pandas as pd
+import vectorbtpro as vbt
+
+## Acquire BTCUSDT 1m crypto data from Binance
+
+data = vbt.BinanceData.fetch(
+    [&quot;BTCUSDT&quot;], 
+    start=&quot;2019-01-01 UTC&quot;, 
+    end=&quot;2023-02-02 UTC&quot;,
+    timeframe=&quot;1m&quot;
+    )
+
+## Save acquired data locally for persistance
+data.to_hdf(&quot;/Users/john.doe/vbt_pro_tutorials/data/Binance_BTCUSDT_OHLCV_3Y_m1.h5&quot;)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>To read <code>hdf</code> files of market data downloaded from Binance, VectorBT Pro has this <code>vbt.BinanceData.from_hdf()</code> method which automatically deals with resampling issues for all the columns.</p>
+<pre><code class="language-python">## Load m1 data - GBPUSD
+m1_data = vbt.BinanceData.from_hdf(&apos;../data/Binance_BTCUSDT_OHLCV_3Y_m1.h5&apos;)
+
+## Resample m1 data to higher timeframes
+m5_data  = m1_data.resample(&apos;5T&apos;)   # Convert 1 minute to 5 mins
+m15_data = m1_data.resample(&apos;15T&apos;)  # Convert 1 minute to 15 mins
+m30_data = m1_data.resample(&apos;30T&apos;)  # Convert 1 minute to 30 mins
+h1_data  = m1_data.resample(&quot;1H&quot;)   # Convert 1 minute to 1 hour
+h2_data  = m1_data.resample(&quot;2H&quot;)   # Convert 1 minute to 2 hour
+h4_data  = m1_data.resample(&apos;4H&apos;)   # Convert 1 minute to 4 hour
+h12_data = m1_data.resample(&apos;12H&apos;)  # Convert 1 minute to 12 hour
+d1_data  = m1_data.resample(&apos;1D&apos;)   # Convert 1 minute to Daily data
+
+mtf_data = { &quot;1T&quot; : m1_data, &quot;5T&quot; : m5_data, &quot;15T&quot; : m15_data, &quot;30T&quot; : m30_data,
+             &quot;1H&quot; : h1_data, &quot;2H&quot; : h2_data, &quot;4H&quot; : h4_data, &quot;12H&quot; : h12_data, &quot;1D&quot; : d1_data }
+</code></pre>
+<p>We will also create helper functions like:</p>
+<ul>
+<li><code>remapped_tf</code> - to retrive mapped key values from this <code>freq_dict</code> mapper dict</li>
+<li><code>flatten_list</code> - to flatten a 2D list into a 1D list</li>
+<li><code>create_list_numbers</code> - to generate a range list of numbers</li>
+</ul>
+<pre><code class="language-python">freq_dict = { &quot;1T&quot; : 1, &quot;5T&quot; : 5, &quot;15T&quot; : 15, &quot;30T&quot; : 30,
+              &quot;1H&quot; : 60, &quot;2H&quot; : 120, &quot;4H&quot; : 240, &quot;8H&quot; : 480,
+              &quot;12H&quot; : 720, &quot;1D&quot;: 1440 }  
+
+def remapped_tf(input_value : int) -&gt; str:
+    &quot;&quot;&quot;Map an integer to a string timeframe format&quot;&quot;&quot;
+    tf_freq = {1 : &quot;1T&quot;, 5 : &quot;5T&quot;, 15 : &quot;15T&quot;, 30 : &quot;30T&quot;, 60 :&quot;1H&quot;, 
+                  120 : &quot;2H&quot;, 240 : &quot;4H&quot;, 720 : &quot;12H&quot;, 1440 : &quot;1D&quot;}
+    new_value = tf_freq.get(input_value)
+    return new_value      
+
+def flatten_list(list_2D : list):
+    &quot;&quot;&quot;Flatten a list of list of strings&quot;&quot;&quot;
+    flat_list = list_2D if len(list_2D) == 0 else [item for sublist in list_2D for item in sublist]
+    return flat_list
+
+def create_list_numbers(r1, r2, step):
+    &quot;&quot;&quot;Create a list of numbers between two bounds (r1, r2 which can be float or int) and incrementing
+       each number using the specified `step` value &quot;&quot;&quot;
+    if type(r1) == float and type(r2) == float:
+        return list(np.round(np.arange(r1, r2+step, step), 2))
+    return list(np.arange(r1, r2+step, step))                            
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>You might remember this <code>create_resamplers</code> function from our first tutorial which we used for <code>upsampling</code>.</p>
+<pre><code class="language-python">def create_resamplers(result_dict_keys_list : list, source_indices : list,  
+                      source_frequencies :list, target_index : pd.Series, target_freq : str):
+    &quot;&quot;&quot;
+    Creates a dictionary of vbtpro resampler objects.
+
+    Parameters
+    ==========
+    result_dict_keys_list : list, list of strings, which are keys of the output dictionary
+    source_indices        : list, list of pd.time series objects of the higher timeframes
+    source_frequencies    : list(str), which are short form representation of time series order. Eg:[&quot;1D&quot;, &quot;4h&quot;]
+    target_index          : pd.Series, target time series for the resampler objects
+    target_freq           : str, target time frequency for the resampler objects
+
+    Returns
+    ===========
+    resamplers_dict       : dict, vbt pro resampler objects
+    &quot;&quot;&quot;
+    
+    
+    resamplers = []
+    for si, sf in zip(source_indices, source_frequencies):
+        resamplers.append(vbt.Resampler(source_index = si,  target_index = target_index,
+                                        source_freq = sf, target_freq = target_freq))
+    return dict(zip(result_dict_keys_list, resamplers))
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="vbtparameterized-decorator"><code>@vbt.parameterized</code> decorator</h2>
+<p>The decorator <code>@vbt.parameterized</code> is engine-agnostic and parameterizes a strategy function and returns a new function with the same signature as the passed one. This decorator enhances our <code>optimal_2BB</code> strategy function (below) to take arguments wrapped with <code>vbt.Param</code>, and build the grid of parameter combinations, run the <code>optimal_2BB</code> function on each parameter combination, and merge the results using concatenation. <br><br>
+The following arguments are used in the <code>@vbt.parameterized()</code> decorator:</p>
+<ul>
+<li><code>random_subset = 1000</code>, randomly selects 1000 combinations out of millions of combinations, like we do in <code>random selection</code></li>
+<li><code>merge_func = &quot;concat&quot;</code>, concats the output of each output row-wise, to the same <code>pd.Series</code>, other values for <code>merg_func</code> are <code>&quot;column_stack&quot;</code></li>
+<li><code>show_progress = True</code>, shows the <code>tqdm</code> progress bar of the simulation</li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">@vbt.parameterized(merge_func = &quot;concat&quot;, random_subset = 1000, show_progress=True)  
+def optimal_2BB(lower_tf : int = 1, higher_tf: int = 5,
+                ltf_rsi_timeperiod : int = 21, 
+                bb_price_timeperiod : int = 14, bb_rsi_timeperiod : int = 14,
+                bb_price_nbdevup : int = 2, bb_price_nbdevdn: int = 2,
+                bb_rsi_nbdevup : int = 2, bb_rsi_nbdevdn : int = 2,
+                output_metric : str | list = &quot;total_return&quot;,
+                index = None
+                ):
+    
+    lower_tf  = remapped_tf(lower_tf)
+    higher_tf = remapped_tf(higher_tf)
+    # print(&quot;New Lower TF:&quot;, lower_tf, &quot;New Higher TF:&quot;, higher_tf)
+    
+    if index is None:
+        ltf_data = mtf_data[lower_tf]
+        htf_data = mtf_data[higher_tf]
+    else:
+        # print(f&quot;Start Index:{index[0]} || End Index: {index[-1]}&quot;)
+        ltf_data = mtf_data[lower_tf].loc[index[0]:index[-1]]
+        htf_data = mtf_data[higher_tf].loc[index[0]:index[-1]]
+
+    ### Get OHLC prices for lower and higher timeframes
+    ltf_open, ltf_high, ltf_low, ltf_close = ltf_data.get(&apos;Open&apos;), ltf_data.get(&apos;High&apos;), ltf_data.get(&apos;Low&apos;), ltf_data.get(&apos;Close&apos;)
+    htf_open, htf_high, htf_low, htf_close = htf_data.get(&apos;Open&apos;), htf_data.get(&apos;High&apos;), htf_data.get(&apos;Low&apos;), htf_data.get(&apos;Close&apos;)
+
+    ltf_rsi = vbt.talib(&quot;RSI&quot;, timeperiod = ltf_rsi_timeperiod).run(ltf_close, skipna=True).real.ffill()
+    ltf_bbands_rsi = vbt.talib(&quot;BBANDS&quot;).run(ltf_rsi, timeperiod = bb_rsi_timeperiod, nbdevup = bb_rsi_nbdevup, nbdevdn = bb_rsi_nbdevdn, skipna=True)    
+    htf_bbands_price = vbt.talib(&quot;BBANDS&quot;).run(htf_close, timeperiod = bb_price_timeperiod, nbdevup = bb_price_nbdevup, nbdevdn = bb_price_nbdevdn, skipna=True)
+
+    ## Initialize  dictionary
+    data = {}
+
+    col_values = [ ltf_close, ltf_rsi,ltf_bbands_rsi.upperband, ltf_bbands_rsi.middleband, ltf_bbands_rsi.lowerband ]
+
+    col_keys = [ &quot;ltf_close&quot;, &quot;ltf_rsi&quot;, &quot;ltf_bbands_rsi_upper&quot;,  &quot;ltf_bbands_rsi_middle&quot;, &quot;ltf_bbands_rsi_lower&quot; ]
+
+    # Assign key, value pairs for method of time series data to store in data dict
+    for key, time_series in zip(col_keys, col_values):
+        data[key] = time_series.ffill()
+
+    resampler_dict_keys = [higher_tf + &quot;_&quot; + lower_tf]
+
+    list_resamplers = create_resamplers(result_dict_keys_list = resampler_dict_keys,
+                                        source_indices = [htf_close.index], 
+                                        source_frequencies = [higher_tf], 
+                                        target_index = ltf_close.index,
+                                        target_freq = lower_tf)
+
+    # print(list_resamplers)
+    
+    ## Use along with  Manual indicator creation method for MTF
+    series_to_resample = [
+        [htf_open, htf_high, htf_low, htf_close, 
+        htf_bbands_price.upperband, htf_bbands_price.middleband, htf_bbands_price.lowerband]
+        ]
+
+
+    resample_data_keys = [
+        [&quot;htf_open&quot;, &quot;htf_high&quot;, &quot;htf_low&quot;, &quot;htf_close&quot;, 
+        &quot;htf_bbands_price_upper&quot;,  &quot;htf_bbands_price_middle&quot;,  &quot;htf_bbands_price_lower&quot;]
+            ]    
+
+    df_cols_order = col_keys + flatten_list(resample_data_keys)
+    ## Create resampled time series data aligned to base line frequency (15min)
+    # print(&quot;COLUMNS ORDER:&quot;, df_cols_order)
+    
+    for lst_series, lst_keys, resampler in zip(series_to_resample, resample_data_keys, resampler_dict_keys):
+        for key, time_series in zip(lst_keys, lst_series):
+            if key.lower().endswith(&apos;open&apos;):
+                # print(f&apos;Resampling {key} differently using vbt.resample_opening using &quot;{resampler}&quot; resampler&apos;)
+                resampled_time_series = time_series.vbt.resample_opening(list_resamplers[resampler])
+            else:
+                resampled_time_series = time_series.vbt.resample_closing(list_resamplers[resampler])
+            data[key] = resampled_time_series
+    
+
+    ## construct a multi-timeframe dataframe
+    mtf_df = pd.DataFrame(data)[df_cols_order]
+
+    # print(&quot;DataFrame Output:\n&quot;, mtf_df.head())
+
+    ## Long Entry Conditions
+    c1_long_entry = (mtf_df[&apos;htf_low&apos;] &lt;= mtf_df[&apos;htf_bbands_price_lower&apos;])
+    c2_long_entry = (mtf_df[&apos;ltf_rsi&apos;] &lt;= mtf_df[&apos;ltf_bbands_rsi_lower&apos;] )
+
+    ## Long Exit Conditions
+    c1_long_exit =  (mtf_df[&apos;htf_high&apos;] &gt;= mtf_df[&apos;htf_bbands_price_upper&apos;])
+    c2_long_exit =  (mtf_df[&apos;ltf_rsi&apos;]  &gt;= mtf_df[&apos;ltf_bbands_rsi_upper&apos;])             
+
+    ## Create entries and exit columns using the above conditions
+    mtf_df[&apos;entry&apos;] = c1_long_entry &amp; c2_long_entry
+    mtf_df[&apos;exit&apos;]  = c1_long_exit &amp; c2_long_exit
+
+    mtf_df[&apos;signal&apos;] = 0   
+    mtf_df[&apos;signal&apos;] = np.where( mtf_df[&apos;entry&apos;], 1, 0)
+    mtf_df[&apos;signal&apos;] = np.where( mtf_df[&apos;exit&apos;] , -1, mtf_df[&apos;signal&apos;])
+
+    entries = mtf_df.signal == 1.0
+    exits = mtf_df.signal == -1.0
+
+    pf = vbt.Portfolio.from_signals(
+        close = ltf_close, 
+        entries = entries, 
+        exits = exits, 
+        direction = &quot;both&quot;, ## This setting trades both long and short signals
+        freq = pd.Timedelta(minutes = freq_dict[lower_tf]), 
+        init_cash = 100000
+    )
+
+    if type(output_metric) == str:
+        return pf.deep_getattr(output_metric) ## When tuning a single metric
+    elif type(output_metric) == list:
+        return pd.Series({k: getattr(pf, k) for k in output_metric}) ## When you want to tune a list of metrics
+</code></pre>
+<h4 id="double-bollinger-bandstrategy">Double Bollinger Band - Strategy</h4>
+<p>As a quick recap, the rules of the strategy coded in <code>optimal_2BB</code> are as follows:</p>
+<ol>
+<li>
+<p>A long (buy) signal is generated whenever the higher timeframe (Low) price goes below its lower Bollinger band, and the lower timeframe RSI goes below its lower Bollinger band (RSI).</p>
+</li>
+<li>
+<p>A short (sell) signal is generated whenever the higher timeframe (High) price breaks its upper Bollinger band, and the lower timeframe RSI breaks above its upper Bollinger band (RSI).</p>
+</li>
+</ol>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>We can invoke the parameter optimization process by passing the list of parameters we want for each argument wrapped in the <code>vbt.Param</code> class.<br>
+The <code>vbt.Param</code> class also accepts conditions, like in our case we don&apos;t want the <code>lower_tf</code> to have a value greater than the <code>higher_tf</code> so we specify that using the <code>condition</code> argument inside the <code>vbt.Param</code> class. In this particular case we are just specifying one metric (<code>total_return</code>) to tune our parameter optimization.</p>
+<pre><code class="language-python">pf_results = optimal_2BB(
+    lower_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720, 1440]),
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = &quot;total_return&quot;
+ )
+
+print(f&quot;Best Total Returns: {round(pf_results.max(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Best Total Returns:{pf_results.idxmax()}&quot;)
+
+print(f&quot;Worst Total Returns: {round(pf_results.min(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Worst Total Returns:{pf_results.idxmin()}&quot;)
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code class="language-bash">Best Total Returns: 8917.26 %
+Parameter Combinations with Best Total Returns:(1, 1, 19, 20, 22, 1.75, 2.25, 1.5, 2.0)
+Worst Total Returns: -4.41 %
+Parameter Combinations with Worst Total Returns:(120, 1440, 18, 19, 22, 2.5, 2.0, 2.25, 2.5)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Since for this simulation, we selected only a single output metric ( <code>total_returns</code> ), we get a multi-index pandas series which we can sort to quickly see the most promising results</p>
+<pre><code class="language-python">pf_results.sort_values(ascending=False)
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/pf_sim_multi_index_series.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="2000" height="425" srcset="http://localhost:2368/content/images/size/w600/2023/02/pf_sim_multi_index_series.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/pf_sim_multi_index_series.png 1000w, http://localhost:2368/content/images/size/w1600/2023/02/pf_sim_multi_index_series.png 1600w, http://localhost:2368/content/images/size/w2400/2023/02/pf_sim_multi_index_series.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Portfolio Simulation Results (Multi-index Pandas Series)</figcaption></figure><!--kg-card-begin: markdown--><p>We can also pass multiple metrics as a list to the <code>output_metric</code> argument, and the output the entire portfolio simulation a multi-index pandas series. Of course, in this case, it is not like <em>we are tuning multiple knobs and dials to get an optimal value for all the metrics passed</em>, but we are just returning multiple metrics as part of the output of each simulation.</p>
+<pre><code class="language-python">pf_results = optimal_2BB(
+    lower_tf = vbt.Param([5, 30], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15]),
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = [&quot;total_profit&quot;, &quot;total_return&quot;, &quot;max_drawdown&quot;, &quot;sharpe_ratio&quot;]
+ )</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>To flatten the multi-index series and convert it into a pandas DataFrame, we can use this following code:</p>
+<pre><code class="language-python">pf_results_df = pf_results.unstack(level = -1)
+pf_results_df = pf_results_df[[&apos;total_return&apos;,&apos;max_drawdown&apos;,&apos;sharpe_ratio&apos;]].sort_values(
+                by=[&apos;total_return&apos;, &apos;max_drawdown&apos;], 
+                ascending=False)
+pf_results_df.reset_index(inplace=True)
+pf_results_df
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2023/02/pf_results_flattened_dataframe.png" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## To check if our condition for `lower_tf` works
+print(&quot;Length of DF:&quot;,len(pf_results_df[pf_results_df[&apos;lower_tf&apos;] &gt; pf_results_df[&apos;higher_tf&apos;]]))
+</code></pre>
+<p><strong>Output</strong></p>
+<pre><code class="language-bash">Length of DF: 0
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(f&quot;Best Total Returns: {round(pf_results_df[&apos;total_return&apos;].max(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Best Total Returns:&quot;)
+pd.DataFrame(pf_results_df.iloc[pf_results_df[&apos;total_return&apos;].idxmax()]).T
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-bash">Best Total Returns: 504.49 %
+Parameter Combinations with Best Total Returns:
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>lower_tf</th>
+<th>higher_tf</th>
+<th>ltf_rsi_timeperiod</th>
+<th>bb_price_timeperiod</th>
+<th>bb_rsi_timeperiod</th>
+<th>bb_price_nbdevup</th>
+<th>bb_price_nbdevdn</th>
+<th>bb_rsi_nbdevup</th>
+<th>bb_rsi_nbdevdn</th>
+<th>total_return</th>
+<th>max_drawdown</th>
+<th>sharpe_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>5</td>
+<td>5</td>
+<td>18.0</td>
+<td>18.0</td>
+<td>19.0</td>
+<td>2.25</td>
+<td>1.5</td>
+<td>1.75</td>
+<td>2.0</td>
+<td>504.490043</td>
+<td>-0.389288</td>
+<td>2.328832</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(f&quot;Worst Total Returns: {round(pf_results_df[&apos;total_return&apos;].min(), 2)} %&quot;)
+print(f&quot;Parameter Combinations with Worst Total Returns:&quot;)
+pd.DataFrame(pf_results_df.iloc[pf_results_df[&apos;total_return&apos;].idxmin()]).T
+</code></pre>
+<p><strong>Output</strong>:</p>
+<pre><code class="language-bash">Worst Total Returns: -0.98 %
+Parameter Combinations with Worst Total Returns:
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>lower_tf</th>
+<th>higher_tf</th>
+<th>ltf_rsi_timeperiod</th>
+<th>bb_price_timeperiod</th>
+<th>bb_rsi_timeperiod</th>
+<th>bb_price_nbdevup</th>
+<th>bb_price_nbdevdn</th>
+<th>bb_rsi_nbdevup</th>
+<th>bb_rsi_nbdevdn</th>
+<th>total_return</th>
+<th>max_drawdown</th>
+<th>sharpe_ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>999</td>
+<td>5</td>
+<td>15</td>
+<td>20.0</td>
+<td>22.0</td>
+<td>20.0</td>
+<td>2.25</td>
+<td>2.5</td>
+<td>2.25</td>
+<td>2.5</td>
+<td>-0.977365</td>
+<td>-0.991565</td>
+<td>-0.704983</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="cross-validation">Cross Validation</h2>
+<p>Cross-Validation (CV) is a technique used to curb <a href="https://en.wikipedia.org/wiki/Curve_fitting">overfitting</a>, which involves partitioning a sample of data into complementary subsets, performing the analysis on one subset of data called the <code>training</code> or <code>in-sample</code> (IS) set, and validating the analysis on the other subset of data called the <code>testing</code>, <code>validation</code> or <code>out-of-sample</code> (OOS) set. This procedure is repeated until we have multiple OOS periods and can draw statistics from these results combined. CV is mainly done for the following reasons:</p>
+<ul>
+<li>Improve robustness testing of the strategy</li>
+<li>Mitigate the risk of running wrong predictions. <br>
+<ul>
+<li>This is because, the input data, usually retrieved from a limited time frame slice of history, is highly biased and can not produce reliable forecasts. One way to mitigate the risk of running wrong predictions is to do CV, where we re-run backtests many times but each with slightly different data input</li>
+</ul>
+</li>
+</ul>
+<h3 id="splitter-class"><code>Splitter</code> Class</h3>
+<p>At the heart of implementing CV functionality in vectorBT Pro is the class <code>Splitter</code>, whose main responsibility is to produce arbitrary splits and perform operations on those splits. The workings of this class are quite simple- the user calls one of the class methods with the prefix <code>from_</code>to generate splits; in return, a splitter instance is returned with splits and their labels being saved in a memory-efficient array format. This instance can be used to analyze the split distribution, to chunk array-like objects, and to run User Defined Functions (UDFs).<br>
+The splitter class has many methods like:</p>
+<ul>
+<li><code>from_rolling</code> and<code>from_n_rolling</code></li>
+<li><code>from_expanding</code>and <code>from_n_expanding</code></li>
+<li><code>from_splits</code></li>
+<li><code>from_ranges</code></li>
+<li><code>from_grouper</code></li>
+<li><code>from_random</code></li>
+<li><code>from_sklearn</code></li>
+<li><code>from_split_func</code></li>
+</ul>
+<p>In this tutorial we will just go over the <code>from_rolling</code> splitter method as it is the typical requirement of creating data splits. It is beyond the scope of this tutorial, to go over all the splitter methods above, so it is recommended to read the <code>vectorbtpro</code> documentation to decide which method would best fit your use case.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Let&apos;s create a splitter schema using <code>splitter.from_rolling()</code> method for cross-validation of our <code>optimal_2BB</code> strategy.</p>
+<pre><code class="language-python">## Global Plot Settings
+vbt.settings.set_theme(&quot;dark&quot;)
+vbt.settings[&apos;plotting&apos;][&apos;layout&apos;][&apos;width&apos;] = 1600
+
+splitter = vbt.Splitter.from_rolling(
+    index  = d1_data.index, 
+    length = 360, 
+    split = 0.5,
+    set_labels = [&quot;train&quot;, &quot;test&quot;]
+    )
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>The arguments we have used in the <code>from_rolling</code> method for the above schema are as follows:</p>
+<ul>
+<li><code>index</code> - datatime index series required to create the splits from. In this case, we used the the index series from the daily (<code>d1_data</code>) data.</li>
+<li><code>length</code> - can be <code>int</code>, <code>float</code>, or <code>timedelta_like</code> . Floating values between 0 and 1 are considered relative. Length can also be negative. We have used 360 days as the length of a single split.</li>
+<li><code>split</code> - Ranges to split the range into. If None, will produce the entire range as a single range. Here <code>split = 0.5</code> means, we will be splitting the length of 360 days into equal splits for <code>train</code> and <code>test</code> sets.</li>
+<li><code>set_labels</code> - Labels corresponding to the selected row/column groups. In our case we are creating two sets called <code>train</code> and <code>test</code></li>
+</ul>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">splitter.plot().show()
+</code></pre>
+<p><strong>Output</strong>:<br>
+<img src="http://localhost:2368/content/images/2023/02/Splitter_Test_Train.png" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>The smallest unit of a splitter is a range, which is a period of time that can be mapped onto data. On the plot above, we can count a total of 14 ranges - 7 blue ones for train sets and 7 orange ones for test sets. Multiple ranges next to each other and representing a single test are called a split; there are 6 splits present in the chart, such that we expect one pipeline to be tested on 6 different data ranges. Different range types within each split are called sets. We have used the two sets - &quot;training&quot; and &quot;test&quot; (commonly used in backtesting). The number of sets is fixed throughout all splits.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">splitter.splits
+</code></pre>
+<p><strong>Output</strong>:<br></p>
+<table>
+<thead>
+<tr>
+<th>set</th>
+<th>train</th>
+<th>test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>split</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>0</td>
+<td>slice(0,180,None)</td>
+<td>slice(180,360,None)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>slice(180,360,None)</td>
+<td>slice(360,540,None)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>slice(360,540,None)</td>
+<td>slice(540,720,None)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>slice(540,720,None)</td>
+<td>slice(720,900,None)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>slice(720,900,None)</td>
+<td>slice(900,1080,None)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>slice(900,1080,None)</td>
+<td>slice(1080,1260,None)</td>
+</tr>
+<tr>
+<td>6</td>
+<td>slice(1080,1260,None)</td>
+<td>slice(1260,1440,None)</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p>Time is being tracked separately in <code>Splitter.index</code> while assets aren&apos;t being tracked at all since they have no implications on splitting.</p>
+<pre><code class="language-python">splitter.index
+</code></pre>
+<p><strong>Output</strong>:<br></p>
+<pre><code class="language-bash">DatetimeIndex([&apos;2019-01-01 00:00:00+00:00&apos;, &apos;2019-01-02 00:00:00+00:00&apos;,
+               &apos;2019-01-03 00:00:00+00:00&apos;, &apos;2019-01-04 00:00:00+00:00&apos;,
+               &apos;2019-01-05 00:00:00+00:00&apos;, &apos;2019-01-06 00:00:00+00:00&apos;,
+               &apos;2019-01-07 00:00:00+00:00&apos;, &apos;2019-01-08 00:00:00+00:00&apos;,
+               &apos;2019-01-09 00:00:00+00:00&apos;, &apos;2019-01-10 00:00:00+00:00&apos;,
+               ...
+               &apos;2023-01-23 00:00:00+00:00&apos;, &apos;2023-01-24 00:00:00+00:00&apos;,
+               &apos;2023-01-25 00:00:00+00:00&apos;, &apos;2023-01-26 00:00:00+00:00&apos;,
+               &apos;2023-01-27 00:00:00+00:00&apos;, &apos;2023-01-28 00:00:00+00:00&apos;,
+               &apos;2023-01-29 00:00:00+00:00&apos;, &apos;2023-01-30 00:00:00+00:00&apos;,
+               &apos;2023-01-31 00:00:00+00:00&apos;, &apos;2023-02-01 00:00:00+00:00&apos;],
+              dtype=&apos;datetime64[ns, UTC]&apos;, name=&apos;Open time&apos;, length=1493, freq=&apos;D&apos;)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">print(&quot;Total Nr. of Splits:&quot;,len(close_slices.index))
+df_splits = pd.DataFrame(close_slices.index.tolist(), columns=[&quot;split&quot;, &quot;period&quot;])
+unique_splits = df_splits[&quot;split&quot;].unique().tolist()
+print(&quot;Unique Splits:&quot;, unique_splits)
+df_splits
+</code></pre>
+<p><strong>Output:</strong><br></p>
+<pre><code class="language-bash">Total Nr. of Splits: 14
+Unique Splits: [0, 1, 2, 3, 4, 5, 6]
+</code></pre>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>split</th>
+<th>period</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>train</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0</td>
+<td>test</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>train</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>test</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>train</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2</td>
+<td>test</td>
+</tr>
+<tr>
+<td>6</td>
+<td>3</td>
+<td>train</td>
+</tr>
+<tr>
+<td>7</td>
+<td>3</td>
+<td>test</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4</td>
+<td>train</td>
+</tr>
+<tr>
+<td>9</td>
+<td>4</td>
+<td>test</td>
+</tr>
+<tr>
+<td>10</td>
+<td>5</td>
+<td>train</td>
+</tr>
+<tr>
+<td>11</td>
+<td>5</td>
+<td>test</td>
+</tr>
+<tr>
+<td>12</td>
+<td>6</td>
+<td>train</td>
+</tr>
+<tr>
+<td>13</td>
+<td>6</td>
+<td>test</td>
+</tr>
+</tbody>
+</table>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="compute-baseline-returns-across-splits">Compute Baseline Returns across <code>splits</code></h3>
+<p>The baseline returns is just the buy and hold returns for buying and holding the asset for the period of the split.</p>
+<pre><code class="language-python">def get_total_return(close_prices):
+    return close_prices.vbt.to_returns().vbt.returns.total()
+
+base_line_returns = close_slices.apply(get_total_return)
+base_line_returns
+</code></pre>
+<p><strong>Output:</strong><br></p>
+<pre><code class="language-bash">split  set  
+0      train    2.134762
+       test    -0.336472
+1      train   -0.336472
+       test     0.326704
+2      train    0.326704
+       test     1.523051
+3      train    1.523051
+       test     0.576598
+4      train    0.576598
+       test     0.377110
+5      train    0.377110
+       test    -0.527897
+6      train   -0.527897
+       test    -0.226275
+dtype: float64
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>Print upper and lower bound in each split</strong></p>
+<pre><code class="language-python">train_slices = [slice(close_slices[i, &quot;train&quot;].index[0], close_slices[i, &quot;train&quot;].index[-1]) for i in unique_splits]
+train_slices
+</code></pre>
+<p><strong>Output:</strong><br></p>
+<pre><code class="language-bash">[slice(Timestamp(&apos;2019-01-01 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2019-06-29 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2019-06-30 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2019-12-26 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2019-12-27 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2020-06-23 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2020-06-24 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2020-12-20 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2020-12-21 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2021-06-18 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2021-06-19 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2021-12-15 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2021-12-16 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2022-06-13 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None)]
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">test_slices = [slice(close_slices[i, &quot;test&quot;].index[0], close_slices[i, &quot;test&quot;].index[-1]) for i in unique_splits]
+test_slices
+</code></pre>
+<p><strong>Output:</strong></p>
+<pre><code class="language-bash">[slice(Timestamp(&apos;2019-06-30 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2019-12-26 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2019-12-27 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2020-06-23 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2020-06-24 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2020-12-20 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2020-12-21 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2021-06-18 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2021-06-19 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2021-12-15 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2021-12-16 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2022-06-13 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None),
+ slice(Timestamp(&apos;2022-06-14 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), Timestamp(&apos;2022-12-10 00:00:00+0000&apos;, tz=&apos;UTC&apos;, freq=&apos;D&apos;), None)]
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="splitterapplyapplying-our-optimal2bb-function-to-the-splitter-sets"><code>Splitter.apply</code> - Applying our <code>optimal_2BB</code> function to the splitter sets</h2>
+<p>We can use the <code>splitter.apply()</code> to apply the different splits on our strategy <code>optimal_2BB</code> function, by selecting the splits by their set label (eg: <code>train</code> or <code>test</code>). We would pass our strategy function (<code>optimal_2BB</code>) to the <code>apply_func</code> argument of the <code>splitter_apply</code> method and the arguments of the <code>optimal_2BB</code> function typically follow after the <code>apply_func</code> argument.<br><br>
+The <code>splitter.apply()</code> method also has lots of arguments on its own and below we will see the  significant ones used here:</p>
+<ul>
+<li><code>index</code> argument allows us to pass the <code>splitter.index</code> variable containing our timeseries index, wrapped with the class <code>vbt.Takeable</code> which represents an object from which a range can be taken. The <code>vbt.Takeable</code> method will select a slice from it and substitute the instruction with that slice.</li>
+<li><code>set_</code> argument allows us to select the <code>set_label</code> from the splitter object, in our case either <code>train</code> or <code>test</code></li>
+<li><code>_random_subset</code> argument over-rides the argument <code>random_subset</code> in <code>vbt.parameterized</code> and determines the nr. of simulations to run per split</li>
+<li><code>merge_func</code> argument with the value <code>concat</code> allows to append the result of each simulation in the train set row-wise (<code>axis = 0</code>)</li>
+<li><code>execute_kwargs</code> control the execution of each split/set/range</li>
+<li><code>_execute_kwargs</code> control the execution of your parameter combinations</li>
+</ul>
+<p>When we use this <code>optimal_2BB</code> function during cross-validation by calling <code>splitter.apply()</code> method, we have to pass an <code>index</code> argument to our <code>optimal_2BB</code> function. We slice the dataframe using this <code>index</code> argument (eg: <code>mtf_data[lower_tf]loc[index[0]:index[-1]]</code>) inside the <code>optimal_2BB</code> function since we are doing <code>vbt.Splitter.from_rolling()</code>in this tutorial.</p>
+<p>Generally, if the splitter produces date ranges that contain no gaps, such as in <code>from_rolling</code> method and most other cross-validation schemes for time-series data, we can use the first and the last date (also called <code>&quot;bounds&quot;</code>) of each produced date range to select the subset of data.<br>
+For splitter versions that produce gaps, such as for k-fold cross-validation schemes (which are rarely used anyway), we must use the entire index to select the subset of data.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="performance-on-train-splits">Performance on <code>train</code> splits</h3>
+<p>Below we will see the <code>splitter.apply</code> used on our <code>train</code> splits</p>
+<pre><code class="language-python">train_perf = splitter.apply(
+    apply_func = optimal_2BB, ## apply your strategy function to the splitter object, followed by its arguments
+    lower_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720, 1440]),    
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = &quot;sharpe_ratio&quot;,
+    #### Arguments of splitter.apply() not related to strategy
+    index =  vbt.Takeable(splitter.index), ## DataTime index from the splitter object
+    set_ = &quot;train&quot;,  ## Specify the set to be used for this CV simulation - train or test
+    _random_subset = 500, ## Specify the nr. of simulations to run per train split
+    merge_func = &quot;concat&quot;, ## concat the results
+    execute_kwargs=dict(show_progress=True), ## execute_kwargs control the execution of each split/set/range - Show Progress bar of the simulation
+    _execute_kwargs=dict(show_progress=False, clear_cache=50, collect_garbage=50) ## _execute_kwargs control the execution of your parameter combinations
+    )
+    
+train_perf.sort_values(ascending=False)
+</code></pre>
+<p>An argument having underscore <code>_</code> as the prefix (eg: <code>_random_subset</code>) here means that the argument overrides the default argument value passed to the <code>vbt.parameterized()</code> decorator. In this case, <code>_random_subset = 500</code> means we will be doing only 500 simulations for each train split (7 train splits in total), as opposed to the default value of <code>random_subset = 1000</code> set in the <code>vbt.parameterized()</code> decorator above the <code>optimal_2BB</code> function definition.</p>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/train_split_performance-1.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="2000" height="453" srcset="http://localhost:2368/content/images/size/w600/2023/02/train_split_performance-1.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/train_split_performance-1.png 1000w, http://localhost:2368/content/images/size/w1600/2023/02/train_split_performance-1.png 1600w, http://localhost:2368/content/images/size/w2400/2023/02/train_split_performance-1.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Parameter Optimization Results on <code>train</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h3 id="statistics-on-train-split">Statistics on <code>train</code> split</h3>
+<pre><code class="language-python">train_split_describe = pd.concat([train_perf[train_perf.index.get_level_values(&apos;split&apos;) == i].describe()\
+                                for i in unique_splits], axis = 1, 
+                                keys = [f&quot;Train_Split_{i}&quot; for i in unique_splits])
+train_split_describe 
+</code></pre>
+<p><strong>Output:</strong><br>
+<img src="http://localhost:2368/content/images/2023/02/train_split_describe-1.png" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Compute baseline, best and worst returns for the overlaid line plots
+train_split_best_returns = train_split_describe.loc[&apos;max&apos;].reset_index(drop=True)
+train_split_worst_returns = train_split_describe.loc[&apos;min&apos;].reset_index(drop=True)
+train_splits_baseline_returns = pd.Series([base_line_returns[i, &quot;train&quot;] for i in unique_splits])
+
+## Create Box Plot for train_performance
+train_split_fig = train_perf.vbt.boxplot(
+    by_level=&quot;split&quot;,
+    trace_kwargs=dict(
+        line=dict(color=&quot;lightskyblue&quot;),
+        opacity=0.4,
+        showlegend=False
+        ),
+        xaxis_title=&quot;Train Splits&quot;,
+        yaxis_title=&quot;Sharpe Ratio&quot;
+        )
+
+train_split_best_returns.vbt.plot(trace_kwargs=dict(name=&quot;Best Returns&quot;, line=dict(color=&quot;limegreen&quot;, dash=&quot;dash&quot;)), fig=train_split_fig)
+train_split_worst_returns.vbt.plot(trace_kwargs=dict(name=&quot;Worst Returns&quot;, line=dict(color=&quot;tomato&quot;, dash=&quot;dash&quot;)), fig=train_split_fig)
+train_splits_baseline_returns.vbt.plot(trace_kwargs=dict(name=&quot;Baseline&quot;, line=dict(color=&quot;yellow&quot;, dash=&quot;dash&quot;)), fig=train_split_fig)
+train_split_fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/train_split_perf_box_plot-1.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="1600" height="350" srcset="http://localhost:2368/content/images/size/w600/2023/02/train_split_perf_box_plot-1.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/train_split_perf_box_plot-1.png 1000w, http://localhost:2368/content/images/2023/02/train_split_perf_box_plot-1.png 1600w" sizes="(min-width: 720px) 720px"><figcaption>Box Plot to view simulation statistics on <code>train</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h3 id="performance-statistics-on-test-splits">Performance Statistics on <code>test</code> splits</h3>
+<pre><code class="language-python">test_perf = splitter.apply(
+    apply_func = optimal_2BB, ## apply your strategy function to the splitter object, followed by its arguments
+    lower_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720], condition = &quot;x &lt;= higher_tf&quot;),
+    higher_tf = vbt.Param([1, 5, 15, 30, 60, 120, 240, 720, 1440]),    
+    ltf_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_rsi_timeperiod = vbt.Param(create_list_numbers(18, 22, 1)),
+    bb_price_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_price_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevup = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    bb_rsi_nbdevdn = vbt.Param(create_list_numbers(1.5, 2.5, step = 0.25)),
+    output_metric = &quot;sharpe_ratio&quot;,
+    #### Arguments of splitter.apply() not related to strategy
+    index =  vbt.Takeable(splitter.index), ## DataTime index from the splitter object
+    _random_subset = 500, ## Specify the nr. of simulations to run per test split
+    set_ = &quot;test&quot;,  ## Specify the set to be used for this CV simulation - train or test
+    merge_func =&quot;concat&quot;, ## concat the results
+    execute_kwargs=dict(show_progress=True), ## execute_kwargs control the execution of each split/set/range - Show Progress bar of the simulation
+    _execute_kwargs=dict(show_progress=False, clear_cache=50, collect_garbage=50) ## _execute_kwargs control the execution of your parameter combinations
+    )
+    
+test_perf.sort_values(ascending=False)
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/test_split_performance-1.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="2000" height="501" srcset="http://localhost:2368/content/images/size/w600/2023/02/test_split_performance-1.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/test_split_performance-1.png 1000w, http://localhost:2368/content/images/size/w1600/2023/02/test_split_performance-1.png 1600w, http://localhost:2368/content/images/size/w2400/2023/02/test_split_performance-1.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Parameter Optimization Results on <code>test</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h3 id="statistics-on-test-split">Statistics on <code>test</code> split</h3>
+<pre><code class="language-python">test_split_describe = pd.concat([test_perf[test_perf.index.get_level_values(&apos;split&apos;) == i].describe()\
+                                for i in unique_splits], axis = 1, 
+                                keys = [f&quot;Test_Split_{i}&quot; for i in unique_splits])
+test_split_describe  
+</code></pre>
+<p><img src="http://localhost:2368/content/images/2023/02/test_split_describe-1.png" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy"></p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Compute baseline, best and worst returns for the overlaid line plots
+test_split_best_returns = test_split_describe.loc[&apos;max&apos;].reset_index(drop=True)
+test_split_worst_returns = test_split_describe.loc[&apos;min&apos;].reset_index(drop=True)
+test_splits_baseline_returns = pd.Series([base_line_returns[i, &quot;test&quot;] for i in unique_splits])
+
+## Create Box Plot for test_performance statistics
+test_split_fig = test_perf.vbt.boxplot(
+    by_level=&quot;split&quot;,
+    trace_kwargs=dict(
+        line=dict(color=&quot;lightskyblue&quot;),
+        opacity=0.4,
+        showlegend=False
+        ),
+        xaxis_title=&quot;Test Splits&quot;,
+        yaxis_title=&quot;Sharpe Ratio&quot;
+        )
+
+test_split_best_returns.vbt.plot(trace_kwargs=dict(name=&quot;Best Returns&quot;, line=dict(color=&quot;limegreen&quot;, dash=&quot;dash&quot;)), fig=test_split_fig)
+test_split_worst_returns.vbt.plot(trace_kwargs=dict(name=&quot;Worst Returns&quot;, line=dict(color=&quot;tomato&quot;, dash=&quot;dash&quot;)), fig=test_split_fig)
+test_splits_baseline_returns.vbt.plot(trace_kwargs=dict(name=&quot;Baseline&quot;, line=dict(color=&quot;yellow&quot;, dash=&quot;dash&quot;)), fig=test_split_fig)
+test_split_fig.show()
+</code></pre>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/test_split_perf_box_plot-1.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="1600" height="350" srcset="http://localhost:2368/content/images/size/w600/2023/02/test_split_perf_box_plot-1.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/test_split_perf_box_plot-1.png 1000w, http://localhost:2368/content/images/2023/02/test_split_perf_box_plot-1.png 1600w" sizes="(min-width: 720px) 720px"><figcaption>Box Plot to view simulation statistics on <code>test</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h2 id="bonusline-by-line-profiling-of-a-python-function">BONUS - <code>Line-by-Line</code> Profiling of a python function</h2>
+<p>It is sometimes important to optimize your strategy function to reduce the time taken for each simulation. We can do, <em>line by line</em> profiling of <code>optimal_2BB</code> function using this <code>%load_ext line_profiler</code>. <br> When applying the <code>line_profiler</code> you have to remove the <code>vbt.parameterized()</code> decorator, and apply the <code>line_profiler</code> on the unwrapped raw <code>optimal_2BB</code> strategy function. Below is a snapshot of the results you will get from the <code>line_profiler</code> which you can use to optimize aspects of your strategy function which have very higher <code>Time per hit</code> cost.</p>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/line_profiler_output.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="2000" height="979" srcset="http://localhost:2368/content/images/size/w600/2023/02/line_profiler_output.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/line_profiler_output.png 1000w, http://localhost:2368/content/images/size/w1600/2023/02/line_profiler_output.png 1600w, http://localhost:2368/content/images/size/w2400/2023/02/line_profiler_output.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Line Profiler Results on <code>optimal_2BB</code> function</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/main/Parameter%20Optimization.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - MultiAsset Data Acquisition]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired data will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called</p>]]></description><link>http://localhost:2368/multi_asset_data_acquisition/</link><guid isPermaLink="false">63cd6f15ecd6fd45f2c84561</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[data acquisition]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 17:27:21 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - MultiAsset Data Acquisition"><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired data will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called <code>Dukascopy-node</code> to download M1 (1 minute) historical data for the following currency pairs.<br></p>
 <p>You can find the installation instructions and other details for this node package here: <a href="https://github.com/Leo4815162342/dukascopy-node">https://github.com/Leo4815162342/dukascopy-node</a></p>
 <!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="multi-asset-market-data-acquistion-with-dukascopy">Multi Asset Market Data Acquistion with DukaScopy</h2>
 <pre><code class="language-shell">npx dukascopy-node -i gbpaud -p ask -from 2019-01-01 to 2022-12-31 -t m1 -v true -f csv
@@ -1523,7 +2283,7 @@ memory usage: 29.9 MB
 </ol>
 <!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Resampling-and-Alignment---FlowChart-_4LightBG.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy"><figcaption>Steps for MultiTimeFrame DataFrame creation</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Tutorial Series]]></title><description><![CDATA[<p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code</p>]]></description><link>http://localhost:2368/vbt-tuts-toc/</link><guid isPermaLink="false">638a1a09db6f4b53ca5eb9a1</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[python]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 14 Nov 2022 07:00:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" alt="VectorBT Pro - Tutorial Series"><p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code in these tutorials, you would need to buy access to vectorBT pro from <strong>Oleg Polakow</strong> and <code>import vectorbtpro as vbt</code> in your code.</p><!--kg-card-begin: html--><h1 style="text-align: center;">TABLE OF CONTENTS</h1><!--kg-card-end: html--><!--kg-card-begin: markdown--><h2 id="1-comprehensive-basics">1. Comprehensive Basics</h2>
 <!--kg-card-end: markdown--><p> The tutorials in this chapter will use a toy strategy called the <code><a href="https://abouttrading.substack.com/p/the-double-bollinger-trading-strategy">Double Bollinger Band Strategy</a></code> to illustrate the vectorBT concepts </p><ul><li><strong><a href="https://qubitquants.github.io/aligning-mtf-data/index.html">Aligning Multi-Time Frame time series Data with Resampling</a></strong><br>Learn about the creation of multi-time frame (MTF) time-series data and their alignment using <code>resampling</code> methods. </li><li><strong><a href="https://qubitquants.github.io/strategydev/index.html">Strategy Development &amp; Signal Generation using</a></strong> <code>vbt.portfolio.from_signals()</code> <br>Learn how to create signals based on multiple confluences / criterion and exploration of backtesting (simulation) results with a variety of methods and plots from <code>vbt.portfolio</code> module.</li><li><strong><a href="https://qubitquants.github.io/vbt_plot_strategy/index.html">Plotting Indicators and Visualising Strategy with Cleaned Signals</a></strong><br>Learn basic plotting techniques available in VectorBT Pro and also advanced techniques like creating your own <code>plot_strategy()</code> function with all the major functionalities one would typically need.</li><li><strong><a href="https://qubitquants.github.io/multi_asset_portfolio_simulation/index.html">Multi Asset Portfolio Simulation</a></strong><br>Learn about various types of portfolio simulations for multiple assets, that is possible in VectorBT Pro . <br><strong>Bonus</strong>: <a href="https://qubitquants.github.io/multi_asset_data_acquisition/index.html">Multi Asset Data Acquisition</a> of multiple Forex pairs with <code>Dukascopy</code></li></ul><hr><!--kg-card-begin: markdown--><h2 id="2-advanced">2. Advanced</h2>
-<!--kg-card-end: markdown--><ul><li><strong><a href="https://qubitquants.github.io/vbt_dashboard/index.html">Create Customized dashboard for Simulation and Strategy </a></strong><br>Create your own customized dashboard using <code>dash</code> (from <code>plotly</code>) to visualize the vectorBT portfolio simulation and strategy development with entries and exits.</li></ul><p><strong>Want to Contribute?</strong><br>If you would like to contribute any articles to this blog reach out to us on <a href="https://www.linkedin.com/groups/14112759/">Linkedin</a><br>Have suggestions for tutorial topics, leave them in the comments below!</p><p>Many thanks to <a href="https://github.com/polakowo">Oleg Polakow</a>, for his continuing support to VectorBT Pro</p>]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Account Monitor & Data Visualisation Dashboard]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
+<!--kg-card-end: markdown--><ul><li><strong><a href="https://qubitquants.github.io/vbt_dashboard/index.html">Create Customized dashboard for Simulation and Strategy </a></strong><br>Create your own customized dashboard using <code>dash</code> (from <code>plotly</code>) to visualize the vectorBT portfolio simulation and strategy development with entries and exits.</li><li><a href="qubitquants.pro/parameter-optimization/"><strong>Parameter Optimization</strong></a><br>Learn how to run a parameter optimization process on a strategy with multiple parameter combinations and also do cross validation of the parameter optimization across multiple train &amp; test splits of the market data.</li></ul><p><strong>Want to Contribute?</strong><br>If you would like to contribute any articles to this blog reach out to us on <a href="https://www.linkedin.com/groups/14112759/">Linkedin</a><br>Have suggestions for tutorial topics, leave them in the comments below!</p><p>Many thanks to <a href="https://github.com/polakowo">Oleg Polakow</a>, for his continuing support to VectorBT Pro</p>]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Account Monitor & Data Visualisation Dashboard]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
 <p><strong>MongoDB ChangeStreams and WebSockets</strong></p>]]></description><link>http://localhost:2368/plotly-dashboard/</link><guid isPermaLink="false">638ccdb02467af9576eed1ca</guid><category><![CDATA[python]]></category><category><![CDATA[plotly]]></category><category><![CDATA[plotly-dash]]></category><category><![CDATA[mongoDB]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 05 Sep 2022 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="MT5PyBot &#x1F916; - Account Monitor &amp; Data Visualisation Dashboard"><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
 <p><strong>MongoDB ChangeStreams and WebSockets</strong> - <a href="https://community.plotly.com/t/mongodb-websocket-and-dash-plot/64808">https://community.plotly.com/t/mongodb-websocket-and-dash-plot/64808</a></p>
 <!--kg-card-end: markdown--><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/qYkeeI56dew?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Account Monitor and Data Visualization Dashboard"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTKjq1PEwo5KRhtk8SDtVXR9Cnli4j8s9omoUt5W1t6mNsLr9Jn15YEeLR3CNc30YX91OhLKDeHE6Kl/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="540" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖- Strategy and AlgoBot in Action]]></title><description><![CDATA[<p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></description><link>http://localhost:2368/strategy_algobot_action/</link><guid isPermaLink="false">638ca9bb2467af9576eed195</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[metatrader5]]></category><category><![CDATA[python]]></category><category><![CDATA[aws]]></category><category><![CDATA[ec2]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Wed, 31 Aug 2022 14:14:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/runningbot.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/runningbot.png" alt="MT5PyBot &#x1F916;- Strategy and AlgoBot in Action"><p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Architecture]]></title><description><![CDATA[<p><strong>MetaTrader5 (Python) Algorithmic Trading bot infrastructure </strong></p><p>In the presentation below, I talk about the <code>MetaTrader5</code> Algorithmic Trading bot infrastructure that we have built using the MetaTrader5 <code>python</code> library. Details include the architecture elements and their functionalities.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/8850EMr_AXU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Architecture of MetaTrader5 Python AlgoTrading Bot (MT5PyBot)"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR9TcCcoccIEcrlHFi25FL9Afz3qifQymOa74ei2xqP-ym1XfwxdM1fkMTIz7pxQ4lB2Cb7YNEZVu31/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></description><link>http://localhost:2368/mt5pybot/</link><guid isPermaLink="false">638a0ca6db6f4b53ca5eb94b</guid><category><![CDATA[python]]></category><category><![CDATA[metatrader5]]></category><category><![CDATA[algorithmic trading]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 15 Aug 2022 09:00:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/MT5-AlgoBot-Final-Architecture-1.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/MT5-AlgoBot-Final-Architecture-1.png" alt="MT5PyBot &#x1F916; - Architecture"><p><strong>MetaTrader5 (Python) Algorithmic Trading bot infrastructure </strong></p><p>In the presentation below, I talk about the <code>MetaTrader5</code> Algorithmic Trading bot infrastructure that we have built using the MetaTrader5 <code>python</code> library. Details include the architecture elements and their functionalities.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/8850EMr_AXU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Architecture of MetaTrader5 Python AlgoTrading Bot (MT5PyBot)"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR9TcCcoccIEcrlHFi25FL9Afz3qifQymOa74ei2xqP-ym1XfwxdM1fkMTIz7pxQ4lB2Cb7YNEZVu31/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item></channel></rss>
