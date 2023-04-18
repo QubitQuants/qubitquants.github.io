@@ -1,4 +1,884 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Qubit Quants]]></title><description><![CDATA[Welcome to Qubit Quants. The blogging platform to elevate your algorithmic and quantitative trading endeavours.]]></description><link>http://localhost:2368/</link><image><url>http://localhost:2368/favicon.png</url><title>Qubit Quants</title><link>http://localhost:2368/</link></image><generator>Ghost 5.24</generator><lastBuildDate>Sat, 15 Apr 2023 10:14:07 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[VectorBT Pro - Discretionary Signal Bactesting]]></title><description><![CDATA[<p>In this tutorial we see how to backtest discretionary signals (eg: from a Telegram Channel) using VectorBT Pro. Primarily, we learn how to create our own order execution engine <code>order_func_nb</code> which deals with orders and position management in our signals data and finally our own custom simulator <code>signal_</code></p>]]></description><link>http://localhost:2368/discretionary-signals-bactesting/</link><guid isPermaLink="false">643a5b1c525b5f23264c4ab1</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[discretionary signals]]></category><category><![CDATA[backtesting]]></category><category><![CDATA[telegram]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sat, 15 Apr 2023 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1636743094110-5e153f93ad7e?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fFRlbGVncmFtfGVufDB8fHx8MTY4MTU1MzExOA&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<img src="https://images.unsplash.com/photo-1636743094110-5e153f93ad7e?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fFRlbGVncmFtfGVufDB8fHx8MTY4MTU1MzExOA&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Discretionary Signal Bactesting"><p>In this tutorial we see how to backtest discretionary signals (eg: from a Telegram Channel) using VectorBT Pro. Primarily, we learn how to create our own order execution engine <code>order_func_nb</code> which deals with orders and position management in our signals data and finally our own custom simulator <code>signal_simulator_nb</code> which uses the <code>order_func_nb</code> function along with a host of other smaller helper functions to complete the simulation.</p><p>You can follow this tutorial in this YouTube video</p><figure class="kg-card kg-embed-card kg-card-hascaption"><iframe width="200" height="113" src="https://www.youtube.com/embed/EQjdWAE613A?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Discretionary Signals Backtesting using VectorBT Pro"></iframe><figcaption>YouTube - Discretionary Signals using VectorBT Pro</figcaption></figure><p>Many Thanks to <code>Oleg Polakow</code> for his gracious effort in building all the code in this project. Be sure to check out the jupyter notebook in the link below</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/main/MultiAsset_DataAcquisition.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Parameter Optimisation of a Strategy]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will see how to do <code>Parameter Optimization</code> on the <code>Double Bollinger Band strategy</code> we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like <code>total_</code></p>]]></description><link>http://localhost:2368/parameter-optimization/</link><guid isPermaLink="false">63fcc5cd8867ca123ef5e729</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[parameter optimization]]></category><category><![CDATA[cross-validation]]></category><category><![CDATA[vectorBT]]></category><category><![CDATA[signal generation]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Tue, 28 Feb 2023 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Parameter Optimisation of a Strategy"><p>In this tutorial, we will see how to do <code>Parameter Optimization</code> on the <code>Double Bollinger Band strategy</code> we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like <code>total_returns</code>, <code>Sharpe Ratio</code>, <code>Sortino Ratio</code>, <code>Win Rate</code> etc. or also to minimize certain metrics like <code>Total Drawdown</code>. Quintessentially, we will see how to:</p>
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title><![CDATA[Qubit Quants]]></title><description><![CDATA[Welcome to Qubit Quants. The blogging platform to elevate your algorithmic and quantitative trading endeavours.]]></description><link>http://localhost:2368/</link><image><url>http://localhost:2368/favicon.png</url><title>Qubit Quants</title><link>http://localhost:2368/</link></image><generator>Ghost 5.24</generator><lastBuildDate>Tue, 18 Apr 2023 14:09:07 GMT</lastBuildDate><atom:link href="http://localhost:2368/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[VectorBT Pro - Custom Simulator 3: CandleStick Strategy + StopLoss + TakeProfit + Partial Profits]]></title><description><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing The Dependencies</h2>
+<pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_</code></pre>]]></description><link>http://localhost:2368/customsim_3/</link><guid isPermaLink="false">643e998528c00f113e763a69</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[python]]></category><category><![CDATA[vectorBT]]></category><category><![CDATA[customsimulator]]></category><dc:creator><![CDATA[Bhavin Siddhapura]]></dc:creator><pubDate>Tue, 18 Apr 2023 13:29:37 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing The Dependencies</h2>
+<pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_nb, enums as pf_enums
+import plotly.io as pio
+from numba import njit
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="strategy-rules-%F0%9F%93%90">Strategy Rules &#x1F4D0;</h2>
+<blockquote>
+<img src="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Custom Simulator 3: CandleStick Strategy + StopLoss + TakeProfit + Partial Profits"><p>In addition to the previous rules , the only additional rule here is to close 50 % of the position when the price hits the first take profit <code>tp1</code> (RRR of 1)  moving the stop loss to breakeven (<code>entry_price</code>)</p>
+<hr>
+<p>The tracking dictionary here does exactly what it says , it will keep track of  the <code>entry_price</code> , <code>stop_loss</code> , <code>tp1</code> (take profit 1) , <code>tp2</code> (take profit 2) for both <code>long</code> &#x1F7E9; and <code>short</code> &#x1F7E5; positions.</p>
+<hr>
+<p>&#x1F40C; Indexing into a dictionary to update / retrieve values that will subsequently be used in the trading logic will be undoubtly be computationally slow however it is very easy to understand.</p>
+<hr>
+<p>&#x26A1;The dictionary variables can be unpacked and be used independently to increase the speed.</p>
+<hr>
+</blockquote>
+<pre><code class="language-python">tracking_dict = {&apos;long&apos; : {&apos;entry_price&apos;: None,&apos;stop_loss&apos;: None,&apos;tp1&apos;: None,&apos;tp2&apos;: None},
+                &apos;short&apos;: {&apos;entry_price&apos;: None,&apos;stop_loss&apos;: None,&apos;tp1&apos;: None,&apos;tp2&apos;: None}}
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p>When <code>tp1</code> (first take profit) the tracking dictionary (<code>tracking_dict</code>) must be updated to reflect this change (set to <code>None</code>).</p>
+<hr>
+<p>In conjunction to this when <code>tp1</code> is hit the <code>stop_loss</code> should be moved to breakeven (<code>stop_loss</code> price is set to <code>entry_price</code>)</p>
+<hr>
+<p>When the <code>stop_loss</code> or <code>tp2</code> is hit every variable in the <code>tracking_dict</code> is set to <code>None</code> to reflect that we are no longer in that position.</p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="custom-simulator">Custom Simulator</h2>
+<pre><code class="language-python">def custom_simulator_candlestick_partial_profs(open_ , high_ , low_ , close_ , IsBullArray, init_cash = 10000):
+    
+    order_records = np.empty((2663,1), dtype = vbt.pf_enums.order_dt)
+    order_counts = np.full(1,0, dtype = np.int_)
+    
+    
+    tracking_dict = {&apos;long&apos; : {&apos;entry_price&apos;: None,&apos;stop_loss&apos;: None,&apos;tp1&apos;: None,&apos;tp2&apos;: None},
+                     &apos;short&apos;: {&apos;entry_price&apos;: None,&apos;stop_loss&apos;: None,&apos;tp1&apos;: None,&apos;tp2&apos;: None}}
+
+    exec_state = vbt.pf_enums.ExecState(
+                        cash = float(init_cash),
+                        position = 0.0,
+                        debt = 0.0,
+                        locked_cash = 0.0,
+                        free_cash = float(init_cash),
+                        val_price = np.nan,
+                        value = np.nan)
+     
+    for i in range(len(close_)):
+        price_area = vbt.pf_enums.PriceArea(open = open_[i], 
+                                            high = high_[i], 
+                                            low = low_[i], 
+                                            close = close_[i])
+        
+        value_price = price_area.close
+        value = exec_state.cash + (exec_state.position * value_price)
+        
+        current_price = price_area.close
+        
+        exec_state = vbt.pf_enums.ExecState(
+                                            cash = exec_state.cash,
+                                            position = exec_state.position,
+                                            debt = exec_state.debt,
+                                            locked_cash = exec_state.locked_cash,
+                                            free_cash = exec_state.free_cash,
+                                            val_price = value_price,
+                                            value = value)
+        
+        if IsBullArray[i] and exec_state.position == 0:
+            long_stop_loss = price_area.low #Long Stop loss
+            long_entry_price = price_area.close #Long Entry Price
+            long_tp1 = price_area.close + ( 1 * (price_area.close - long_stop_loss) ) #1RRR
+            long_tp2 = price_area.close + ( 2 * (price_area.close - long_stop_loss) ) #2RRR
+            
+            tracking_dict[&apos;long&apos;][&apos;entry_price&apos;] = long_entry_price
+            tracking_dict[&apos;long&apos;][&apos;stop_loss&apos;] = long_stop_loss
+            tracking_dict[&apos;long&apos;][&apos;tp1&apos;] = long_tp1
+            tracking_dict[&apos;long&apos;][&apos;tp2&apos;] = long_tp2
+            
+            
+            
+            order_result , exec_state = enter_position(
+                                                        execution_state_ = exec_state,
+                                                        price_area_ = price_area,
+                                                        percent_risk_ = 1,
+                                                        group_ = 0, column_= 0, bar_ = i,
+                                                        direction = &apos;Buy&apos;,
+                                                        order_records_= order_records,
+                                                        order_counts_ = order_counts)
+            
+        elif not IsBullArray[i] and exec_state.position == 0:
+            short_stop_loss = price_area.high #Short Stop Loss
+            short_entry_price = price_area.close #Short Entry Price
+            short_tp1 = price_area.close - ( 1 * (price_area.high - short_stop_loss) ) #1RRR
+            short_tp2 = price_area.close - ( 2 * (price_area.high - short_stop_loss) ) #2RRR
+            
+            tracking_dict[&apos;short&apos;][&apos;entry_price&apos;] = short_entry_price
+            tracking_dict[&apos;short&apos;][&apos;stop_loss&apos;] = short_stop_loss
+            tracking_dict[&apos;short&apos;][&apos;tp1&apos;] = short_tp1
+            tracking_dict[&apos;short&apos;][&apos;tp2&apos;] = short_tp2
+            
+            order_result , exec_state = enter_position(
+                                                        execution_state_ = exec_state,
+                                                        price_area_ = price_area,
+                                                        percent_risk_ = 1,
+                                                        group_ = 0, column_= 0, bar_ = i,
+                                                        direction = &apos;Sell&apos;,
+                                                        order_records_= order_records,
+                                                        order_counts_ = order_counts)
+        
+        
+        
+        elif not IsBullArray[i] and exec_state.position &gt; 0:
+            
+            tracking_dict[&apos;long&apos;][&apos;entry_price&apos;] = None
+            tracking_dict[&apos;long&apos;][&apos;stop_loss&apos;] = None
+            tracking_dict[&apos;long&apos;][&apos;tp1&apos;] = None
+            tracking_dict[&apos;long&apos;][&apos;tp2&apos;] = None
+            
+            order_result , exec_state = close_full_position(
+                                                            execution_state_ = exec_state,
+                                                            price_area_ = price_area,
+                                                            group_ = 0, column_= 0, bar_ = i,
+                                                            order_records_= order_records,
+                                                            order_counts_ = order_counts)
+            
+            
+        elif IsBullArray[i] and exec_state.position &lt; 0:
+            
+            tracking_dict[&apos;short&apos;][&apos;entry_price&apos;] = None
+            tracking_dict[&apos;short&apos;][&apos;stop_loss&apos;] = None
+            tracking_dict[&apos;short&apos;][&apos;tp1&apos;] = None
+            tracking_dict[&apos;short&apos;][&apos;tp2&apos;] = None
+            
+            order_result , exec_state = close_full_position(
+                                                            execution_state_ = exec_state,
+                                                            price_area_ = price_area,
+                                                            group_ = 0, column_= 0, bar_ = i,
+                                                            order_records_= order_records,
+                                                            order_counts_ = order_counts)
+  
+        else:
+            
+            if exec_state.position &gt; 0: #In Long 
+                entry_price = tracking_dict[&apos;long&apos;][&apos;entry_price&apos;]
+                
+                if (price_area.low &lt;= long_stop_loss):
+                    #Long Stop Loss Has Been Hit
+                    tracking_dict[&apos;long&apos;][&apos;entry_price&apos;] = None
+                    tracking_dict[&apos;long&apos;][&apos;stop_loss&apos;] = None
+                    tracking_dict[&apos;long&apos;][&apos;tp1&apos;] = None
+                    tracking_dict[&apos;long&apos;][&apos;tp2&apos;] = None
+                    
+                    
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+                    
+                    
+                    
+                
+                elif (price_area.high &gt;= tracking_dict[&apos;long&apos;][&apos;tp1&apos;]):
+                    # First Long Take Profit Has Been Hit
+                    # Move The Stop Loss To Break Even (Entry Price) &amp; Close 50% of The Position
+                    tracking_dict[&apos;long&apos;][&apos;stop_loss&apos;] = entry_price #SL Moved To Entry Price (BreakEven)
+                    tracking_dict[&apos;tp1&apos;] = None #take profit 1 has been hit
+                    
+                    order_result, exec_state = close_partial_pos(
+                                                        execution_state_ = exec_state,
+                                                        price_area_ = price_area,
+                                                        closing_percent = 50, 
+                                                        group_ = 0 , column_ = 0, bar_ = None,
+                                                        update_value_ = False, order_records_ = None, 
+                                                        order_counts_ = None, log_records_ = None,
+                                                        log_counts_ = None)
+                    
+                
+                
+                elif (price_area.high &gt;= tracking_dict[&apos;long&apos;][&apos;tp2&apos;]):
+                    # Second Take Profit Has Been Hit
+                    tracking_dict[&apos;long&apos;][&apos;stop_loss&apos;] = None
+                    tracking_dict[&apos;long&apos;][&apos;tp2&apos;] = None
+                    
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+                
+                else:
+                    continue
+            
+            elif exec_state.position &lt; 0:
+                
+                entry_price = tracking_dict[&apos;short&apos;][&apos;entry_price&apos;]
+                
+                if (price_area.high &gt;= tracking_dict[&apos;short&apos;][&apos;stop_loss&apos;]):
+                    #Short Stop Loss Has Been Hit
+                    tracking_dict[&apos;short&apos;][&apos;entry_price&apos;] = None
+                    tracking_dict[&apos;short&apos;][&apos;stop_loss&apos;] = None
+                    tracking_dict[&apos;short&apos;][&apos;tp1&apos;] = None
+                    tracking_dict[&apos;short&apos;][&apos;tp2&apos;] = None
+                    
+                    
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+                
+                elif (price_area.low &lt;= tracking_dict[&apos;short&apos;][&apos;tp1&apos;]):
+                    # Frist Take Profit Has Been Hit
+                    
+                    tracking_dict[&apos;stop_loss&apos;] = entry_price #SL Moved To Entry Price (BreakEven)
+                    tracking_dict[&apos;tp1&apos;] = None
+                    
+                    order_result, exec_state = close_partial_pos(
+                                                            execution_state_ = exec_state,
+                                                            price_area_ = price_area,
+                                                            closing_percent = 50, 
+                                                            group_ = 0 , column_ = 0, bar_ = None,
+                                                            update_value_ = False, order_records_ = None, 
+                                                            order_counts_ = None, log_records_ = None,
+                                                            log_counts_ = None)
+                
+                elif (price_area.low &lt;= tracking_dict[&apos;short&apos;][&apos;tp2&apos;]):
+                    # Second Take Profit Has Been Hit
+                    tracking_dict[&apos;short&apos;][&apos;entry_price&apos;] = None
+                    tracking_dict[&apos;short&apos;][&apos;stop_loss&apos;] = None
+                    tracking_dict[&apos;short&apos;][&apos;tp1&apos;] = None
+                    tracking_dict[&apos;short&apos;][&apos;tp2&apos;] = None
+                    
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+                
+                else:
+                    continue
+        
+        
+        
+                
+    return vbt.nb.repartition_nb(order_records, order_counts)         
+                
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="key-points-summary-%F0%9F%92%A1">Key Points / Summary &#x1F4A1;</h2>
+<blockquote>
+<hr>
+<p>As you can see there is not a whole lot of differences when looking at partial profits and moving stop loss to breakeven.</p>
+<hr>
+<p>These are just simple examples to demonstrate how one can do these things that are quite common amongst most strategies.</p>
+<hr>
+<p>You can use this code as a point of reference and get creative &#x1F3A8; when you are coding your own strategies &#x26A1;</p>
+</blockquote>
+<!--kg-card-end: markdown-->]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Custom Simulator 2: Candlestick Strategy + StopLoss + TakeProfit]]></title><description><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing the Dependencies</h2>
+<pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_</code></pre>]]></description><link>http://localhost:2368/customsim_2/</link><guid isPermaLink="false">643e928d28c00f113e7639d7</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[customsimulator]]></category><category><![CDATA[python]]></category><category><![CDATA[backtesting]]></category><category><![CDATA[vectorBT]]></category><dc:creator><![CDATA[Bhavin Siddhapura]]></dc:creator><pubDate>Tue, 18 Apr 2023 13:18:45 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing the Dependencies</h2>
+<pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_nb, enums as pf_enums
+import plotly.io as pio
+from numba import njit
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="strategy-rules-%F0%9F%93%90">Strategy Rules &#x1F4D0;</h2>
+<blockquote>
+<img src="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Custom Simulator 2: Candlestick Strategy + StopLoss + TakeProfit"><p>We will build upon the previous strategy</p>
+<p>Stop Loss Below / Above The Entry Candle</p>
+<p>Take Profit Level at a RRR (Risk and Reward Ratio of 2)</p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="long-%F0%9F%9F%A9-stop-loss-%E2%AC%87-and-take-profit-%E2%AC%86">Long &#x1F7E9; Stop Loss &#x2B07; and Take Profit &#x2B06;</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p>The <code>stop loss</code> for the <code>long</code> position is placed below the <code>low</code> of the   candle</p>
+</blockquote>
+<pre><code class="language-python">    long_stop_loss = price_area.low
+</code></pre>
+<blockquote>
+<p>The <code>take profit</code> for the <code>long</code> position is placed at a RRR of 2.</p>
+<p>We find the difference between the <code>close</code> and <code>stoploss</code> prices.</p>
+<p>Multiply it by 2 and then add the the <code>closing</code> price.</p>
+<p>This gives us the price for the <code>take profit</code> level corresponding to a     RRR of 2.</p>
+</blockquote>
+<pre><code class="language-python">long_take_profit = price_area.close + ( 2 * (price_area.close - long_stop_loss) )
+</code></pre>
+<hr>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="short-%F0%9F%9F%A5-stop-loss-%E2%AC%86-and-take-profit-%E2%AC%87">Short &#x1F7E5; Stop Loss &#x2B06; and Take Profit &#x2B07;</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p>The <code>stop loss</code> for the <code>short</code> position is above the <code>high</code> of the candle.</p>
+</blockquote>
+<pre><code class="language-python">short_stop_loss = price_area.high
+</code></pre>
+<blockquote>
+<p>The <code>take profit</code> for the <code>short</code> position is placed at a RRR of 2.</p>
+<p>Similarly the <code>short take profit</code> is placed at a RRR of 2 below the closing price.</p>
+<p>The calculation can be seen below.</p>
+</blockquote>
+<pre><code class="language-python">short_take_profit = price_area.close - ( 2 * (price_area.high - short_stop_loss) )
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="detecting-when-stop-loss-and-take-profit-is-hit">Detecting When Stop Loss and Take Profit Is Hit</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><em>Long</em> &#x1F7E9;</p>
+<blockquote>
+<p>The Long  <code>stop loss</code> is hit when the <code>low</code> of the current candle is less than the stop loss price.</p>
+<blockquote>
+<p><code>price_area.low &lt;= long_stop_loss</code></p>
+</blockquote>
+<hr>
+<p>The Long <code>take profit</code> is hit &#x1F3AF; when the <code>high</code> of the current candle is greater than the <code>take profit</code> price.</p>
+<blockquote>
+<p><code>price_area.high &gt;= long_take_profit</code></p>
+</blockquote>
+<hr>
+</blockquote>
+<p><em>Short</em> &#x1F7E5;</p>
+<blockquote>
+<p>The Short <code>stop loss</code> is hit when the <code>high</code> of the current candle is greater than the stop loss price</p>
+<blockquote>
+<p><code>price_area.high &gt;= short_stop_loss</code></p>
+</blockquote>
+<hr>
+<p>The Short <code>take profit</code> is hit when the <code>low</code> of the current candle is less than the <code>take profit</code> price.</p>
+<blockquote>
+<p><code>price_area.low &lt;= short_take_profit</code></p>
+</blockquote>
+<hr>
+<p>In the code below you can see the implmentation of the <code>stop loss</code> and <code>take profit</code> as part of the entire strategy.</p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="custom-simulator">Custom Simulator</h2>
+<pre><code class="language-python">def custom_simulator_candlestick_sl_tp(open_ , high_ , low_ , close_ , IsBullArray, init_cash = 10000):
+
+    order_records = np.empty((2663,1), dtype = vbt.pf_enums.order_dt)
+    order_counts = np.full(1, 0, dtype=np.int_)
+
+    long_stop_loss = None
+    long_take_profit = None
+    
+    short_stop_loss = None
+    short_take_profit = None
+    
+    exec_state = vbt.pf_enums.ExecState(
+                        cash = float(init_cash),
+                        position = 0.0,
+                        debt = 0.0,
+                        locked_cash = 0.0,
+                        free_cash = float(init_cash),
+                        val_price = np.nan,
+                        value = np.nan)
+    
+    
+    
+    for i in range(len(close_)):
+        price_area = vbt.pf_enums.PriceArea(open = open_[i], 
+                                            high = high_[i], 
+                                            low = low_[i], 
+                                            close = close_[i])
+        
+        value_price = price_area.close
+        value = exec_state.cash + (exec_state.position * value_price)
+        
+        exec_state = vbt.pf_enums.ExecState(
+                                            cash = exec_state.cash,
+                                            position = exec_state.position,
+                                            debt = exec_state.debt,
+                                            locked_cash = exec_state.locked_cash,
+                                            free_cash = exec_state.free_cash,
+                                            val_price = value_price,
+                                            value = value)
+
+
+        if IsBullArray[i] and exec_state.position == 0:
+            long_stop_loss = price_area.low #Stop Loss Placed Below The Low Of The Candle
+            long_take_profit = price_area.close + ( 2 * (price_area.close - long_stop_loss) ) 
+            
+            order_result , exec_state = enter_position(
+                                                        execution_state_ = exec_state,
+                                                        price_area_ = price_area,
+                                                        percent_risk_ = 1,
+                                                        group_ = 0, column_= 0, bar_ = i,
+                                                        direction = &apos;Buy&apos;,
+                                                        order_records_= order_records,
+                                                        order_counts_ = order_counts)
+
+        elif not IsBullArray[i] and exec_state.position == 0:
+            
+            short_stop_loss = price_area.high #Stop Loss Placed Above The High Of The Candle
+            short_take_profit = price_area.close - ( 2 * (price_area.high - short_stop_loss) ) #Stop Loss At 2RRR
+            
+            order_result , exec_state = enter_position(
+                                                        execution_state_ = exec_state,
+                                                        price_area_ = price_area,
+                                                        percent_risk_ = 1,
+                                                        group_ = 0, column_= 0, bar_ = i,
+                                                        direction = &apos;Sell&apos;,
+                                                        order_records_= order_records,
+                                                        order_counts_ = order_counts)
+
+        elif exec_state.position &gt; 0 and not IsBullArray[i]:
+            #Closing Long Position
+            order_result , exec_state = close_full_position(
+                                                            execution_state_ = exec_state,
+                                                            price_area_ = price_area,
+                                                            group_ = 0, column_= 0, bar_ = i,
+                                                            order_records_ = order_records,
+                                                            order_counts_  = order_counts)  
+            
+            
+            
+        
+        elif exec_state.position &lt; 0 and IsBullArray[i]:
+            #Closing Short Position
+            order_result , exec_state = close_full_position(
+                                                            execution_state_ = exec_state,
+                                                            price_area_ = price_area,
+                                                            group_ = 0, column_= 0, bar_ = i,
+                                                            order_records_= order_records,
+                                                            order_counts_ = order_counts)
+        
+        else:
+            
+            if exec_state.position &gt; 0: #In Long
+                if (price_area.low &lt;= long_stop_loss): 
+                    #long stop loss has been hit
+                    #Code To Close The Long Position
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+                    
+                    
+                    long_stop_loss = None
+                    long_take_profit = None
+                
+                elif (price_area.high &gt;= long_take_profit): 
+                    #Long Take Profit Has Been Hit
+                    #Code To Close Long Position Goes Here
+                    
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+                    
+                    
+                    long_stop_loss = None
+                    long_take_profit = None
+                
+                else:
+                    continue
+            
+            elif exec_state.position &lt; 0: #In Short
+                if (price_area.high &gt;= short_stop_loss): 
+                    #Short Stop Loss Has Been Hit
+                    #Code That Closes Out The Short Position Goes Here
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+          
+                    short_stop_loss = None
+                    short_take_profit = None
+                
+                elif (price_area.low &lt;= short_take_profit): 
+                    #Short Take Profit Has Been Hit
+                    #Code That Closes Out The Short Position Goes Here
+                    order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+                    
+                    short_stop_loss = None
+                    short_take_profit = None
+                
+                else:
+                    continue
+        
+    
+    return vbt.nb.repartition_nb(order_records, order_counts)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="key-points-summary-%F0%9F%92%A1">Key Points / Summary &#x1F4A1;</h2>
+<ul>
+<li>
+<p>When the <code>stop loss</code> / <code>take profit</code> is hit , both variables have to be set to <code>None</code>.</p>
+</li>
+<li>
+<p>When we are in a position we must check at each bar (candle) whether the stop loss / take profit has been hit and then deploy the approporatiate function to fulfill the logic of our strategy.</p>
+</li>
+</ul>
+<!--kg-card-end: markdown-->]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy]]></title><description><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing the Dependencies</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_</code></pre>]]></description><link>http://localhost:2368/customsim_1/</link><guid isPermaLink="false">643e8de328c00f113e76395b</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[backtesting]]></category><category><![CDATA[customsimulator]]></category><category><![CDATA[python]]></category><dc:creator><![CDATA[Bhavin Siddhapura]]></dc:creator><pubDate>Tue, 18 Apr 2023 12:51:14 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing the Dependencies</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_nb, enums as pf_enums
+import plotly.io as pio
+from numba import njit
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="strategy-rules-%F0%9F%93%8F">Strategy Rules &#x1F4CF;</h2>
+<img src="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy"><p>In this strategy we will go <code>long</code> &#x1F7E9; on a Bullish Candle and go <code>short</code> &#x1F7E5; on a Bearish Candle.</p>
+<p>If already in a long position and a bearish candle is present the long position should be closed and vice versa.</p>
+<p>Otherwise the position should be held.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="obtaining-the-data">Obtaining The Data</h2>
+<pre><code class="language-python">data = vbt.YFData.fetch(&quot;BTC-USD&quot;, end=&quot;2022-01-01&quot;)
+Open = data.get(&quot;Open&quot;).to_numpy()
+High = data.get(&quot;High&quot;).to_numpy()
+Low = data.get(&quot;Low&quot;).to_numpy()
+Close = data.get(&quot;Close&quot;).to_numpy()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="coding-the-rules">Coding The Rules</h2>
+<blockquote>
+<p>A Bullish Candle &#x1F7E9; is where the <code>close</code> is greater the the <code>open</code> (The price increased)</p>
+</blockquote>
+<blockquote>
+<p><code>df[&apos;IsBull&apos;] = df[&apos;Close&apos;] &gt; df[&apos;Open&apos;]</code></p>
+</blockquote>
+<blockquote>
+<p>Converting the above piece of code to a <code>NumPY Array</code></p>
+</blockquote>
+<blockquote>
+<p><code>IsBull = df[&apos;IsBull&apos;].to_numpy()</code></p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="understanding-the-custom-simulator">Understanding the Custom Simulator</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p>Bullish Candle &#x1F7E9; &amp; Not In A Position &#x26AA;</p>
+<p><code>IsBullArray[i] and exec_state.position == 0</code></p>
+<hr>
+<p>Bearish Candle &#x1F7E5; &amp; Not In A Position &#x26AA;</p>
+<p><code>not IsBullArray[i] and exec_state.position == 0</code></p>
+<hr>
+<p>Bullish Candle &#x1F7E9; &amp; In A Short Position &#x1F534;</p>
+<p><code>IsBullArray[i] and exec_state.position &lt; 0</code></p>
+<hr>
+<p>Bearish Candle &#x1F7E5; &amp; In A Long Position &#x1F7E2;</p>
+<p><code>not IsBullArray[i] and exec_state.position &gt; 0</code></p>
+<hr>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="custom-simulator-code">Custom Simulator Code</h2>
+<pre><code class="language-python">def custom_simulator(open_, high_ , low_ , close_ , IsBullArray,init_cash = 10000):
+     
+    order_records = np.empty((2663,1), dtype = vbt.pf_enums.order_dt)
+    order_counts = np.full(1, 0, dtype=np.int_)
+
+    exec_state = vbt.pf_enums.ExecState(
+                        cash = float(init_cash),
+                        position = 0.0,
+                        debt = 0.0,
+                        locked_cash = 0.0,
+                        free_cash = float(init_cash),
+                        val_price = np.nan,
+                        value = np.nan)
+    
+    
+    for i in range(len(close_)):
+        
+        price_area = vbt.pf_enums.PriceArea(open  = open_[i],
+                                            high = high_[i], 
+                                            low = low_[i], 
+                                            close = close_[i])
+        
+        value_price = price_area.close
+        value = exec_state.cash + (exec_state.position * value_price)
+        
+        exec_state = vbt.pf_enums.ExecState(
+                                cash = exec_state.cash,
+                                position = exec_state.position,
+                                debt = exec_state.debt,
+                                locked_cash = exec_state.locked_cash,
+                                free_cash = exec_state.free_cash,
+                                val_price = value_price,
+                                value = value)
+        
+        if IsBullArray[i] and exec_state.position == 0:
+            #CODE THAT WILL ENTER LONG POSITION
+
+            order_result , exec_state = enter_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                percent_risk_ = 1,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                direction = &apos;Buy&apos;,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+
+        elif not IsBullArray[i] and exec_state.position == 0:
+            #CODE THAT WILL ENTER SHORT POSITION
+            order_result , exec_state = enter_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                percent_risk_ = 1,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                direction = &apos;Sell&apos;,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+               
+
+        elif IsBullArray[i] and exec_state.position &lt; 0:
+            #CODE THAT WILL CLOSE THE SHORT POSITION HERE
+            order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_ = order_records,
+                                                                order_counts_  = order_counts)    
+            
+
+        elif not IsBullArray[i] and exec_state.position &gt;0:
+            order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)    
+        else:
+            continue
+        
+                
+    return vbt.nb.repartition_nb(order_records, order_counts)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="running-the-custom-simulator">Running The Custom Simulator</h2>
+<pre><code class="language-python">custom_simulator(open_ = Open, 
+                 high_ = High, 
+                 low_  = Low, 
+                 close_  = Close, 
+                 IsBullArray = IsBull,
+                 init_cash = 100000)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="output-of-custom-simulation-backtest">Output of Custom Simulation / Backtest</h3>
+<pre><code class="language-python">array([(   0, 0,    0, 2.18658566,   457.33401489, 0., 1),
+       (   1, 0,    3, 2.18658566,   408.9039917 , 0., 0),
+       (   2, 0,    4, 2.51004568,   398.8210144 , 0., 1), ...,
+       (1818, 0, 2659, 0.0218352 , 47588.85546875, 0., 1),
+       (1819, 0, 2661, 0.0218352 , 47178.125     , 0., 0),
+       (1820, 0, 2662, 0.02244184, 46306.4453125 , 0., 1)],
+      dtype={&apos;names&apos;:[&apos;id&apos;,&apos;col&apos;,&apos;idx&apos;,&apos;size&apos;,&apos;price&apos;,&apos;fees&apos;,&apos;side&apos;], &apos;formats&apos;:[&apos;&lt;i4&apos;,&apos;&lt;i4&apos;,&apos;&lt;i4&apos;,&apos;&lt;f8&apos;,&apos;&lt;f8&apos;,&apos;&lt;f8&apos;,&apos;&lt;i4&apos;], &apos;offsets&apos;:[0,4,8,16,24,32,40], &apos;itemsize&apos;:48, &apos;aligned&apos;:True})
+
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="summary-key-points-%F0%9F%92%A1">Summary / Key Points &#x1F4A1;</h3>
+<blockquote>
+<hr>
+<p>The custom simulator is relatively simple to understand , all we do is iterate through the <code>length</code> of the <code>closing_prices</code>.</p>
+<hr>
+<p>Upon each iteration we update the <code>execution_state</code></p>
+<hr>
+<p>We then <code>index</code> into the <code>IsBullArray</code> along with checking the value of the <code>exec_state.position</code> as shown above to match the logic of our strategy.</p>
+<hr>
+<p>After we use our prebuilt functions <code>enter_position</code> , <code>close_position</code> to enter and close positions as per the strategy has defined.</p>
+</blockquote>
+<!--kg-card-end: markdown-->]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Custom Simulator 0 : Main Functions]]></title><description><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing The Dependencies</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_</code></pre>]]></description><link>http://localhost:2368/customsim_0/</link><guid isPermaLink="false">643d6375de286011d16d62ed</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[vectorBT]]></category><category><![CDATA[backtesting]]></category><category><![CDATA[simulator]]></category><dc:creator><![CDATA[Bhavin Siddhapura]]></dc:creator><pubDate>Mon, 17 Apr 2023 15:41:52 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1661956602868-6ae368943878?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wxfDF8YWxsfDZ8fHx8fHwyfHwxNjgxNzQzNzcz&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing The Dependencies</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_nb, enums as pf_enums
+import plotly.io as pio
+from numba import njit
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="order-records-order-counts">Order Records , Order Counts</h2>
+<blockquote>
+<img src="https://images.unsplash.com/photo-1661956602868-6ae368943878?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wxfDF8YWxsfDZ8fHx8fHwyfHwxNjgxNzQzNzcz&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Custom Simulator 0 : Main Functions"><p>The <code>order records</code> keep track of the details of each trade executed by a trading strategy.</p>
+<p>The purpose of order records is to provide traders with a complete record of  all trades executed by the strategy, including the entry and exit prices ,order type , order size and other relevant details.</p>
+<p>The <code>order counts</code> are the number of trades executed by a trading strategy over a certain period of time. They can be analysed to gain insights into trading activity and use this information to adjust their approach.</p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="process-order">Process Order</h2>
+<blockquote>
+<p>The main purpose of using <code>vbt.pf_nb.process_order_nb</code> in the functions that will be introduced below is that it takes in the <code>order_records</code> and <code>order_counts</code> without having to manually construct them after an <code>Order</code> has been submitted.</p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="enter-position"><code>Enter Position</code></h2>
+<p>The <code>enter_position</code> will enter either a <code>Buy</code> or <code>Sell</code> position depending on the logic and overall structure of your strategy.</p>
+<p>Its primary purpose is to create the <code>Order</code> corresponding to the <code>percentage_risk</code> and the <code>direction</code> that has been specified.</p>
+<p>It takes in a multitude of different arguments the main ones being ;</p>
+<p><code>execution_state_</code></p>
+<blockquote>
+<p>The <code>execution_state</code> feature keeps track of the<br>
+current position of a trading strategy (<code>long</code>, <code>short</code>, or <code>neutral</code>) at each time  step in a trading simulation.</p>
+</blockquote>
+<p><code>price_area_</code></p>
+<blockquote>
+<p>The <code>price_area_</code> feature can be used when constructing an order to help determine the entry and exit points for a trade since its compromised of the <code>open</code> , <code>high</code> , <code>low</code> and <code>closing</code> prices at the point in time the trade was taken.</p>
+</blockquote>
+<p><code>percent_risk_</code></p>
+<blockquote>
+<p>The <code>percent_risk_</code> % will allow us to specify how much to risk on each trade.</p>
+</blockquote>
+<p><code>direction</code></p>
+<blockquote>
+<p>This is simply the direction of the trade that one wants to take whether that be <code>Buy</code> &#x1F7E9;  or <code>Sell</code> &#x1F7E5;.</p>
+</blockquote>
+<p><code>group_ , col_ , bar_</code></p>
+<blockquote>
+<p>These refer to the group , column and the current bar number of the iteration of the close prices that we are on.</p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">@njit(nogil = True)
+def enter_position(execution_state_,
+                    price_area_,
+                    percent_risk_ = 1, 
+                    group_ = 0 , column = 0, bar_ = None,
+                    direction = &quot;Buy&quot;,
+                    update_value_ = False, order_records_ = None, 
+                    order_counts_ = None, log_records_ = None,
+                    log_counts_ = None):
+    
+    
+    if direction == &quot;Buy&quot;:
+        direction_to_take = vbt.pf_enums.Direction.LongOnly
+    else:
+        direction_to_take = vbt.pf_enums.Direction.ShortOnly
+        
+    Order = pf_nb.order_nb(size = percent_risk_, 
+                           size_type = vbt.pf_enums.SizeType.ValuePercent100,
+                           direction = direction_to_take,
+                           price = execution_state_.val_price
+                           )
+
+    
+    order_result , new_execution_state = vbt.pf_nb.process_order_nb(
+                                                        group = group_ ,col = column , i = bar_,
+                                                        exec_state = execution_state_,
+                                                        order = Order,
+                                                        price_area = price_area_,
+                                                        update_value = update_value_,
+                                                        order_records = order_records_,
+                                                        order_counts = order_counts_,
+                                                        log_records = log_records_,
+                                                        log_counts = log_counts_)
+    
+    
+
+    
+                                                                
+    return order_result, new_execution_state
+    
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="closefullposition"><code>close_full_position</code></h2>
+<p>There are minor differences between each function in the <code>close_full_position</code> the size is specified to be <code>-np.inf</code> (Infinite size) and the direction is determined via the passed execution_state.</p>
+<p>If the <code>execution_state.position</code> is <code>&gt;0</code> (greater than zero) it indicates that we are invested in a a Buy (Long position) and if it is <code>&lt;0</code> (Less than zero) then we are invested in a Sell (Short Position).</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="closepartialpos"><code>close_partial_pos</code></h2>
+<blockquote>
+<p>The <code>close_partial_pos</code> intends to close the position only partially.</p>
+<p>This is useful when taking partial profits which is the basis of many algorithmic trading strategies.</p>
+<p>The <code>Size</code> when constructing the <code>Order</code> is set to be <code>-closing_percent</code> such that if <code>50</code> is specified only 50% of that particular position will be closed.</p>
+</blockquote>
+<pre><code class="language-python">@njit(nogil = True)
+def close_partial_pos(execution_state_,
+                      price_area_,
+                      closing_percent = 50, 
+                      group_ = 0 , column = 0, bar_ = None,
+                      update_value_ = False, order_records_ = None, 
+                      order_counts_ = None, log_records_ = None,
+                      log_counts_ = None):
+    
+    
+    if execution_state.position &gt; 0 :
+        direction_to_take = vbt.pf_enums.Direction.LongOnly
+    else:
+        direction_to_take = vbt.pf_enums.Direction.ShortOnly
+        
+    Order = pf_nb.order_nb(size = -closing_percent, 
+                           size_type = vbt.pf_enums.SizeType.ValuePercent100,
+                           direction = direction_to_take,
+                           price = execution_state_.val_price
+                           )
+
+    
+    order_result , new_execution_state = vbt.pf_nb.process_order_nb(
+                                                group = group_ ,col = column , i = bar_,
+                                                exec_state = execution_state_,
+                                                order = Order,
+                                                price_area = price_area_,
+                                                update_value = update_value_,
+                                                order_records = order_records_,
+                                                order_counts = order_counts_,
+                                                log_records = log_records_,
+                                                log_counts = log_counts_)
+    
+                                                         
+    return order_result, new_execution_state
+
+
+
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="key-points-summary-%F0%9F%92%A1">Key Points / Summary &#x1F4A1;</h2>
+<blockquote>
+<ul>
+<li>
+<p>The functions streamline the process of creating the <code>Order</code> and allow all the trades to be tracked via the <code>order_records</code> and <code>order_counts</code></p>
+</li>
+<li>
+<p>The <code>Size</code> component of the <code>Order</code> is directly linked to the precentage risk that is being taken on the account and the <code>size_type</code> ensures that the amount on the account that is risked is exactly as what has been specified in the function argument.</p>
+</li>
+</ul>
+</blockquote>
+<!--kg-card-end: markdown-->]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Discretionary Signal Bactesting]]></title><description><![CDATA[<p>In this tutorial we see how to backtest discretionary signals (eg: from a Telegram Channel) using VectorBT Pro. Primarily, we learn how to create our own order execution engine <code>order_func_nb</code> which deals with orders and position management in our signals data and finally our own custom simulator <code>signal_</code></p>]]></description><link>http://localhost:2368/discretionary-signals-bactesting/</link><guid isPermaLink="false">643c151fe770773c74f2e605</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[discretionary signals]]></category><category><![CDATA[backtesting]]></category><category><![CDATA[telegram]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sat, 15 Apr 2023 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1636743094110-5e153f93ad7e?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fFRlbGVncmFtfGVufDB8fHx8MTY4MTU1MzExOA&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<img src="https://images.unsplash.com/photo-1636743094110-5e153f93ad7e?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fFRlbGVncmFtfGVufDB8fHx8MTY4MTU1MzExOA&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Discretionary Signal Bactesting"><p>In this tutorial we see how to backtest discretionary signals (eg: from a Telegram Channel) using VectorBT Pro. Primarily, we learn how to create our own order execution engine <code>order_func_nb</code> which deals with orders and position management in our signals data and finally our own custom simulator <code>signal_simulator_nb</code> which uses the <code>order_func_nb</code> function along with a host of other smaller helper functions to complete the simulation.</p><p>You can follow this tutorial in this YouTube video</p><figure class="kg-card kg-embed-card kg-card-hascaption"><iframe width="200" height="113" src="https://www.youtube.com/embed/EQjdWAE613A?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="Discretionary Signals Backtesting using VectorBT Pro"></iframe><figcaption>YouTube - Discretionary Signals using VectorBT Pro</figcaption></figure><p>Many Thanks to <code>Oleg Polakow</code> for his gracious effort in building all the code in this project. Be sure to check out the jupyter notebook in the link below</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/main/Discretionary_Signal_Backtesting.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Parameter Optimisation of a Strategy]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will see how to do <code>Parameter Optimization</code> on the <code>Double Bollinger Band strategy</code> we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like <code>total_</code></p>]]></description><link>http://localhost:2368/parameter-optimization/</link><guid isPermaLink="false">643c151fe770773c74f2e604</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[parameter optimization]]></category><category><![CDATA[cross-validation]]></category><category><![CDATA[vectorBT]]></category><category><![CDATA[signal generation]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Tue, 28 Feb 2023 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1564730465543-e732e7fc9c10?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDF8fGVuZ2luZSUyMHR1bmluZ3xlbnwwfHx8fDE2Nzc1MTIwNjU&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Parameter Optimisation of a Strategy"><p>In this tutorial, we will see how to do <code>Parameter Optimization</code> on the <code>Double Bollinger Band strategy</code> we had seen in our earlier tutorials. The goal of parameter optimization is to find the optimal values for the parameters of an algorithmic trading strategy to maximize a performance metric like <code>total_returns</code>, <code>Sharpe Ratio</code>, <code>Sortino Ratio</code>, <code>Win Rate</code> etc. or also to minimize certain metrics like <code>Total Drawdown</code>. Quintessentially, we will see how to:</p>
 <ul>
 <li>Use the <code>vbt.Parameterized()</code> decorator to easily convert any strategy function into a parameter optimization simulation.</li>
 <li>Use the <code>vbt.Splitter</code> object to create <code>train</code> and <code>test</code> splits for cross validation of the parameter optimization process.</li>
@@ -758,7 +1638,7 @@ test_split_fig.show()
 </code></pre>
 <!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/test_split_perf_box_plot-1.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="1600" height="350" srcset="http://localhost:2368/content/images/size/w600/2023/02/test_split_perf_box_plot-1.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/test_split_perf_box_plot-1.png 1000w, http://localhost:2368/content/images/2023/02/test_split_perf_box_plot-1.png 1600w" sizes="(min-width: 720px) 720px"><figcaption>Box Plot to view simulation statistics on <code>test</code> splits</figcaption></figure><!--kg-card-begin: markdown--><h2 id="bonusline-by-line-profiling-of-a-python-function">BONUS - <code>Line-by-Line</code> Profiling of a python function</h2>
 <p>It is sometimes important to optimize your strategy function to reduce the time taken for each simulation. We can do, <em>line by line</em> profiling of <code>optimal_2BB</code> function using this <code>%load_ext line_profiler</code>. <br> When applying the <code>line_profiler</code> you have to remove the <code>vbt.parameterized()</code> decorator, and apply the <code>line_profiler</code> on the unwrapped raw <code>optimal_2BB</code> strategy function. Below is a snapshot of the results you will get from the <code>line_profiler</code> which you can use to optimize aspects of your strategy function which have very higher <code>Time per hit</code> cost.</p>
-<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/line_profiler_output.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="2000" height="979" srcset="http://localhost:2368/content/images/size/w600/2023/02/line_profiler_output.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/line_profiler_output.png 1000w, http://localhost:2368/content/images/size/w1600/2023/02/line_profiler_output.png 1600w, http://localhost:2368/content/images/size/w2400/2023/02/line_profiler_output.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Line Profiler Results on <code>optimal_2BB</code> function</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/main/Parameter%20Optimization.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - MultiAsset Data Acquisition]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired data will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called</p>]]></description><link>http://localhost:2368/multi_asset_data_acquisition/</link><guid isPermaLink="false">63cd6f15ecd6fd45f2c84561</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[data acquisition]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 17:27:21 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - MultiAsset Data Acquisition"><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired data will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called <code>Dukascopy-node</code> to download M1 (1 minute) historical data for the following currency pairs.<br></p>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/02/line_profiler_output.png" class="kg-image" alt="VectorBT Pro - Parameter Optimisation of a Strategy" loading="lazy" width="2000" height="979" srcset="http://localhost:2368/content/images/size/w600/2023/02/line_profiler_output.png 600w, http://localhost:2368/content/images/size/w1000/2023/02/line_profiler_output.png 1000w, http://localhost:2368/content/images/size/w1600/2023/02/line_profiler_output.png 1600w, http://localhost:2368/content/images/size/w2400/2023/02/line_profiler_output.png 2400w" sizes="(min-width: 720px) 720px"><figcaption>Line Profiler Results on <code>optimal_2BB</code> function</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/main/Parameter%20Optimization.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - MultiAsset Data Acquisition]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired data will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called</p>]]></description><link>http://localhost:2368/multi_asset_data_acquisition/</link><guid isPermaLink="false">643c151fe770773c74f2e603</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[data acquisition]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 17:27:21 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1641932973980-3dce5f65c5b8?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDg0fHxmb3JleHxlbnwwfHx8fDE2NzQ0MDc4MTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - MultiAsset Data Acquisition"><p>In this tutorial, we will talk about the acquisition of M1 (1 minute) data for various <strong>forex currency pairs</strong> from <code>dukascopy</code> (a free data provider).The acquired data will be saved to a <code>.hdf</code> file for use in a VectorBT Pro Backtesting project. We will use a nodeJS package called <code>Dukascopy-node</code> to download M1 (1 minute) historical data for the following currency pairs.<br></p>
 <p>You can find the installation instructions and other details for this node package here: <a href="https://github.com/Leo4815162342/dukascopy-node">https://github.com/Leo4815162342/dukascopy-node</a></p>
 <!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="multi-asset-market-data-acquistion-with-dukascopy">Multi Asset Market Data Acquistion with DukaScopy</h2>
 <pre><code class="language-shell">npx dukascopy-node -i gbpaud -p ask -from 2019-01-01 to 2022-12-31 -t m1 -v true -f csv
@@ -893,7 +1773,7 @@ data.to_hdf(&quot;/Users/john.doe/Documents/vbtpro_tuts_private/data/Binance_Mul
 <!--kg-card-end: markdown-->]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - MultiAsset Portfolio Simulation]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will talk about verious topics pertaining to Multi Asset Portfolio Simulation, beginning with</p>
 <ul>
 <li>Converting various forex (FX) pairs to the account currency, if the quote currency of the currency pair is not the same as the account currency.</li>
-<li>Running different types of backtesting simulations like <code>grouped</code></li></ul>]]></description><link>http://localhost:2368/multi_asset_portfolio_simulation/</link><guid isPermaLink="false">63cd610becd6fd45f2c844c5</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[multi-asset]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 16:50:48 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1651341050677-24dba59ce0fd?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDE1fHxUcmFkaW5nJTIwUG9ydGZvbGlvfGVufDB8fHx8MTY3NDQ4MjYxNg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1651341050677-24dba59ce0fd?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDE1fHxUcmFkaW5nJTIwUG9ydGZvbGlvfGVufDB8fHx8MTY3NDQ4MjYxNg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - MultiAsset Portfolio Simulation"><p>In this tutorial, we will talk about verious topics pertaining to Multi Asset Portfolio Simulation, beginning with</p>
+<li>Running different types of backtesting simulations like <code>grouped</code></li></ul>]]></description><link>http://localhost:2368/multi_asset_portfolio_simulation/</link><guid isPermaLink="false">643c151fe770773c74f2e602</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[multi-asset]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 16:50:48 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1651341050677-24dba59ce0fd?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDE1fHxUcmFkaW5nJTIwUG9ydGZvbGlvfGVufDB8fHx8MTY3NDQ4MjYxNg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1651341050677-24dba59ce0fd?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDE1fHxUcmFkaW5nJTIwUG9ydGZvbGlvfGVufDB8fHx8MTY3NDQ4MjYxNg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - MultiAsset Portfolio Simulation"><p>In this tutorial, we will talk about verious topics pertaining to Multi Asset Portfolio Simulation, beginning with</p>
 <ul>
 <li>Converting various forex (FX) pairs to the account currency, if the quote currency of the currency pair is not the same as the account currency.</li>
 <li>Running different types of backtesting simulations like <code>grouped</code>, <code>unified</code> and <code>discrete</code> using <code>vbt.Portfolio.from_signals()</code> , and</li>
@@ -1388,11 +2268,11 @@ stats_df
 </code></pre>
 <!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2023/01/pf3_stats_df.png" class="kg-image" alt="VectorBT Pro - MultiAsset Portfolio Simulation" loading="lazy" width="1162" height="1330" srcset="http://localhost:2368/content/images/size/w600/2023/01/pf3_stats_df.png 600w, http://localhost:2368/content/images/size/w1000/2023/01/pf3_stats_df.png 1000w, http://localhost:2368/content/images/2023/01/pf3_stats_df.png 1162w" sizes="(min-width: 720px) 720px"><figcaption>Group-wise Statistics for Grouped Portfolio Simulation</figcaption></figure><p>This concludes the tutorial for multi-asset portfolio simulation. I hope this is useful in your backtesting studies and workflow. If there are any issues or fixes, please leave a git issue in the link below to the jupyter notebook.</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/main/MultiAsset_PortfolioSimulation.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Custom Dashboard for Portfolio Simulation and Strategy Visualisation]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this tutorial, we will see how to create a customized dashboard using <code>dash</code> and <code>plotly</code> to visualize the portfolio simulation and strategy development in separate tabs.</p>
 <blockquote>
-<p>To generate the data for this tutorial, you need to follow the steps in the <a href="https://qubitquants.github.io/multi_asset_portfolio_simulation/index.html">Multi-Asset Portfolio Simulation tutorial</a> OR, for quick reference,</p></blockquote>]]></description><link>http://localhost:2368/vbt_dashboard/</link><guid isPermaLink="false">63cd5c30ecd6fd45f2c844b4</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[plotly-dash]]></category><category><![CDATA[plotly]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 15:55:43 GMT</pubDate><media:content url="http://localhost:2368/content/images/2023/01/VectorBT---Dashboard-Cover-Image.png" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="http://localhost:2368/content/images/2023/01/VectorBT---Dashboard-Cover-Image.png" alt="VectorBT Pro - Custom Dashboard for Portfolio Simulation and Strategy Visualisation"><p>In this tutorial, we will see how to create a customized dashboard using <code>dash</code> and <code>plotly</code> to visualize the portfolio simulation and strategy development in separate tabs.</p>
+<p>To generate the data for this tutorial, you need to follow the steps in the <a href="https://qubitquants.github.io/multi_asset_portfolio_simulation/index.html">Multi-Asset Portfolio Simulation tutorial</a> OR, for quick reference,</p></blockquote>]]></description><link>http://localhost:2368/vbt_dashboard/</link><guid isPermaLink="false">643c151fe770773c74f2e601</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[plotly-dash]]></category><category><![CDATA[plotly]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sun, 22 Jan 2023 15:55:43 GMT</pubDate><media:content url="http://localhost:2368/content/images/2023/01/VectorBT---Dashboard-Cover-Image.png" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="http://localhost:2368/content/images/2023/01/VectorBT---Dashboard-Cover-Image.png" alt="VectorBT Pro - Custom Dashboard for Portfolio Simulation and Strategy Visualisation"><p>In this tutorial, we will see how to create a customized dashboard using <code>dash</code> and <code>plotly</code> to visualize the portfolio simulation and strategy development in separate tabs.</p>
 <blockquote>
 <p>To generate the data for this tutorial, you need to follow the steps in the <a href="https://qubitquants.github.io/multi_asset_portfolio_simulation/index.html">Multi-Asset Portfolio Simulation tutorial</a> OR, for quick reference, you can look up <a href="https://github.com/diliprk/vectorbt_pro_dashboard/tree/main/data">this ReadMe file</a>.</p>
 </blockquote>
-<!--kg-card-end: markdown--><p>Please watch this YouTube video below that explains the details about this dashboard</p><figure class="kg-card kg-embed-card kg-card-hascaption"><iframe width="200" height="113" src="https://www.youtube.com/embed/Mek2Q6JZwTw?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="VectorBT Pro - Custom Plotly Dashboard"></iframe><figcaption>Custom plotly dashboard for vectorBT Portfolio Simulation and Strategy Visualisation</figcaption></figure><p>To try out this dashboard at your end, please checkout the Git Repo link below. Feel free to contribute (by <em>forking</em> and creating a <em>pull request</em>) to this dashboard if you want to add more features or share your vectorBT study with the community.</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/diliprk/vectorbt_pro_dashboard" class="kg-btn kg-btn-accent">See Project Code &#x27BF;</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals]]></title><description><![CDATA[<p></p><!--kg-card-begin: markdown--><p>In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your <code>VectorBT Pro</code> plotting skills by creating your own <code>plot_strategy()</code> function and learn how to go from a basic plot</p>]]></description><link>http://localhost:2368/vbt_plot_strategy/</link><guid isPermaLink="false">63936f6bb83e314625f3c796</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[Signal Cleaning]]></category><category><![CDATA[plotly]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Wed, 30 Nov 2022 17:49:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/PostFeatureImage-1.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/PostFeatureImage-1.png" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals"><p></p><!--kg-card-begin: markdown--><p>In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your <code>VectorBT Pro</code> plotting skills by creating your own <code>plot_strategy()</code> function and learn how to go from a basic plot like this &#x2B07;</p>
+<!--kg-card-end: markdown--><p>Please watch this YouTube video below that explains the details about this dashboard</p><figure class="kg-card kg-embed-card kg-card-hascaption"><iframe width="200" height="113" src="https://www.youtube.com/embed/Mek2Q6JZwTw?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen title="VectorBT Pro - Custom Plotly Dashboard"></iframe><figcaption>Custom plotly dashboard for vectorBT Portfolio Simulation and Strategy Visualisation</figcaption></figure><p>To try out this dashboard at your end, please checkout the Git Repo link below. Feel free to contribute (by <em>forking</em> and creating a <em>pull request</em>) to this dashboard if you want to add more features or share your vectorBT study with the community.</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/diliprk/vectorbt_pro_dashboard" class="kg-btn kg-btn-accent">See Project Code &#x27BF;</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals]]></title><description><![CDATA[<p></p><!--kg-card-begin: markdown--><p>In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your <code>VectorBT Pro</code> plotting skills by creating your own <code>plot_strategy()</code> function and learn how to go from a basic plot</p>]]></description><link>http://localhost:2368/vbt_plot_strategy/</link><guid isPermaLink="false">643c151fe770773c74f2e600</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[Signal Cleaning]]></category><category><![CDATA[plotly]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Wed, 30 Nov 2022 17:49:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/PostFeatureImage-1.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/PostFeatureImage-1.png" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals"><p></p><!--kg-card-begin: markdown--><p>In this blog we will see how to visualize our Double Bollinger Band strategy along with the indicators and the cleaned entries/exits from the simulation. You will master your <code>VectorBT Pro</code> plotting skills by creating your own <code>plot_strategy()</code> function and learn how to go from a basic plot like this &#x2B07;</p>
 <p><img src="http://localhost:2368/content/images/2022/12/H4_OHLCV_Only.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
 <!--kg-card-end: markdown--><!--kg-card-begin: markdown--><p><strong>TO this <code>Fancy</code> Advanced Plot &#x1F389; &#x1F60E;</strong> with stacked figures, entries/exits and layered indicators <br><br>
 <img src="http://localhost:2368/content/images/2022/12/Final_Strategy_Plot.svg" alt="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals" loading="lazy"></p>
@@ -1674,7 +2554,7 @@ When you are doing portfolio simulation (backtesting), using the <code>from_sign
 Irrespective of whether we use the clean entries and exits or just the regular entries and exits in the simulation/backtest when running <code>from_signals()</code> it will make no difference. You can try this for yourself and see the results will be the same.</p>
 </blockquote>
 <!--kg-card-end: markdown--><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Strategy Development and Signal Generation]]></title><description><![CDATA[<!--kg-card-begin: markdown--><h2 id="strategy-development-and-signal-generation">Strategy Development and Signal Generation</h2>
-<p>Strategy Development usually involves multiple trial and error research, where we check for various combinations of technical indicators and price levels to generate entry and exit signals. It is very easy to generate entry and exit signals in VectorBT which is just a <code>bool</code> array</p>]]></description><link>http://localhost:2368/strategydev/</link><guid isPermaLink="false">639307e0b83e314625f3c66c</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[algorithmic trading]]></category><category><![CDATA[signal generation]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 28 Nov 2022 11:09:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1635236198091-33d5aa8466cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDQxfHxjaGFydCUyMGFuYWx5c2lzfGVufDB8fHx8MTY3MDU4MDI5OQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><h2 id="strategy-development-and-signal-generation">Strategy Development and Signal Generation</h2>
+<p>Strategy Development usually involves multiple trial and error research, where we check for various combinations of technical indicators and price levels to generate entry and exit signals. It is very easy to generate entry and exit signals in VectorBT which is just a <code>bool</code> array</p>]]></description><link>http://localhost:2368/strategydev/</link><guid isPermaLink="false">643c151fe770773c74f2e5ff</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[algorithmic trading]]></category><category><![CDATA[signal generation]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 28 Nov 2022 11:09:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1635236198091-33d5aa8466cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDQxfHxjaGFydCUyMGFuYWx5c2lzfGVufDB8fHx8MTY3MDU4MDI5OQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><h2 id="strategy-development-and-signal-generation">Strategy Development and Signal Generation</h2>
 <img src="https://images.unsplash.com/photo-1635236198091-33d5aa8466cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDQxfHxjaGFydCUyMGFuYWx5c2lzfGVufDB8fHx8MTY3MDU4MDI5OQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Strategy Development and Signal Generation"><p>Strategy Development usually involves multiple trial and error research, where we check for various combinations of technical indicators and price levels to generate entry and exit signals. It is very easy to generate entry and exit signals in VectorBT which is just a <code>bool</code> array for <code>entries</code> and <code>exits</code>. If you have different criteria for your LONGS and SHORTS, you can create separate boolean arrays for <code>long_entries</code>, <code>long_exits</code>, <code>short_entries</code> and <code>short_exits</code>.</p>
 <!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="double-bollinger-band-strategy-conditions">Double Bollinger Band Strategy Conditions</h3>
 <p>For the rest of this tutorial we will be using the indicators and other elements created in the previous tutorial - <a href="https://qubitquants.pro/aligning-mtf-data/index.html">Aligning MTF time series Data with Resampling</a>, for our customized <code>MTF</code> adaptation of this <a href="https://abouttrading.substack.com/p/the-double-bollinger-trading-strategy"><em>Double Bollinger Band</em> Strategy</a> on the H4 and 15m timeframes. In our implementation we will be using the same conditions for a short entry as a long exit and a short exit signal will use the same conditions as a long entry.</p>
@@ -1848,7 +2728,7 @@ Maximum Drawdown [%]:  28.17
 <p>Its imperative that you study &#x1F4DA; the rules and parameters of your strategy carefully before backtesting.</p>
 </li>
 </ul>
-<!--kg-card-end: markdown--><p>Good Luck &#xA0;&#x270C;&#xFE0F; on your strategy development journey, let us know in the comments below if you happen to discover any profitable variations of this strategy</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Aligning MTF time series Data with Resampling]]></title><description><![CDATA[<blockquote>Software Requirements : vectorbtpro, python3</blockquote><p><strong>Resampling</strong> of the market data is needed for strategies that involve multiple time frames, often referred to as &#x201C;<em>top down analysis</em>&#x201D; or &#x201C;<em>Multi Time Frame</em> (MTF) analysis&#x201D;. There are two types of resampling, called <strong>upsampling</strong> and <strong>downsampling</strong>.<br><br>Before thinking of <em><code>upsampling</code></em> and</p>]]></description><link>http://localhost:2368/aligning-mtf-data/</link><guid isPermaLink="false">638a2dcf63e5f664c010817d</guid><category><![CDATA[python]]></category><category><![CDATA[algorithmic trading]]></category><category><![CDATA[vectorBT]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sat, 26 Nov 2022 08:30:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<blockquote>Software Requirements : vectorbtpro, python3</blockquote><img src="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Aligning MTF time series Data with Resampling"><p><strong>Resampling</strong> of the market data is needed for strategies that involve multiple time frames, often referred to as &#x201C;<em>top down analysis</em>&#x201D; or &#x201C;<em>Multi Time Frame</em> (MTF) analysis&#x201D;. There are two types of resampling, called <strong>upsampling</strong> and <strong>downsampling</strong>.<br><br>Before thinking of <em><code>upsampling</code></em> and <em><code>downsampling</code></em> time-series data, let&apos;s use the analogy of an UltraHD (4K) &#xA0;television to better understand these terms intuitively. When you feed a 1080p video source to a 4K TV it will <em>Upsample</em> the pixels, giving you a high resolution image. Essentially, you will get a high granularity (finer, hi-res image) from a low granularity (coarse, low-res image). The opposite ( <em>downsampling </em>) happens when you play a 4K video file on an old &#x1F4FA; HD TV.<br><br>In the context of time series data,</p><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text"><strong>Downsampling</strong> means going from high frequency time-series data (holds more information about the price within a time interval) to low frequency time-series data (holds less information about the price within the same time interval)<br><strong>Example</strong>: 15 Minute Data &#x2192; 1 Hour Data</div></div><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text"><strong>Upsampling</strong> means going from a low frequency time-series data (holds less information about the price within a time interval) to a higher frequency (holds more information about the price within a time interval)<br><strong>Example</strong> : 1 Hour Data &#x2192; 15 Minute Data</div></div><p>In multi-time frame strategy analysis, we have to deal with the problem of integrating time series data (eg: <code>close</code> price) from multiple time frames.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Merge_How-1.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy" width="1507" height="458"><figcaption>How to merge timeseries data with different frequencies?</figcaption></figure><p>To make our data-analytics and back-testing simulation process easier, we usually like to have a single time-series dataframe ( <code>mtf_df</code> ) which contains all the values from whatever time-frames we require (eg: 5m, 15min, 1h. 4h, 1D, 1W etc.) . This MTF dataframe will have a <em>base-line</em> frequency which will typically be the highest frequency (i.e highest granularity or the lowest timeframe time-series data, eg: 5m ) with which you want to do your signal generation for the strategy. The process of creating this MTF dataframe with resampled data is called <em><strong>Alignment</strong></em>.</p><figure class="kg-card kg-image-card kg-width-wide kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Merged_DFs-1.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy" width="2326" height="505"><figcaption>Aligned and upsampled data frame</figcaption></figure><p>In alignment, we basically merge the MTF time-series &#xA0;<em>resampled</em> data into a single dataframe using <code>ffill()</code> and <code>shift()</code> operations. This is very easily done using <code>vbt.resampler()</code> objects and using those resampler objects as an argument in <code>vbt.resample_opening()</code> function for <strong>open</strong> price and <code>vbt.resample_closing()</code> when dealing with <strong>close</strong>, <strong>high</strong>, <strong>low</strong> prices and indicators.</p><hr><!--kg-card-begin: markdown--><h2 id="loading-and-resampling-data">Loading and Resampling Data</h2>
+<!--kg-card-end: markdown--><p>Good Luck &#xA0;&#x270C;&#xFE0F; on your strategy development journey, let us know in the comments below if you happen to discover any profitable variations of this strategy</p><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Aligning MTF time series Data with Resampling]]></title><description><![CDATA[<blockquote>Software Requirements : vectorbtpro, python3</blockquote><p><strong>Resampling</strong> of the market data is needed for strategies that involve multiple time frames, often referred to as &#x201C;<em>top down analysis</em>&#x201D; or &#x201C;<em>Multi Time Frame</em> (MTF) analysis&#x201D;. There are two types of resampling, called <strong>upsampling</strong> and <strong>downsampling</strong>.<br><br>Before thinking of <em><code>upsampling</code></em> and</p>]]></description><link>http://localhost:2368/aligning-mtf-data/</link><guid isPermaLink="false">643c151fe770773c74f2e5fc</guid><category><![CDATA[python]]></category><category><![CDATA[algorithmic trading]]></category><category><![CDATA[vectorBT]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Sat, 26 Nov 2022 08:30:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<blockquote>Software Requirements : vectorbtpro, python3</blockquote><img src="https://images.unsplash.com/photo-1637561696264-bca8c24878e5?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDl8fGFsaWdubWVudCUyMHZlY3RvcnxlbnwwfHx8fDE2NzAwMDAwOTQ&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="VectorBT Pro - Aligning MTF time series Data with Resampling"><p><strong>Resampling</strong> of the market data is needed for strategies that involve multiple time frames, often referred to as &#x201C;<em>top down analysis</em>&#x201D; or &#x201C;<em>Multi Time Frame</em> (MTF) analysis&#x201D;. There are two types of resampling, called <strong>upsampling</strong> and <strong>downsampling</strong>.<br><br>Before thinking of <em><code>upsampling</code></em> and <em><code>downsampling</code></em> time-series data, let&apos;s use the analogy of an UltraHD (4K) &#xA0;television to better understand these terms intuitively. When you feed a 1080p video source to a 4K TV it will <em>Upsample</em> the pixels, giving you a high resolution image. Essentially, you will get a high granularity (finer, hi-res image) from a low granularity (coarse, low-res image). The opposite ( <em>downsampling </em>) happens when you play a 4K video file on an old &#x1F4FA; HD TV.<br><br>In the context of time series data,</p><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text"><strong>Downsampling</strong> means going from high frequency time-series data (holds more information about the price within a time interval) to low frequency time-series data (holds less information about the price within the same time interval)<br><strong>Example</strong>: 15 Minute Data &#x2192; 1 Hour Data</div></div><div class="kg-card kg-callout-card kg-callout-card-grey"><div class="kg-callout-emoji">&#x1F4A1;</div><div class="kg-callout-text"><strong>Upsampling</strong> means going from a low frequency time-series data (holds less information about the price within a time interval) to a higher frequency (holds more information about the price within a time interval)<br><strong>Example</strong> : 1 Hour Data &#x2192; 15 Minute Data</div></div><p>In multi-time frame strategy analysis, we have to deal with the problem of integrating time series data (eg: <code>close</code> price) from multiple time frames.</p><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Merge_How-1.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy" width="1507" height="458"><figcaption>How to merge timeseries data with different frequencies?</figcaption></figure><p>To make our data-analytics and back-testing simulation process easier, we usually like to have a single time-series dataframe ( <code>mtf_df</code> ) which contains all the values from whatever time-frames we require (eg: 5m, 15min, 1h. 4h, 1D, 1W etc.) . This MTF dataframe will have a <em>base-line</em> frequency which will typically be the highest frequency (i.e highest granularity or the lowest timeframe time-series data, eg: 5m ) with which you want to do your signal generation for the strategy. The process of creating this MTF dataframe with resampled data is called <em><strong>Alignment</strong></em>.</p><figure class="kg-card kg-image-card kg-width-wide kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Merged_DFs-1.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy" width="2326" height="505"><figcaption>Aligned and upsampled data frame</figcaption></figure><p>In alignment, we basically merge the MTF time-series &#xA0;<em>resampled</em> data into a single dataframe using <code>ffill()</code> and <code>shift()</code> operations. This is very easily done using <code>vbt.resampler()</code> objects and using those resampler objects as an argument in <code>vbt.resample_opening()</code> function for <strong>open</strong> price and <code>vbt.resample_closing()</code> when dealing with <strong>close</strong>, <strong>high</strong>, <strong>low</strong> prices and indicators.</p><hr><!--kg-card-begin: markdown--><h2 id="loading-and-resampling-data">Loading and Resampling Data</h2>
 <p>Loading the data using <code>vbt.HDF</code> functionality of the <code>1-minute</code> granularity</p>
 <!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">## Import Required Libaries
 import vectorbtpro as vbt
@@ -2266,9 +3146,9 @@ memory usage: 29.9 MB
 <li>We then create the indicators on the multiple time frames required but at this juncture we don&apos;t forward fill the price data. After the indicator is created we can <code>ffill()</code> the resulting series if we are going with the manual method of indicator creation.</li>
 <li>In order to create the composite, merged MTF dataframe we employ <code>resample_opening()</code> on the open price or <code>resample_closing()</code> on every other time series, with the appropriate <code>vbt.Resampler()</code> objects, so that all the time-series are aligned to the base-line frequency time series.</li>
 </ol>
-<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Resampling-and-Alignment---FlowChart-_4LightBG.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy"><figcaption>Steps for MultiTimeFrame DataFrame creation</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Tutorial Series]]></title><description><![CDATA[<p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code</p>]]></description><link>http://localhost:2368/vbt-tuts-toc/</link><guid isPermaLink="false">638a1a09db6f4b53ca5eb9a1</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[python]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 14 Nov 2022 07:00:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" alt="VectorBT Pro - Tutorial Series"><p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code in these tutorials, you would need to buy access to vectorBT pro from <strong>Oleg Polakow</strong> and <code>import vectorbtpro as vbt</code> in your code.</p><!--kg-card-begin: html--><h1 style="text-align: center;">TABLE OF CONTENTS</h1><!--kg-card-end: html--><!--kg-card-begin: markdown--><h2 id="1-comprehensive-basics">1. Comprehensive Basics</h2>
-<!--kg-card-end: markdown--><p> The tutorials in this chapter will use a toy strategy called the <code><a href="https://abouttrading.substack.com/p/the-double-bollinger-trading-strategy">Double Bollinger Band Strategy</a></code> to illustrate the vectorBT concepts </p><ul><li><strong><a href="https://qubitquants.github.io/aligning-mtf-data/index.html">Aligning Multi-Time Frame time series Data with Resampling</a></strong><br>Learn about the creation of multi-time frame (MTF) time-series data and their alignment using <code>resampling</code> methods. </li><li><strong><a href="https://qubitquants.github.io/strategydev/index.html">Strategy Development &amp; Signal Generation using</a></strong> <code>vbt.portfolio.from_signals()</code> <br>Learn how to create signals based on multiple confluences / criterion and exploration of backtesting (simulation) results with a variety of methods and plots from <code>vbt.portfolio</code> module.</li><li><strong><a href="https://qubitquants.github.io/vbt_plot_strategy/index.html">Plotting Indicators and Visualising Strategy with Cleaned Signals</a></strong><br>Learn basic plotting techniques available in VectorBT Pro and also advanced techniques like creating your own <code>plot_strategy()</code> function with all the major functionalities one would typically need.</li><li><strong><a href="https://qubitquants.github.io/multi_asset_portfolio_simulation/index.html">Multi Asset Portfolio Simulation</a></strong><br>Learn about various types of portfolio simulations for multiple assets, that is possible in VectorBT Pro . <br><strong>Bonus</strong>: <a href="https://qubitquants.github.io/multi_asset_data_acquisition/index.html">Multi Asset Data Acquisition</a> of multiple Forex pairs with <code>Dukascopy</code></li></ul><hr><!--kg-card-begin: markdown--><h2 id="2-advanced">2. Advanced</h2>
-<!--kg-card-end: markdown--><ul><li><strong><a href="https://qubitquants.github.io/vbt_dashboard/index.html">Create Customized dashboard for Simulation and Strategy </a></strong><br>Create your own customized dashboard using <code>dash</code> (from <code>plotly</code>) to visualize the vectorBT portfolio simulation and strategy development with entries and exits.</li><li><strong><a href="https://qubitquants.github.io/parameter-optimization/index.html">Parameter Optimization</a></strong><br>Learn how to run a parameter optimization process on a strategy with multiple parameter combinations and also do cross validation of the parameter optimization across multiple train &amp; test splits of the market data.</li></ul><p><strong>Want to Contribute?</strong><br>If you would like to contribute any articles to this blog reach out to us on <a href="https://www.linkedin.com/groups/14112759/">Linkedin</a><br>Have suggestions for tutorial topics, leave them in the comments below!</p><p>Many thanks to <a href="https://github.com/polakowo">Oleg Polakow</a>, for his continuing support to VectorBT Pro</p>]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Account Monitor & Data Visualisation Dashboard]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
-<p><strong>MongoDB ChangeStreams and WebSockets</strong></p>]]></description><link>http://localhost:2368/plotly-dashboard/</link><guid isPermaLink="false">638ccdb02467af9576eed1ca</guid><category><![CDATA[python]]></category><category><![CDATA[plotly]]></category><category><![CDATA[plotly-dash]]></category><category><![CDATA[mongoDB]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 05 Sep 2022 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="MT5PyBot &#x1F916; - Account Monitor &amp; Data Visualisation Dashboard"><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
+<!--kg-card-end: markdown--><figure class="kg-card kg-image-card kg-card-hascaption"><img src="http://localhost:2368/content/images/2022/12/Resampling-and-Alignment---FlowChart-_4LightBG.svg" class="kg-image" alt="VectorBT Pro - Aligning MTF time series Data with Resampling" loading="lazy"><figcaption>Steps for MultiTimeFrame DataFrame creation</figcaption></figure><div class="kg-card kg-button-card kg-align-center"><a href="https://github.com/QubitQuants/vectorbt_pro_tutorials/blob/c679b6edf5bfecdbea1107daeb0ca86ed6f14377/Comprehensive_VectorBT_Basics_Final.ipynb" class="kg-btn kg-btn-accent">See Project Code</a></div>]]></content:encoded></item><item><title><![CDATA[VectorBT Pro - Tutorial Series]]></title><description><![CDATA[<p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code</p>]]></description><link>http://localhost:2368/vbt-tuts-toc/</link><guid isPermaLink="false">643c151fe770773c74f2e5fb</guid><category><![CDATA[vectorBT]]></category><category><![CDATA[python]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 14 Nov 2022 07:00:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/VBTlogo-1.svg" alt="VectorBT Pro - Tutorial Series"><p>This article is an introduction to a series of tutorials on <a href="https://vectorbt.pro/">VectorBT Pro</a> and will serve as a <em>Table of Contents</em> to the entire series of our VectorBT tutorials and will be regularly updated whenever a new blog post is published in our VectorBT tutorial series. To run the code in these tutorials, you would need to buy access to vectorBT pro from <strong>Oleg Polakow</strong> and <code>import vectorbtpro as vbt</code> in your code.</p><!--kg-card-begin: html--><h1 style="text-align: center;">TABLE OF CONTENTS</h1><!--kg-card-end: html--><!--kg-card-begin: markdown--><h2 id="1-comprehensive-basics">1. Comprehensive Basics</h2>
+<!--kg-card-end: markdown--><p> The tutorials in this chapter will use a toy strategy called the <code><a href="https://abouttrading.substack.com/p/the-double-bollinger-trading-strategy">Double Bollinger Band Strategy</a></code> to illustrate the vectorBT concepts </p><ul><li><strong><a href="https://qubitquants.github.io/aligning-mtf-data/index.html">Aligning Multi-Time Frame time series Data with Resampling</a></strong><br>Learn about the creation of multi-time frame (MTF) time-series data and their alignment using <code>resampling</code> methods. </li><li><strong><a href="https://qubitquants.github.io/strategydev/index.html">Strategy Development &amp; Signal Generation using</a></strong> <code>vbt.portfolio.from_signals()</code> <br>Learn how to create signals based on multiple confluences / criterion and exploration of backtesting (simulation) results with a variety of methods and plots from <code>vbt.portfolio</code> module.</li><li><strong><a href="https://qubitquants.github.io/vbt_plot_strategy/index.html">Plotting Indicators and Visualising Strategy with Cleaned Signals</a></strong><br>Learn basic plotting techniques available in VectorBT Pro and also advanced techniques like creating your own <code>plot_strategy()</code> function with all the major functionalities one would typically need.</li><li><strong><a href="https://qubitquants.github.io/multi_asset_portfolio_simulation/index.html">Multi Asset Portfolio Simulation</a></strong><br>Learn about various types of portfolio simulations for multiple assets, that is possible in VectorBT Pro . <br><strong>Bonus</strong>: <a href="https://qubitquants.github.io/multi_asset_data_acquisition/index.html">Multi Asset Data Acquisition</a> of multiple Forex pairs with <code>Dukascopy</code></li><li><strong><a href="https://qubitquants.github.io/customsim_0/index.html">Custom Simulator 0: Fundamental Functions</a></strong><br>In this tutorial , you will learn about creating basic functions that will then in turn be used as part of a running a BackTest of a strategy using a custom simulator.</li><li><strong><u><a href="https://qubitquants.github.io/customsim_1/index.html">Custom Simulator 1: Candlestick Strategy Basics</a></u></strong><br>In this tutorial you will implement the fundamental functions on a simple candlestick strategy.</li><li><strong><u><a href="https://qubitquants.github.io/customsim_2/index.html">Custom Simulator 2: Candlestick Strategy + StopLoss +TakeProfit</a></u></strong><br>In this tutorial we develop on the previous post implementing a StopLoss and TakeProfit to our simple candlestick strategy.</li><li><strong><a href="https://qubitquants.github.io/customsim_3/index.html">Custom Simulator 3: Candlestick Strategy,SL,TP and Partial Profits</a></strong><br>In this tutorial we add to our strategy the idea of taking partial profits and moving the stop loss to break even after a certain predefined risk to reward ratio has been met.</li></ul><hr><!--kg-card-begin: markdown--><h2 id="2-advanced">2. Advanced</h2>
+<!--kg-card-end: markdown--><ul><li><strong><a href="https://qubitquants.github.io/vbt_dashboard/index.html">Create Customized dashboard for Simulation and Strategy </a></strong><br>Create your own customized dashboard using <code>dash</code> (from <code>plotly</code>) to visualize the vectorBT portfolio simulation and strategy development with entries and exits.</li><li><strong><a href="https://qubitquants.github.io/parameter-optimization/index.html">Parameter Optimization</a></strong><br>Learn how to run a parameter optimization process on a strategy with multiple parameter combinations and also do cross validation of the parameter optimization across multiple train &amp; test splits of the market data.</li><li><strong><a href="https://qubitquants.github.io/discretionary-signals-bactesting/index.html">Discretionary Signals Backtesting</a></strong><br>Learn how to run a backtest simulation on extracted discretionary signals, by creating your own custom simulator and order management function.</li></ul><p><strong>Want to Contribute?</strong><br>If you would like to contribute any articles to this blog reach out to us on <a href="https://www.linkedin.com/groups/14112759/">Linkedin</a><br>Have suggestions for tutorial topics, leave them in the comments below!</p><p>Many thanks to <a href="https://github.com/polakowo">Oleg Polakow</a>, for his continuing support to VectorBT Pro</p>]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Account Monitor & Data Visualisation Dashboard]]></title><description><![CDATA[<!--kg-card-begin: markdown--><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
+<p><strong>MongoDB ChangeStreams and WebSockets</strong></p>]]></description><link>http://localhost:2368/plotly-dashboard/</link><guid isPermaLink="false">643c151fe770773c74f2e5fe</guid><category><![CDATA[python]]></category><category><![CDATA[plotly]]></category><category><![CDATA[plotly-dash]]></category><category><![CDATA[mongoDB]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 05 Sep 2022 09:00:00 GMT</pubDate><media:content url="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" medium="image"/><content:encoded><![CDATA[<!--kg-card-begin: markdown--><img src="https://images.unsplash.com/photo-1592495989226-03f88104f8cc?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwxMTc3M3wwfDF8c2VhcmNofDV8fGdyYXBofGVufDB8fHx8MTY3MDE3MjIyMg&amp;ixlib=rb-4.0.3&amp;q=80&amp;w=2000" alt="MT5PyBot &#x1F916; - Account Monitor &amp; Data Visualisation Dashboard"><p>In this presentation we will see the details of the <code>Account Monitor</code> and the required infrastructure for the same. Thereafter we will also see the visualization of the trading strategy&#x2019;s performance metrics in a data visualization dashboard and finally a demo of the dashboard.</p>
 <p><strong>MongoDB ChangeStreams and WebSockets</strong> - <a href="https://community.plotly.com/t/mongodb-websocket-and-dash-plot/64808">https://community.plotly.com/t/mongodb-websocket-and-dash-plot/64808</a></p>
-<!--kg-card-end: markdown--><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/qYkeeI56dew?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Account Monitor and Data Visualization Dashboard"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTKjq1PEwo5KRhtk8SDtVXR9Cnli4j8s9omoUt5W1t6mNsLr9Jn15YEeLR3CNc30YX91OhLKDeHE6Kl/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="540" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖- Strategy and AlgoBot in Action]]></title><description><![CDATA[<p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></description><link>http://localhost:2368/strategy_algobot_action/</link><guid isPermaLink="false">638ca9bb2467af9576eed195</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[metatrader5]]></category><category><![CDATA[python]]></category><category><![CDATA[aws]]></category><category><![CDATA[ec2]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Wed, 31 Aug 2022 14:14:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/runningbot.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/runningbot.png" alt="MT5PyBot &#x1F916;- Strategy and AlgoBot in Action"><p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖 - Architecture]]></title><description><![CDATA[<p><strong>MetaTrader5 (Python) Algorithmic Trading bot infrastructure </strong></p><p>In the presentation below, I talk about the <code>MetaTrader5</code> Algorithmic Trading bot infrastructure that we have built using the MetaTrader5 <code>python</code> library. Details include the architecture elements and their functionalities.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/8850EMr_AXU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Architecture of MetaTrader5 Python AlgoTrading Bot (MT5PyBot)"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR9TcCcoccIEcrlHFi25FL9Afz3qifQymOa74ei2xqP-ym1XfwxdM1fkMTIz7pxQ4lB2Cb7YNEZVu31/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></description><link>http://localhost:2368/mt5pybot/</link><guid isPermaLink="false">638a0ca6db6f4b53ca5eb94b</guid><category><![CDATA[python]]></category><category><![CDATA[metatrader5]]></category><category><![CDATA[algorithmic trading]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Mon, 15 Aug 2022 09:00:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/MT5-AlgoBot-Final-Architecture-1.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/MT5-AlgoBot-Final-Architecture-1.png" alt="MT5PyBot &#x1F916; - Architecture"><p><strong>MetaTrader5 (Python) Algorithmic Trading bot infrastructure </strong></p><p>In the presentation below, I talk about the <code>MetaTrader5</code> Algorithmic Trading bot infrastructure that we have built using the MetaTrader5 <code>python</code> library. Details include the architecture elements and their functionalities.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/8850EMr_AXU?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Architecture of MetaTrader5 Python AlgoTrading Bot (MT5PyBot)"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vR9TcCcoccIEcrlHFi25FL9Afz3qifQymOa74ei2xqP-ym1XfwxdM1fkMTIz7pxQ4lB2Cb7YNEZVu31/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item></channel></rss>
+<!--kg-card-end: markdown--><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/qYkeeI56dew?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Account Monitor and Data Visualization Dashboard"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTKjq1PEwo5KRhtk8SDtVXR9Cnli4j8s9omoUt5W1t6mNsLr9Jn15YEeLR3CNc30YX91OhLKDeHE6Kl/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="540" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item><item><title><![CDATA[MT5PyBot 🤖- Strategy and AlgoBot in Action]]></title><description><![CDATA[<p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></description><link>http://localhost:2368/strategy_algobot_action/</link><guid isPermaLink="false">643c151fe770773c74f2e5fd</guid><category><![CDATA[algorithmic trading]]></category><category><![CDATA[metatrader5]]></category><category><![CDATA[python]]></category><category><![CDATA[aws]]></category><category><![CDATA[ec2]]></category><dc:creator><![CDATA[Dilip Rajkumar]]></dc:creator><pubDate>Wed, 31 Aug 2022 14:14:00 GMT</pubDate><media:content url="http://localhost:2368/content/images/2022/12/runningbot.png" medium="image"/><content:encoded><![CDATA[<img src="http://localhost:2368/content/images/2022/12/runningbot.png" alt="MT5PyBot &#x1F916;- Strategy and AlgoBot in Action"><p>In this presentation we will see a description of the Double Bollinger Band Strategy and a code walkthrough of the strategy module. In the second half we will also see the Algorithmic Trading Bot in action on an AWS Windows EC2 instance trading the Double Bollinger Band Strategy.</p><figure class="kg-card kg-embed-card"><iframe width="200" height="113" src="https://www.youtube.com/embed/vAH8sOWM5eI?feature=oembed" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen title="Strategy and AlgoBot in Action"></iframe></figure><!--kg-card-begin: html--><iframe src="https://docs.google.com/presentation/d/e/2PACX-1vTA8Bjc2JZT6SB5WSUyM8Hs15pDFY1Ev6Kb6Dy9MXNnC7QDGFGnoQPHwR8OLa1HfEKG8UPPdUA8Zx6j/embed?start=false&amp;loop=false&amp;delayms=3000" frameborder="0" width="1920" height="510" allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true"></iframe><!--kg-card-end: html-->]]></content:encoded></item></channel></rss>

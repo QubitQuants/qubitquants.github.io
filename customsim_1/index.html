@@ -4,17 +4,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dilip Rajkumar - Qubit Quants (Page 2)</title>
-    <link rel="stylesheet" href="../../../../assets/built/screen.css%3Fv=dda50d4487.css">
+    <title>VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy</title>
+    <link rel="stylesheet" href="../assets/built/screen.css%3Fv=dda50d4487.css">
     <link rel="stylesheet" href="https://use.typekit.net/nlf8nho.css">
 
     <!-- Favicon Situation -->
-    <link rel="apple-touch-icon" sizes="180x180" href="../../../../assets/images/apple-touch-icon.png%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
-    <link rel="icon" type="image/png" sizes="32x32" href="../../../../assets/images/favicon-32x32.png%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
-    <link rel="icon" type="image/png" sizes="16x16" href="../../../../assets/images/favicon-16x16.png%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
-    <link rel="manifest" href="../../../../assets/images/site.webmanifest%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
-    <link rel="mask-icon" href="../../../../assets/images/safari-pinned-tab.svg%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
-    <link rel="shortcut icon" href="../../../../assets/images/favicon.ico%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32x32.png%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon-16x16.png%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
+    <link rel="manifest" href="../assets/images/site.webmanifest%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
+    <link rel="mask-icon" href="../assets/images/safari-pinned-tab.svg%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
+    <link rel="shortcut icon" href="../assets/images/favicon.ico%3Fv=YA3x6XqYr8%3Fv=dda50d4487">
     <meta name="msapplication-TileColor" content="#029aff">
     <meta name="msapplication-config" content="/assets/images/browserconfig.xml?v=YA3x6XqYr8">
     <meta name="theme-color" content="#ffffff">
@@ -41,17 +41,117 @@
         }
     </script>
 
-    <link rel="icon" href="../../../../content/images/size/w256h256/2023/01/android-chrome-192x192.png" type="image/png" />
+    <link rel="icon" href="../content/images/size/w256h256/2023/01/android-chrome-192x192.png" type="image/png" />
     <link rel="canonical" href="index.html" />
     <meta name="referrer" content="no-referrer-when-downgrade" />
-    <link rel="prev" href="../../index.html" />
-    <link rel="next" href="../3/index.html" />
+    
+    <meta property="og:site_name" content="Qubit Quants" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy" />
+    <meta property="og:description" content="Importing the Dependencies
+
+
+import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_" />
+    <meta property="og:url" content="http://localhost:2368/customsim_1/" />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000" />
+    <meta property="article:published_time" content="2023-04-18T12:51:14.000Z" />
+    <meta property="article:modified_time" content="2023-04-18T13:39:18.000Z" />
+    <meta property="article:tag" content="algorithmic trading" />
+    <meta property="article:tag" content="backtesting" />
+    <meta property="article:tag" content="customsimulator" />
+    <meta property="article:tag" content="python" />
+    
+    <meta property="article:publisher" content="https://www.facebook.com/ghost" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy" />
+    <meta name="twitter:description" content="Importing the Dependencies
+
+
+import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_" />
+    <meta name="twitter:url" content="http://localhost:2368/customsim_1/" />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;2000" />
+    <meta name="twitter:label1" content="Written by" />
+    <meta name="twitter:data1" content="Bhavin Siddhapura" />
+    <meta name="twitter:label2" content="Filed under" />
+    <meta name="twitter:data2" content="algorithmic trading, backtesting, customsimulator, python" />
+    <meta name="twitter:site" content="@ghost" />
+    <meta property="og:image:width" content="2000" />
+    <meta property="og:image:height" content="2500" />
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "Qubit Quants",
+        "url": "http://localhost:2368/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2022/12/QQ_Text_DarkMode.png"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Bhavin Siddhapura",
+        "image": {
+            "@type": "ImageObject",
+            "url": "http://localhost:2368/content/images/2023/04/bhavin_profile_pic.jpg",
+            "width": 1660,
+            "height": 1660
+        },
+        "url": "http://localhost:2368/author/bhavin/",
+        "sameAs": [
+            "https://www.linkedin.com/in/bhavin97"
+        ]
+    },
+    "headline": "VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy",
+    "url": "http://localhost:2368/customsim_1/",
+    "datePublished": "2023-04-18T12:51:14.000Z",
+    "dateModified": "2023-04-18T13:39:18.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&ixlib=rb-4.0.3&q=80&w=2000",
+        "width": 2000,
+        "height": 2500
+    },
+    "keywords": "algorithmic trading, backtesting, customsimulator, python",
+    "description": "Importing the Dependencies\n\n\nimport vectorbtpro as vbt\nimport numpy as np\nimport pandas as pd\nfrom numba import njit\nimport talib\nimport datetime as dt\nimport time\nfrom collections import namedtuple\nimport itertools\nimport math\nfrom vectorbtpro.records.nb import col_map_nb\nfrom vectorbtpro.portfolio import nb as pf_nb, enums as pf_enums\nimport plotly.io as pio\nfrom numba import njit\n\n\n\n\nStrategy Rules 📏\n\n\nIn this strategy we will go long 🟩 on a Bullish Candle and go short 🟥 on a Bearish Candl",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "http://localhost:2368/"
+    }
+}
+    </script>
+
     <meta name="generator" content="Ghost 5.24" />
-    <link rel="alternate" type="application/rss+xml" title="Qubit Quants" href="../../../../rss/index.html" />
+    <link rel="alternate" type="application/rss+xml" title="Qubit Quants" href="../rss/index.html" />
     
     <script defer src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/sodo-search.min.js" data-key="cc7f7cd5f79a8dea46a7677053" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.1/umd/main.css" data-sodo-search="http://localhost:2368/" crossorigin="anonymous"></script>
-    <script defer src="../../../../public/cards.min.js%3Fv=dda50d4487"></script>
-    <link rel="stylesheet" type="text/css" href="../../../../public/cards.min.css%3Fv=dda50d4487.css">
+    <script defer src="../public/cards.min.js%3Fv=dda50d4487"></script>
+    <link rel="stylesheet" type="text/css" href="../public/cards.min.css%3Fv=dda50d4487.css">
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q14D0SCYNP"></script>
 <script>
@@ -82,7 +182,7 @@
 </style><style>:root {--ghost-accent-color: #FF1A75;}</style>
 </head>
 
-<body class="author-template author-dilip paged paged-next">
+<body class="post-template tag-algorithmic-trading tag-backtesting tag-customsimulator tag-python">
     <svg width="0" height="0" style="display: none;">
 <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" id="arrow-left">
     <path d="M26.667 14.667v2.667h-16L18 24.667l-1.893 1.893L5.547 16l10.56-10.56L18 7.333l-7.333 7.333h16z"></path>
@@ -253,15 +353,15 @@
     <div class="site">
         <header class="site-header container">
     <div class="header-left">
-        <a class="logo" href="../../../../index.html">
-                <img class="logo-image" src="../../../../content/images/2022/12/QQ_Text_DarkMode.png" alt="Qubit Quants">
+        <a class="logo" href="../index.html">
+                <img class="logo-image" src="../content/images/2022/12/QQ_Text_DarkMode.png" alt="Qubit Quants">
         </a>
     </div>
         <nav class="main-nav hidden-xs hidden-sm hidden-md">
                 <a class="menu-item menu-item-home"
-        href="../../../../index.html">Home</a>
+        href="../index.html">Home</a>
     <a class="menu-item menu-item-about"
-        href="../../../../about/index.html">About</a>
+        href="../about/index.html">About</a>
 
         </nav>
 
@@ -279,9 +379,9 @@
             <div class="container">
                 <nav class="mobile-nav">
                         <a class="menu-item menu-item-home"
-        href="../../../../index.html">Home</a>
+        href="../index.html">Home</a>
     <a class="menu-item menu-item-about"
-        href="../../../../about/index.html">About</a>
+        href="../about/index.html">About</a>
 
                 </nav>
             </div>
@@ -295,107 +395,315 @@
     </div>
 </header>
 
+        <header class="sticky">
+            <div class="sticky-title">VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy</div>
+            <button class="button-icon sticky-toc-button" aria-label="Table of Contents">
+                <svg class="icon">
+                    <use xlink:href="#table-of-contents"></use>
+                </svg>
+                <div class="sticky-toc"></div>
+            </button>
+            <div class="sticky-track">
+                <div class="sticky-progress"></div>
+            </div>
+        </header>
         <div class="site-content">
             
 <div class="content-area">
     <main class="site-main">
-            <section class="author container small">
-                <div class="author-image-placeholder u-placeholder square">
-                    <img class="author-image u-object-fit" src="../../../../content/images/size/w150/2022/12/ProfilePic.jpg" alt="Dilip Rajkumar">
+            <article class="single post tag-algorithmic-trading tag-backtesting tag-customsimulator tag-python">
+    <header class="single-header kg-canvas">
+            <div class="single-meta">
+                <span class="single-meta-item single-meta-date">
+                    <time datetime="2023-04-18">
+                        Apr 18, 2023
+                    </time>
+                </span>
+                <span class="single-meta-item single-meta-length">
+                    3 min read
+                </span>
+                    <span class="single-meta-item single-meta-tag">
+                        <a class="post-tag post-tag-algorithmic-trading" href="../tag/algorithmic-trading/index.html">
+                            algorithmic trading
+                        </a>
+                    </span>
+            </div>
+            <h1 class="single-title">VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy</h1>
+                <div class="single-media kg-width-wide u-placeholder horizontal">
+                    <img class="lazyload u-object-fit" data-srcset="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;400 400w,
+https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;750 750w,
+https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960 960w,
+https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;1140 1140w"
+                        data-sizes="auto" src="https://images.unsplash.com/photo-1530893609608-32a9af3aa95c?crop&#x3D;entropy&amp;cs&#x3D;tinysrgb&amp;fit&#x3D;max&amp;fm&#x3D;jpg&amp;ixid&#x3D;MnwxMTc3M3wwfDF8c2VhcmNofDEzfHxsYXB0b3B8ZW58MHx8fHwxNjgxODIxMTg0&amp;ixlib&#x3D;rb-4.0.3&amp;q&#x3D;80&amp;w&#x3D;960"
+                        srcset="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="
+                        alt="VectorBT Pro - Custom Simulator 1: Basic Candlestick Strategy">
                 </div>
-                    <h1 class="author-name"><a href="https://www.linkedin.com/in/sridiliprk/" target="_blank" rel="noopener noreferrer">Dilip Rajkumar</a>
-                    </h1>
-                    <span class="author-meta">Coimbatore, India</span>
-                <div class="author-bio">Sr. Data Engineer at nFerence Inc. Passionate about data science, algorithmic trading and quantitative analytics</div>
+    </header>
+    <div class="single-content kg-canvas u-text-format">
+            <!--kg-card-begin: markdown--><h2 id="importing-the-dependencies">Importing the Dependencies</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><pre><code class="language-python">import vectorbtpro as vbt
+import numpy as np
+import pandas as pd
+from numba import njit
+import talib
+import datetime as dt
+import time
+from collections import namedtuple
+import itertools
+import math
+from vectorbtpro.records.nb import col_map_nb
+from vectorbtpro.portfolio import nb as pf_nb, enums as pf_enums
+import plotly.io as pio
+from numba import njit
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="strategy-rules-%F0%9F%93%8F">Strategy Rules 📏</h2>
+<p>In this strategy we will go <code>long</code> 🟩 on a Bullish Candle and go <code>short</code> 🟥 on a Bearish Candle.</p>
+<p>If already in a long position and a bearish candle is present the long position should be closed and vice versa.</p>
+<p>Otherwise the position should be held.</p>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="obtaining-the-data">Obtaining The Data</h2>
+<pre><code class="language-python">data = vbt.YFData.fetch(&quot;BTC-USD&quot;, end=&quot;2022-01-01&quot;)
+Open = data.get(&quot;Open&quot;).to_numpy()
+High = data.get(&quot;High&quot;).to_numpy()
+Low = data.get(&quot;Low&quot;).to_numpy()
+Close = data.get(&quot;Close&quot;).to_numpy()
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="coding-the-rules">Coding The Rules</h2>
+<blockquote>
+<p>A Bullish Candle 🟩 is where the <code>close</code> is greater the the <code>open</code> (The price increased)</p>
+</blockquote>
+<blockquote>
+<p><code>df['IsBull'] = df['Close'] &gt; df['Open']</code></p>
+</blockquote>
+<blockquote>
+<p>Converting the above piece of code to a <code>NumPY Array</code></p>
+</blockquote>
+<blockquote>
+<p><code>IsBull = df['IsBull'].to_numpy()</code></p>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="understanding-the-custom-simulator">Understanding the Custom Simulator</h2>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><blockquote>
+<p>Bullish Candle 🟩 &amp; Not In A Position ⚪</p>
+<p><code>IsBullArray[i] and exec_state.position == 0</code></p>
+<hr>
+<p>Bearish Candle 🟥 &amp; Not In A Position ⚪</p>
+<p><code>not IsBullArray[i] and exec_state.position == 0</code></p>
+<hr>
+<p>Bullish Candle 🟩 &amp; In A Short Position 🔴</p>
+<p><code>IsBullArray[i] and exec_state.position &lt; 0</code></p>
+<hr>
+<p>Bearish Candle 🟥 &amp; In A Long Position 🟢</p>
+<p><code>not IsBullArray[i] and exec_state.position &gt; 0</code></p>
+<hr>
+</blockquote>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="custom-simulator-code">Custom Simulator Code</h2>
+<pre><code class="language-python">def custom_simulator(open_, high_ , low_ , close_ , IsBullArray,init_cash = 10000):
+     
+    order_records = np.empty((2663,1), dtype = vbt.pf_enums.order_dt)
+    order_counts = np.full(1, 0, dtype=np.int_)
 
-            </section>
-        <div class="post-feed container medium">
-                <article class="feed post tag-vectorbt tag-signal-cleaning tag-plotly">
+    exec_state = vbt.pf_enums.ExecState(
+                        cash = float(init_cash),
+                        position = 0.0,
+                        debt = 0.0,
+                        locked_cash = 0.0,
+                        free_cash = float(init_cash),
+                        val_price = np.nan,
+                        value = np.nan)
+    
+    
+    for i in range(len(close_)):
+        
+        price_area = vbt.pf_enums.PriceArea(open  = open_[i],
+                                            high = high_[i], 
+                                            low = low_[i], 
+                                            close = close_[i])
+        
+        value_price = price_area.close
+        value = exec_state.cash + (exec_state.position * value_price)
+        
+        exec_state = vbt.pf_enums.ExecState(
+                                cash = exec_state.cash,
+                                position = exec_state.position,
+                                debt = exec_state.debt,
+                                locked_cash = exec_state.locked_cash,
+                                free_cash = exec_state.free_cash,
+                                val_price = value_price,
+                                value = value)
+        
+        if IsBullArray[i] and exec_state.position == 0:
+            #CODE THAT WILL ENTER LONG POSITION
+
+            order_result , exec_state = enter_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                percent_risk_ = 1,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                direction = 'Buy',
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+
+        elif not IsBullArray[i] and exec_state.position == 0:
+            #CODE THAT WILL ENTER SHORT POSITION
+            order_result , exec_state = enter_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                percent_risk_ = 1,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                direction = 'Sell',
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)
+               
+
+        elif IsBullArray[i] and exec_state.position &lt; 0:
+            #CODE THAT WILL CLOSE THE SHORT POSITION HERE
+            order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_ = order_records,
+                                                                order_counts_  = order_counts)    
+            
+
+        elif not IsBullArray[i] and exec_state.position &gt;0:
+            order_result , exec_state = close_full_position(
+                                                                execution_state_ = exec_state,
+                                                                price_area_ = price_area,
+                                                                group_ = 0, column_= 0, bar_ = i,
+                                                                order_records_= order_records,
+                                                                order_counts_ = order_counts)    
+        else:
+            continue
+        
+                
+    return vbt.nb.repartition_nb(order_records, order_counts)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h2 id="running-the-custom-simulator">Running The Custom Simulator</h2>
+<pre><code class="language-python">custom_simulator(open_ = Open, 
+                 high_ = High, 
+                 low_  = Low, 
+                 close_  = Close, 
+                 IsBullArray = IsBull,
+                 init_cash = 100000)
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="output-of-custom-simulation-backtest">Output of Custom Simulation / Backtest</h3>
+<pre><code class="language-python">array([(   0, 0,    0, 2.18658566,   457.33401489, 0., 1),
+       (   1, 0,    3, 2.18658566,   408.9039917 , 0., 0),
+       (   2, 0,    4, 2.51004568,   398.8210144 , 0., 1), ...,
+       (1818, 0, 2659, 0.0218352 , 47588.85546875, 0., 1),
+       (1819, 0, 2661, 0.0218352 , 47178.125     , 0., 0),
+       (1820, 0, 2662, 0.02244184, 46306.4453125 , 0., 1)],
+      dtype={'names':['id','col','idx','size','price','fees','side'], 'formats':['&lt;i4','&lt;i4','&lt;i4','&lt;f8','&lt;f8','&lt;f8','&lt;i4'], 'offsets':[0,4,8,16,24,32,40], 'itemsize':48, 'aligned':True})
+
+</code></pre>
+<!--kg-card-end: markdown--><!--kg-card-begin: markdown--><h3 id="summary-key-points-%F0%9F%92%A1">Summary / Key Points 💡</h3>
+<blockquote>
+<hr>
+<p>The custom simulator is relatively simple to understand , all we do is iterate through the <code>length</code> of the <code>closing_prices</code>.</p>
+<hr>
+<p>Upon each iteration we update the <code>execution_state</code></p>
+<hr>
+<p>We then <code>index</code> into the <code>IsBullArray</code> along with checking the value of the <code>exec_state.position</code> as shown above to match the logic of our strategy.</p>
+<hr>
+<p>After we use our prebuilt functions <code>enter_position</code> , <code>close_position</code> to enter and close positions as per the strategy has defined.</p>
+</blockquote>
+<!--kg-card-end: markdown-->
+    </div>
+        <footer class="single-footer container medium">
+            <div class="single-footer-middle">
+             <div class="single-footer-top">
+                <h3 class="single-footer-title">Published by:</h3>
+                <div class="author-list">
+                    <div class="author-image-placeholder u-placeholder square">
+                        <a href="../author/bhavin/index.html" title="Bhavin Siddhapura">
+                            <img class="author-image u-object-fit" src="../content/images/size/w150/2023/04/bhavin_profile_pic.jpg" alt="Bhavin Siddhapura" loading="lazy">
+                        </a>
+                    </div>
+                </div>               
+            </div>
+            <div class="copyright" style="text-align:center">
+                <br>
+                <strong>© Warning</strong> All rights belong to the author(s) of this publication. <br>
+                No part of this publication can be reproduced anywhere without prior approval from the author(s).
+            </div>
+        </footer>
+        <script src="https://utteranc.es/client.js"
+        repo="QubitQuants/qubitquants.github.io"
+        issue-term="pathname"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+        </script>
+</article>                    <section class="related-wrapper">
+            <div class="container medium">
+                <h3 class="related-title">You might also like...</h3>
+                <div class="related-feed">
+                        <article class="feed post">
     <div class="feed-calendar">
         <div class="feed-calendar-month">
-            Nov
+            Apr
         </div>
         <div class="feed-calendar-day">
-            30
+            18
         </div>
     </div>
-    <h2 class="feed-title">VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals</h2>
+    <h2 class="feed-title">VectorBT Pro - Custom Simulator 3: CandleStick Strategy + StopLoss + TakeProfit + Partial Profits</h2>
     <div class="feed-right">
         <div class="feed-length">
-            11 min read
+            4 min read
         </div>
     </div>
     <svg class="icon feed-icon">
         <use xlink:href="#chevron-right"></use>
     </svg>
-    <a class="u-permalink" href="../../../../vbt_plot_strategy/index.html" aria-label="VectorBT Pro - Plotting Indicators and Visualising Strategy with Cleaned Signals"></a>
-</article>                <article class="feed post tag-vectorbt tag-algorithmic-trading tag-signal-generation">
+    <a class="u-permalink" href="../customsim_3/index.html" aria-label="VectorBT Pro - Custom Simulator 3: CandleStick Strategy + StopLoss + TakeProfit + Partial Profits"></a>
+</article>                        <article class="feed post">
     <div class="feed-calendar">
         <div class="feed-calendar-month">
-            Nov
+            Apr
         </div>
         <div class="feed-calendar-day">
-            28
+            18
         </div>
     </div>
-    <h2 class="feed-title">VectorBT Pro - Strategy Development and Signal Generation</h2>
+    <h2 class="feed-title">VectorBT Pro - Custom Simulator 2: Candlestick Strategy + StopLoss + TakeProfit</h2>
     <div class="feed-right">
         <div class="feed-length">
-            7 min read
+            3 min read
         </div>
     </div>
     <svg class="icon feed-icon">
         <use xlink:href="#chevron-right"></use>
     </svg>
-    <a class="u-permalink" href="../../../../strategydev/index.html" aria-label="VectorBT Pro - Strategy Development and Signal Generation"></a>
-</article>                <article class="feed post tag-python tag-algorithmic-trading tag-vectorbt featured">
+    <a class="u-permalink" href="../customsim_2/index.html" aria-label="VectorBT Pro - Custom Simulator 2: Candlestick Strategy + StopLoss + TakeProfit"></a>
+</article>                        <article class="feed post">
     <div class="feed-calendar">
         <div class="feed-calendar-month">
-            Nov
+            Apr
         </div>
         <div class="feed-calendar-day">
-            26
+            17
         </div>
     </div>
-    <h2 class="feed-title">VectorBT Pro - Aligning MTF time series Data with Resampling</h2>
+    <h2 class="feed-title">VectorBT Pro - Custom Simulator 0 : Main Functions</h2>
     <div class="feed-right">
         <div class="feed-length">
-            14 min read
+            3 min read
         </div>
     </div>
     <svg class="icon feed-icon">
         <use xlink:href="#chevron-right"></use>
     </svg>
-    <a class="u-permalink" href="../../../../aligning-mtf-data/index.html" aria-label="VectorBT Pro - Aligning MTF time series Data with Resampling"></a>
-</article>                <article class="feed post tag-vectorbt tag-python featured">
+    <a class="u-permalink" href="../customsim_0/index.html" aria-label="VectorBT Pro - Custom Simulator 0 : Main Functions"></a>
+</article>                        <article class="feed post">
     <div class="feed-calendar">
         <div class="feed-calendar-month">
-            Nov
+            Apr
         </div>
         <div class="feed-calendar-day">
-            14
+            15
         </div>
     </div>
-    <h2 class="feed-title">VectorBT Pro - Tutorial Series</h2>
-    <div class="feed-right">
-        <div class="feed-length">
-            2 min read
-        </div>
-    </div>
-    <svg class="icon feed-icon">
-        <use xlink:href="#chevron-right"></use>
-    </svg>
-    <a class="u-permalink" href="../../../../vbt-tuts-toc/index.html" aria-label="VectorBT Pro - Tutorial Series"></a>
-</article>                <article class="feed post tag-python tag-plotly tag-dash tag-mongodb">
-    <div class="feed-calendar">
-        <div class="feed-calendar-month">
-            Sep
-        </div>
-        <div class="feed-calendar-day">
-            05
-        </div>
-    </div>
-    <h2 class="feed-title">MT5PyBot 🤖 - Account Monitor &amp; Data Visualisation Dashboard</h2>
+    <h2 class="feed-title">VectorBT Pro - Discretionary Signal Bactesting</h2>
     <div class="feed-right">
         <div class="feed-length">
             1 min read
@@ -404,20 +712,30 @@
     <svg class="icon feed-icon">
         <use xlink:href="#chevron-right"></use>
     </svg>
-    <a class="u-permalink" href="../../../../plotly-dashboard/index.html" aria-label="MT5PyBot 🤖 - Account Monitor &amp; Data Visualisation Dashboard"></a>
-</article>        </div>
-        <nav class="pagination">
-        <a class="older-posts" href="../3/index.html"></a>
-</nav>
-<div class="infinite-scroll-status">
-    <div class="infinite-scroll-request"></div>
-</div>
-<div class="infinite-scroll-action">
-    <button class="button button-secondary infinite-scroll-button">Load more</button>
-</div>
-
-
-    </main>
+    <a class="u-permalink" href="../discretionary-signals-bactesting/index.html" aria-label="VectorBT Pro - Discretionary Signal Bactesting"></a>
+</article>                        <article class="feed post">
+    <div class="feed-calendar">
+        <div class="feed-calendar-month">
+            Feb
+        </div>
+        <div class="feed-calendar-day">
+            28
+        </div>
+    </div>
+    <h2 class="feed-title">VectorBT Pro - Parameter Optimisation of a Strategy</h2>
+    <div class="feed-right">
+        <div class="feed-length">
+            20 min read
+        </div>
+    </div>
+    <svg class="icon feed-icon">
+        <use xlink:href="#chevron-right"></use>
+    </svg>
+    <a class="u-permalink" href="../parameter-optimization/index.html" aria-label="VectorBT Pro - Parameter Optimisation of a Strategy"></a>
+</article>                </div>
+            </div>
+        </section>
+                </main>
 </div>
         </div>
         </section>
@@ -440,7 +758,7 @@
         </a>
 
         <a class="social-item social-item-rss"
-            href="../../../../rss/index.html"
+            href="../rss/index.html"
             target="_blank" rel="noopener noreferrer" aria-label="RSS">
             <svg class="icon">
                 <use xlink:href="#rss-box"></use>
@@ -500,11 +818,11 @@
                 <div class="popular-wrapper">
                     <h4 class="popular-title">Popular tags</h4>
                     <div class="popular-feed">
-                            <a class="popular" href="../../../../tag/vectorbt/index.html">vectorBT</a>
-                            <a class="popular" href="../../../../tag/algorithmic-trading/index.html">algorithmic trading</a>
-                            <a class="popular" href="../../../../tag/python/index.html">python</a>
-                            <a class="popular" href="../../../../tag/backtesting/index.html">backtesting</a>
-                            <a class="popular" href="../../../../tag/plotly/index.html">plotly</a>
+                            <a class="popular" href="../tag/vectorbt/index.html">vectorBT</a>
+                            <a class="popular" href="../tag/algorithmic-trading/index.html">algorithmic trading</a>
+                            <a class="popular" href="../tag/python/index.html">python</a>
+                            <a class="popular" href="../tag/backtesting/index.html">backtesting</a>
+                            <a class="popular" href="../tag/plotly/index.html">plotly</a>
                     </div>
                 </div>
         <div class="search-result"></div>
@@ -572,7 +890,7 @@
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
         crossorigin="anonymous">
     </script>
-    <script src="../../../../assets/built/main.min.js%3Fv=dda50d4487"></script>
+    <script src="../assets/built/main.min.js%3Fv=dda50d4487"></script>
 
     
 </body>
